@@ -11,16 +11,13 @@ wget -O cellranger-7.1.0.tar.gz "https://cf.10xgenomics.com/releases/cell-exp/ce
 
 tar -xzvf cellranger-7.1.0.tar.gz
 
-
 ## Download Cell Ranger
 - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
 - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz 
 
-## Prepend the Cell Ranger directory to your $PATH. This will allow you to invoke the cellranger command.
-export PATH=/opt/cellranger-7.1.0:$PATH
-
 ## Verify installation
-cellranger testrun
+cellranger-7.1.0/bin/cellranger testrun --id 10
+
 
 
 
