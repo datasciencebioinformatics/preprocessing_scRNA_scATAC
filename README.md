@@ -12,7 +12,7 @@ Step 2 – Download and unpack any of the reference data files in a convenient l
        – tar -xzvf refdata-gex-GRCh38-2020-A.tar.gz
        – tar -xzvf refdata-gex-GRCh38-2020-A.tar.gz
        - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
-       - 
+       - curl -O curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz 
 
 
 
