@@ -21,8 +21,11 @@ curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz
 curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
 
 ## Step 3 – Prepend the Cell Ranger directory to your $PATH. This will allow you to invoke the cellranger command.
+export PATH=/opt/cellranger-7.1.0:$PATH
 
-* CellRanger ARC pipeline for matrices barcoded gene expression
+## Verify installation
+cellranger testrun
+
 
 
 
