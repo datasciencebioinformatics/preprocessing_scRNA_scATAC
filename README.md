@@ -5,12 +5,12 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## Installation
 - CellRanger installation
-  
+-   
 ### Download cell ranger using wget
-See https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest#cr-wget
+- at https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest#cr-wget
 
 ### Untar cell ranger 
-tar -xzvf cellranger-7.1.0.tar.gz
+- tar -xzvf cellranger-7.1.0.tar.gz
 
 ### Download reference refdata
 - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
@@ -21,6 +21,8 @@ tar -xzvf cellranger-7.1.0.tar.gz
 - mkdir /home/cellranger/database/
 
 ### Prepend the Cell Ranger directory to your $PATH
+- export PATH=/opt/cellranger-7.1.0:$PATH
+
 
 
 ### Verify installation
