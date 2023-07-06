@@ -13,8 +13,9 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz
 
 ### Prepare a single directory for cellranger and database
-- mkdir /home/cellranger/
+- mkdir /home/cellranger/                           #### Grant
 - mkdir /home/cellranger/database/
+- sudo chmod a+x -R /home/cellranger/
 - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/
 - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/
 - mv ./cellranger-7.1.0.tar.gz /home/cellranger/
