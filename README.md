@@ -20,6 +20,10 @@ sudo apt-get install samtools
 ### Create dir
   - mkdir /home/cellranger/                                           #### create cellranger folder
   - mkdir /home/cellranger/database/                                  #### create cellranger database
+
+### Go to cellranger folder
+  - cd /home/cellranger/                                              #### go to cellranger folder
+  - sudo chmod a+x -R /home/cellranger/                               #### grant sudo permissiom folder- 
     
 ### Move files to correspondent directories
   - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/    #### Move mousa genome
@@ -27,10 +31,6 @@ sudo apt-get install samtools
   - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/    #### Move mousa genome
   - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/  #### Move human genome
   - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                    #### Move cellranger file
-
-### Move files to correspondent directories     
-  - cd /home/cellranger/                                              #### go to cellranger folder
-  - sudo chmod a+x -R /home/cellranger/                               #### grant sudo permissiom folder
 
 ## Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
