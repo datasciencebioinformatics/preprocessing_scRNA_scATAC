@@ -28,7 +28,7 @@ sudo apt-get install samtools
 ### Move files to correspondent directories
   - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/    #### Move mouse annotation to database folder
   - mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/    #### Move human annotation to database folder
-  - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/    #### Move mousa genome to database folder
+  - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/    #### Move mouse genome to database folder
   - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/  #### Move human genome to database folder
   - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                    #### Move cellranger file to folder
 
