@@ -65,12 +65,6 @@ https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
 
-## Create reference files for homo sapiens
-cellranger mkref \
-  --nthreads=4 \
-  --genome={OUTPUT FOLDER FOR INDEX} \
-  --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa \
-  --genes={ANNOTATION GTF}
 
 # Integrative analysis
 
