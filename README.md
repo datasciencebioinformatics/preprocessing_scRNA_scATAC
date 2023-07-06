@@ -18,6 +18,8 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ### Prepare a single directory for cellranger and database
 - mkdir /home/cellranger/
 - mkdir /home/cellranger/database/
+- mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/
+- mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/
 
 ### Prepend the Cell Ranger directory to your $PATH
 - export PATH=/opt/cellranger-7.1.0:$PATH
