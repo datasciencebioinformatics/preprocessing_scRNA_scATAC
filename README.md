@@ -22,9 +22,6 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ### Untar cell ranger 
 - tar -xzvf cellranger-7.1.0.tar.gz
 
-### Prepend the Cell Ranger directory to your $PATH
-- export PATH=/home/cellranger/cellranger-7.1.0/bin/cellranger:$PATH
-
 ### Verify installation
 - /home/cellranger/cellranger-7.1.0/bin/cellranger testrun --id 10
 
