@@ -3,9 +3,8 @@
 # preprocessing_scRNA_scATAC
 Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.#
 
-## Installation
-- CellRanger installation
--   
+## CellRanger Installation
+
 ### Download cell ranger using wget
 - at https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest#cr-wget
 
