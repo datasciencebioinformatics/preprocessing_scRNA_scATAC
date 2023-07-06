@@ -26,18 +26,17 @@ sudo apt-get install samtools
   - sudo chmod a+x -R /home/cellranger/                               #### grant sudo permissiom folder- 
     
 ### Move files to correspondent directories
-  - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/    #### Move mousa genome
-  - mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/    #### Move human genome
-  - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/    #### Move mousa genome
-  - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/  #### Move human genome
-  - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                    #### Move cellranger file
+  - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/    #### Move mousa annotation to database folder
+  - mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/    #### Move human annotation to database folder
+  - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/    #### Move mousa genome to database folder
+  - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/  #### Move human genome to database folder
+  - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                    #### Move cellranger file to folder
 
 ## Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
   - sudo samtools faidx /home/cellranger/database/refdata-gex-mm10-2020-A/fasta/genome.fa
 
-## Untar cell ranger
-  - cd /home/cellranger/
+## Untar cell cellranger  
   - tar -xzvf cellranger-7.1.0.tar.gz
 
 ## Verify installation
