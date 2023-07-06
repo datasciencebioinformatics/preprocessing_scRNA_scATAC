@@ -1,7 +1,7 @@
 <!-- GETTING STARTED -->
 
 # preprocessing_scRNA_scATAC
-Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.#
+Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## CellRanger Installation
 
@@ -28,19 +28,5 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 - cellranger-7.1.0/bin/cellranger testrun --id 10
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Integrative analysis using R Maestro 
+### Integrative analysis using R Maestro 
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
