@@ -1,7 +1,8 @@
 # preprocessing_scRNA_scATAC
 Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
-## Installation of samtools
+## Installation of samtools and python packages
+sudo apt install python3-docopt
 sudo apt-get install samtools
 
 ## CellRanger Installation
@@ -53,7 +54,7 @@ cellranger mkref \
   --nthreads=4 \
   --genome=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/ \
   --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa \
-  --genes=gencode.v43.annotation.gff3
+  --genes=/home/cellranger/database/gencode.v43.annotation.gff3
 
 # Integrative analysis
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
