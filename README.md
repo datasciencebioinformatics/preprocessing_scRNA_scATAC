@@ -4,6 +4,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ## Installation of samtools and python packages
 sudo apt install python3-docopt
 sudo apt install python3-lz4
+sudo apt install python3-numpy
 sudo apt-get install samtools
 
 ## CellRanger Installation
@@ -51,7 +52,7 @@ sudo apt-get install samtools
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
 
 ## Create reference files for homo sapiens
-cellranger mkref \
+/home/cellranger/cellranger-7.1.0/bin/cellranger mkref \
   --nthreads=4 \
   --genome=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/ \
   --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa \
