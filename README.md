@@ -19,6 +19,9 @@ sudo apt-get install samtools
 ## Prepare a single directory for cellranger and database
   - mkdir /home/cellranger/                                           #### create cellranger
   - mkdir /home/cellranger/database/                                  #### create cellranger
+
+  - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/    #### Move mousa genome
+  - mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/    #### Move human genome
   
   - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/    #### Move mousa genome
   - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/  #### Move human genome
