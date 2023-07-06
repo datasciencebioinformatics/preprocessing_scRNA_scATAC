@@ -38,7 +38,7 @@ sudo apt-get install samtools
 ## Untar cell cellranger and annotation tar.gz
   - cd /home/cellranger/database/                                     #### go to cellranger folder- 
   - tar -xzvf cellranger-7.1.0.tar.gz
-  - sudo gzip -d gencode.vM32.annotation.gtf.gz 
+  - sudo gzip -d gencode.v43.annotation.gff3
   - sudo gzip -d gencode.vM32.annotation.gtf.gz
  
 
