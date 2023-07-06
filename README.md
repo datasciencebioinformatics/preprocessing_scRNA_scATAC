@@ -12,6 +12,9 @@ sudo apt-get install samtools
   - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
   - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz
 
+## Download reference gene data
+  - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/gencode.vM32.annotation.gtf.gz
+  - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/gencode.v43.annotation.gff3.gz
 ## Prepare a single directory for cellranger and database
   - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/
   - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/
