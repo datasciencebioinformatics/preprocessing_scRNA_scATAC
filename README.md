@@ -22,10 +22,8 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ### Prepend the Cell Ranger directory to your $PATH
 - export PATH=/opt/cellranger-7.1.0:$PATH
 
-
-
 ### Verify installation
-cellranger-7.1.0/bin/cellranger testrun --id 10
+- cellranger-7.1.0/bin/cellranger testrun --id 10
 
 
 
