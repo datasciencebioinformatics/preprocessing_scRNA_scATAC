@@ -35,13 +35,12 @@ sudo apt-get install samtools
   - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/  #### Move human genome to database folder
   - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                    #### Move cellranger file to folder
 
-## Untar cell cellranger and annotation tar.gz
+## Untar cell cellranger and annotation tar.gz # Check .gtf.gz
   - cd /home/cellranger/database/                                     #### go to cellranger folder- 
   - tar -xzvf cellranger-7.1.0.tar.gz
-  - sudo gzip -d gencode.v43.annotation.gff3
+  - sudo gzip -d gencode.v43.annotation.gtf.gz
   - sudo gzip -d gencode.vM32.annotation.gtf.gz
  
-
 ## Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
   - sudo samtools faidx /home/cellranger/database/refdata-gex-mm10-2020-A/fasta/genome.fa
@@ -53,7 +52,7 @@ sudo apt-get install samtools
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
 
-## Prepare gff3 files - I stoppeed here
+## Prepare gff3 files # I stoppeed here
   - /home/cellranger/cellranger-7.1.0/bin/cellranger/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value
   - /home/cellranger/cellranger-7.1.0/bin/cellranger/cellranger mkgtf /home/cellranger/database/gencode.vM32.annotation.gtf /home/cellranger/database/gencode.vM32.annotation.gtf --attribute=key:allowable_value
 
@@ -62,7 +61,7 @@ sudo apt-get install samtools
   --nthreads=4 \
   --genome=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/ \
   --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa \
-  --genes=/home/cellranger/database/gencode.v43.annotation.gff3
+  --genes=/home/cellranger/database/gencode.v43.annotation.gtf
 
 # Integrative analysis
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
@@ -82,7 +81,5 @@ https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
 
-
 # Integrative analysis
-
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
