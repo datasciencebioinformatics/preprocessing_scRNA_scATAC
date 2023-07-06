@@ -32,12 +32,12 @@ sudo apt-get install samtools
   - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/  #### Move human genome to database folder
   - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                    #### Move cellranger file to folder
 
+## Untar cell cellranger and annotation tar.gz
+  - tar -xzvf cellranger-7.1.0.tar.gz    
+
 ## Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
   - sudo samtools faidx /home/cellranger/database/refdata-gex-mm10-2020-A/fasta/genome.fa
-
-## Untar cell cellranger  
-  - tar -xzvf cellranger-7.1.0.tar.gz
 
 ## Verify installation
   - /home/cellranger/cellranger-7.1.0/bin/cellranger testrun --id 10
