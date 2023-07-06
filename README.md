@@ -29,7 +29,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
 
 ### Verify installation
-- /home/cellranger/cellranger-7.1.0/bin/cellranger testrun --id 10
+- /home/cellranger/cellranger-7.1.0/bin/cellranger testrun --id=tiny
 - 
 ### Integrative analysis using R Maestro 
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
