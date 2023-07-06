@@ -39,7 +39,7 @@ sudo apt-get install samtools
 ## Create reference files for homo sapiens
 cellranger mkref \
   --nthreads=4 \
-  --genome={OUTPUT FOLDER FOR INDEX} \
+  --genome=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/ \
   --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa \
   --genes={ANNOTATION GTF}
 
