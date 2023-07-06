@@ -33,7 +33,9 @@ sudo apt-get install samtools
   - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                    #### Move cellranger file to folder
 
 ## Untar cell cellranger and annotation tar.gz
-  - tar -xzvf cellranger-7.1.0.tar.gz    
+  - tar -xzvf cellranger-7.1.0.tar.gz
+  - 
+  - 
 
 ## Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
