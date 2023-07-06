@@ -14,10 +14,11 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## Prepare a single directory for cellranger and database
 
+  - cd /home/cellranger/
   - mkdir /home/cellranger/ #### Grant
   - mkdir /home/cellranger/database/
   - sudo chmod a+x -R /home/cellranger/
-  - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/
+  - cd 
   - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/
   - mv ./cellranger-7.1.0.tar.gz /home/cellranger/
 
@@ -34,6 +35,13 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
+
+## Create reference files for homo sapiens
+cellranger mkref \
+  --nthreads=4 \
+  --genome={OUTPUT FOLDER FOR INDEX} \
+  --fasta={GENOME FASTA} \
+  --genes={ANNOTATION GTF}
 
 # Integrative analysis
 
