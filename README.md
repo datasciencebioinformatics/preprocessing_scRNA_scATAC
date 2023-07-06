@@ -53,7 +53,7 @@ cellranger mkref \
   --nthreads=4 \
   --genome=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/ \
   --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa \
-  --genes={ANNOTATION GTF}
+  --genes=gencode.v43.annotation.gff3
 
 # Integrative analysis
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
