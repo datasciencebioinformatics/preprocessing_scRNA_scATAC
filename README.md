@@ -3,6 +3,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## Installation of samtools and python packages
 sudo apt install python3-docopt
+sudo apt install python3-lz4
 sudo apt-get install samtools
 
 ## CellRanger Installation
