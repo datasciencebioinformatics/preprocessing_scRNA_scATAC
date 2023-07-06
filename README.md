@@ -49,9 +49,13 @@ sudo apt-get install samtools
 ## Verify installation
   - /home/cellranger/cellranger-7.1.0/bin/cellranger testrun --id 10
 
-## Confgure cellranger
+## Configure cellranger
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
+
+## Prepare gff3 files - I stoppeed here
+  - /home/cellranger/cellranger-7.1.0/bin/cellranger/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value
+  - /home/cellranger/cellranger-7.1.0/bin/cellranger/cellranger mkgtf /home/cellranger/database/gencode.vM32.annotation.gtf /home/cellranger/database/gencode.vM32.annotation.gtf --attribute=key:allowable_value
 
 ## Create reference files for homo sapiens
 /home/cellranger/cellranger-7.1.0/bin/cellranger mkref \
