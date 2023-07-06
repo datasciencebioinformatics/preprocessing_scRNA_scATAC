@@ -17,8 +17,8 @@ tar -xzvf cellranger-7.1.0.tar.gz
 - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz
 
 # Prepare a single directory for cellranger and database
-mkdir /home/cellranger/
-mkdir /home/cellranger/database/
+- mkdir /home/cellranger/
+- mkdir /home/cellranger/database/
 
 
 
