@@ -86,7 +86,19 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - Dimensionality reduction
   - Cell clustering
   - Cluster differential accessibility
-  
-  #### For each sample in the metadata, cellranger-atac count will be used 
+
+### Cellranger sc-ATAC command:
+#### For each sample in the metadata, cellranger-atac count will be used 
+#### fastqs=
+#### reference=
+cat /home/cellranger/database/metadata.txt | grep -v #  | while read line 
+do
+    # Take the id
+        
+    # sample=   
+    
+done
+
+
 
 
