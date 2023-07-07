@@ -39,7 +39,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - cd /home/cellranger/database/                                     #### go to cellranger folder- 
   - tar -xzvf cellranger-7.1.0.tar.gz
   - gzip -d gencode.v43.annotation.gtf.gz
-  - gzip -d gencode.v43.chr_patch_hapl_scaff.annotation.gtf.gz
+  - gzip -d gencode.vM32.annotation.gtf.gz
   - tar -xzvf  /home/cellranger/database/refdata-gex-mm10-2020-A.tar.gz
   - tar -xzvf  /home/cellranger/database/refdata-gex-GRCh38-2020-A.tar.gz
  
@@ -56,7 +56,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## Prepare gff3 files
   - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value
-  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.chr_patch_hapl_scaff.annotation.gtf /home/cellranger/database/gencode.v43.chr_patch_hapl_scaff.annotation.transcripts.gtf --attribute=key:allowable_value
+  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.vM32.annotation.gtf /home/cellranger/database/gencode.vM32.annotation.transcripts.gtf --attribute=key:allowable_value
 
 ## Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
