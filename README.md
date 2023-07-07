@@ -26,7 +26,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ### Go to cellranger folder
   - cd /home/cellranger/                                              #### go to cellranger folder
-  - sudo chmod a+x -R /home/cellranger/                               #### grant sudo permissiom folder- 
+  - chmod a+x -R /home/cellranger/                               #### grant sudo permissiom folder- 
     
 ### Move files to correspondent directories
   - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/    #### Move mouse annotation to database folder
@@ -38,14 +38,14 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ## Untar cell cellranger and annotation tar.gz # Check .gtf.gz
   - cd /home/cellranger/database/                                     #### go to cellranger folder- 
   - tar -xzvf cellranger-7.1.0.tar.gz
-  - sudo gzip -d gencode.v43.annotation.gtf.gz
-  - sudo gzip -d gencode.vM32.annotation.gtf.gz
+  - gzip -d gencode.v43.annotation.gtf.gz
+  - gzip -d gencode.vM32.annotation.gtf.gz
   - tar -xzvf  /home/cellranger/database/refdata-gex-mm10-2020-A.tar.gz
   - tar -xzvf  /home/cellranger/database/refdata-gex-GRCh38-2020-A.tar.gz
  
 ## Create fasta indexes
-  - sudo samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
-  - sudo samtools faidx /home/cellranger/database/refdata-gex-mm10-2020-A/fasta/genome.fa
+  - samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
+  - samtools faidx /home/cellranger/database/refdata-gex-mm10-2020-A/fasta/genome.fa
 
 ## Verify installation
   - /home/cellranger/cellranger-7.1.0/bin/cellranger testrun --id 10
@@ -58,7 +58,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value
 
 ## Create reference files for homo sapiens
-  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.transcripts.gtf
+  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.transcripts.gtf
 
 # Integrative analysis
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
