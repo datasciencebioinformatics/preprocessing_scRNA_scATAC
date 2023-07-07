@@ -70,4 +70,13 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ## Call cellranger for ATAC
   -
 ## Call cellranger for single-cell
-  -
+### For each sample, cellranger-atac count will be used 
+  - Read filtering and alignment
+  - Barcode counting
+  - Identification of transposase cut sites
+  - Detection of accessible chromatin peaks
+  - Cell calling
+  - Count matrix generation for peaks and transcription factors
+  - Dimensionality reduction
+  - Cell clustering
+  - Cluster differential accessibility
