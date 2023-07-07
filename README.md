@@ -30,16 +30,16 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
     
 ### Move files to correspondent directories
   - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/    #### Move mouse annotation to database folder
-  - mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/    #### Move human annotation to database folder
-  - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/    #### Move mouse genome to database folder
-  - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/  #### Move human genome to database folder
-  - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                    #### Move cellranger file to folder
+  - mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/                        #### Move human annotation to database folder
+  - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/                        #### Move mouse genome to database folder
+  - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/                      #### Move human genome to database folder
+  - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                                        #### Move cellranger file to folder
 
 ## Untar cell cellranger and annotation tar.gz # Check .gtf.gz
   - cd /home/cellranger/database/                                     #### go to cellranger folder- 
   - tar -xzvf cellranger-7.1.0.tar.gz
   - gzip -d gencode.v43.annotation.gtf.gz
-  - gzip -d gencode.vM32.annotation.gtf.gz
+  - gzip -d gencode.v43.chr_patch_hapl_scaff.annotation.gtf.gz
   - tar -xzvf  /home/cellranger/database/refdata-gex-mm10-2020-A.tar.gz
   - tar -xzvf  /home/cellranger/database/refdata-gex-GRCh38-2020-A.tar.gz
  
@@ -56,7 +56,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## Prepare gff3 files
   - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value
-  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.vM32.annotation.gtf /home/cellranger/database/gencode.vM32.annotation.transcripts.gtf --attribute=key:allowable_value
+  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.chr_patch_hapl_scaff.annotation.gtf /home/cellranger/database/gencode.v43.chr_patch_hapl_scaff.annotation.transcripts.gtf --attribute=key:allowable_value
 
 ## Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
