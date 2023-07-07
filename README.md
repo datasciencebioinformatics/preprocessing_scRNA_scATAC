@@ -11,11 +11,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ## Download cell ranger using wget
   - at https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest#cr-wget
 
-## Download reference refdata
-  - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
-  - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz
-
-## Download reference gene data
+## Download reference gene data and corresponding genome
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/gencode.vM32.annotation.gtf.gz
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/gencode.v43.annotation.gtf.gz
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/GRCh38.p13.genome.fa.gz
@@ -31,26 +27,24 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - chmod a+x -R /home/cellranger/                                    #### grant sudo permissiom folder- 
     
 ### Move files to correspondent directories
-  - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/    #### Move mouse annotation to database folder
-  - mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/                        #### Move human annotation to database folder
-  - mv ./refdata-gex-mm10-2020-A.tar.gz /home/cellranger/database/                        #### Move mouse genome to database folder
-  - mv ./refdata-gex-GRCh38-2020-A.tar.gz /home/cellranger/database/                      #### Move human genome to database folder    
-  - mv ./GRCh38.p13.genome.fa.gz /home/cellranger/database/                               #### Move mouse genome to database folder
-  - mv ./GRCm39.genome.fa.gz     /home/cellranger/database/                               #### Move human genome to database folder
-
-  - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                                        #### Move cellranger file to folder
+  - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/            #### Move mouse annotation to database folder
+  - mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/            #### Move human annotation to database folder 
+  - mv ./GRCh38.p13.genome.fa.gz /home/cellranger/database/                   #### Move mouse genome to database folder
+  - mv ./GRCm39.genome.fa.gz     /home/cellranger/database/                   #### Move human genome to database folder
+  - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                            #### Move cellranger file to folder
 
 ## Untar cell cellranger and annotation tar.gz # Check .gtf.gz
-  - cd /home/cellranger/database/                                     #### go to cellranger folder- 
-  - tar -xzvf cellranger-7.1.0.tar.gz
-  - gzip -d gencode.v43.annotation.gtf.gz
-  - gzip -d gencode.vM32.annotation.gtf.gz
-  - tar -xzvf  /home/cellranger/database/refdata-gex-mm10-2020-A.tar.gz
-  - tar -xzvf  /home/cellranger/database/refdata-gex-GRCh38-2020-A.tar.gz
+  - cd /home/cellranger/database/                                         #### go to database folder- 
+  - tar -xzvf cellranger-7.1.0.tar.gz                                     #### unzip cellranger
+  - gzip -d gencode.v43.annotation.gtf.gz                                 #### unzip gencode.v43.annotation.gtf
+  - gzip -d gencode.vM32.annotation.gtf.gz                                #### unzip gencode.vM32.annotation.gtf
+  - gzip -d GRCm39.genome.fa.gz                                           #### unzip gencode.v43.annotation.gtf
+  - gzip -d GRCh38.p13.genome.fa.gz                                       #### unzip gencode.vM32.annotation.gtf- 
+  
  
 ## Create fasta indexes
-  - samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
-  - samtools faidx /home/cellranger/database/refdata-gex-mm10-2020-A/fasta/genome.fa
+  - sudo samtools faidx /home/cellranger/database/GRCm39.genome.fa
+  - sudo samtools faidx /home/cellranger/database/GRCh38.p13.genome.fa
 
 ## Verify installation
   - /home/cellranger/cellranger-7.1.0/bin/cellranger testrun --id 10
@@ -68,8 +62,8 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - sudo samtools faidx /home/cellranger/database/refdata-gex-mm10-2020-A/fasta/genome.fa
 
 ## Create reference files
-  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.transcripts.gtf # Human
-  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/refdata-gex-mm10-2020-A/fasta/genome.fa --genes=/home/cellranger/database/gencode.vM32.annotation.transcripts.gtf # Mouse
+  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/GRCm39.genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.transcripts.gtf # Human
+  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/GRCh38.p13.genome.fa --genes=/home/cellranger/database/gencode.vM32.annotation.transcripts.gtf # Mouse
 
 # Integrative analysis
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
