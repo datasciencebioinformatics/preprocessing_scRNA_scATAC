@@ -68,7 +68,9 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
     
 ## Call cellranger for single-cell
-### For each sample, cellranger-atac count will be used 
+  -
+## Call cellranger for ATAC
+  ### For each sample, cellranger-atac count will be used 
   - Read filtering and alignment
   - Barcode counting
   - Identification of transposase cut sites
@@ -78,6 +80,3 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - Dimensionality reduction
   - Cell clustering
   - Cluster differential accessibility
-
-## Call cellranger for ATAC
-  -
