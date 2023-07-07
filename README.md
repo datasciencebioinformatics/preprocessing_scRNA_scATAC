@@ -67,3 +67,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
 
+## Call cellranger for ATAC
+  -
+## Call cellranger for single-cell
+  -
