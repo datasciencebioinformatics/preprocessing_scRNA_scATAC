@@ -16,7 +16,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz
 
 ## Download reference gene data
-  - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/gencode.vM32.annotation.gtf.gz
+  - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf.gz
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/gencode.v43.annotation.gff3.gz
     
 ## Prepare a single directory for cellranger and database
@@ -54,16 +54,11 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
 
-## Prepare gff3 files # I stoppeed here
-  - /home/cellranger/cellranger-7.1.0/bin/cellranger/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value
-  - /home/cellranger/cellranger-7.1.0/bin/cellranger/cellranger mkgtf /home/cellranger/database/gencode.vM32.annotation.gtf /home/cellranger/database/gencode.vM32.annotation.gtf --attribute=key:allowable_value
+## Prepare gff3 files
+  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value
 
 ## Create reference files for homo sapiens
-/home/cellranger/cellranger-7.1.0/bin/cellranger mkref \
-  --nthreads=4 \
-  --genome=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/ \
-  --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa \
-  --genes=/home/cellranger/database/gencode.v43.annotation.gtf
+  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.transcripts.gtf
 
 # Integrative analysis
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
