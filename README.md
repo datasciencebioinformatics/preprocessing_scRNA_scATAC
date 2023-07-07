@@ -88,3 +88,4 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - Cluster differential accessibility
   
   #### For each sample in the metadata, cellranger-atac count will be used 
+
