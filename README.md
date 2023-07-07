@@ -26,7 +26,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ### Go to cellranger folder
   - cd /home/cellranger/                                              #### go to cellranger folder
-  - chmod a+x -R /home/cellranger/                               #### grant sudo permissiom folder- 
+  - chmod a+x -R /home/cellranger/                                    #### grant sudo permissiom folder- 
     
 ### Move files to correspondent directories
   - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/    #### Move mouse annotation to database folder
@@ -56,9 +56,11 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## Prepare gff3 files
   - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value
+  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.vM32.annotation.gtf /home/cellranger/database/gencode.vM32.annotation.transcripts.gtf --attribute=key:allowable_value
 
-## Create reference files for homo sapiens
-  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.transcripts.gtf
+## Create reference files
+  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.transcripts.gtf # Human
+  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/refdata-gex-mm10-2020-A/fasta/genome.fa --genes=/home/cellranger/database/gencode.vM32.annotation.transcripts.gtf # Mouse
 
 # Integrative analysis
 https://liulab-dfci.github.io/MAESTRO/example/Integration/Integration.html
