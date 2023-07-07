@@ -40,6 +40,8 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - tar -xzvf cellranger-7.1.0.tar.gz
   - sudo gzip -d gencode.v43.annotation.gtf.gz
   - sudo gzip -d gencode.vM32.annotation.gtf.gz
+  - tar -xzvf  /home/cellranger/database/refdata-gex-mm10-2020-A.tar.gz
+  - tar -xzvf  /home/cellranger/database/refdata-gex-GRCh38-2020-A.tar.gz
  
 ## Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/refdata-gex-GRCh38-2020-A/fasta/genome.fa
