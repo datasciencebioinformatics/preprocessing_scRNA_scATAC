@@ -1,3 +1,4 @@
+#######################################################################################################################
 # preprocessing_scRNA_scATAC
 Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC. This step focuses on the installation, preparation and execution of Cellranger.
 
@@ -39,9 +40,9 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## Untar annotation tar.gz
   - gzip -d gencode.v43.annotation.gtf.gz                                 #### unzip gencode.v43.annotation.gtf
-  - gzip -d gencode.vM32.annotation.gtf.gz                                #### unzip gencode.vM32.annotation.gtf
-  - gzip -d GRCm39.genome.fa.gz                                           #### unzip gencode.v43.annotation.gtf
-  - gzip -d GRCh38.p13.genome.fa.gz                                       #### unzip gencode.vM32.annotation.gtf- 
+  - gzip -d gencode.vM32.annotation.gtf                                   #### unzip gencode.vM32.annotation.gtf
+  - gzip -d GRCm39.genome.fa.gz                                           #### unzip GRCm39.genome.fa.gz
+  - gzip -d GRCh38.p13.genome.fa.gz                                       #### unzip GRCh38.p13.genome.fa
    
 ## Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/GRCm39.genome.fa     # Human genome index
@@ -50,6 +51,9 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ## Configure cellranger
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
+
+## Fiter gft file with filtergtf
+  
 
 ## Prepare gft files
   - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value # Human gtf file
@@ -86,6 +90,10 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - Dimensionality reduction
   - Cell clustering
   - Cluster differential accessibility
+
+#######################################################################################################################
+### Create a metadata file to list the files and info for each sample 
+metadata_file=/home/cellranger/database/metadata.txt
 
 ### Cellranger sc-ATAC command:
 #### For each sample in the metadata, cellranger-atac count will be used 
