@@ -7,6 +7,9 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - sudo apt install python3-lz4
   - sudo apt install python3-numpy
   - sudo apt-get install samtools
+  - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh # Download Miniconda3
+  - sudo ./Miniconda3-latest-Linux-x86_64.sh                                   # Open and install mininconda3
+  - /home/miniconda/bin/conda install filtergtf                                # Install filtergtf
 
 ## CellRanger Installation
 ## Download instructions from :
@@ -51,9 +54,6 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ## Configure cellranger
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
-
-## Fiter gft file with filtergtf
-  
 
 ## Prepare gft files
   - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value # Human gtf file
