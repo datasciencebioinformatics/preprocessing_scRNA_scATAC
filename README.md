@@ -84,7 +84,6 @@ database_folder=/home/cellranger/database/hypothalamu_scRNA_scATAC/
 preprocessing_scRNA_scATAC/CallCellRanger_sc_RNA_NAExperiment.sh
 
 ## Step 7 - Call cellranger for single-cell atac-seq
-  - 
 ##### Path to the folder with the files
 metadata_file=/home/cellranger/database/metadata.txt
 database_folder=/home/cellranger/database/hypothalamu_scRNA_scATAC/
