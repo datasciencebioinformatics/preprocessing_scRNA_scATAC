@@ -65,7 +65,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## Create reference files
   - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/GRCm39.genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.transcripts.gtf # Human annotation formatted
-  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/GRCh38.p13.genome.fa --genes=/home/cellranger/database/gencode.vM32.annotation.transcripts.gtf # Mouse annotation formatted
+  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/GRCh38.p13.genome.fa --genes=/home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf # Mouse annotation formatted
 
 ## Untar cell ranger
   - cd /home/cellranger/
