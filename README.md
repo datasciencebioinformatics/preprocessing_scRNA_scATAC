@@ -86,5 +86,6 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ##### Call script folder for processing cell ranger in each sample of the experiment
   - preprocessing_scRNA_scATAC/CallCellRanger_sc_ATAC_NAExperiment.sh
+    
 
 
