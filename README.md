@@ -95,34 +95,9 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - Cell clustering
   - Cluster differential accessibility
 
-#######################################################################################################################
+##############################################################################################
 ### Create a metadata file to list the files and info for each sample 
 metadata_file=/home/cellranger/database/metadata.txt
 
 # Save the folder with the files
 database_folder=/home/cellranger/database/hypothalamu_scRNA_scATAC/
-
-### Cellranger sc-ATAC command:
-#### For each sample in the metadata, cellranger-atac count will be used 
-#### fastqs=
-#### reference=
-cat /home/cellranger/database/metadata.txt | grep -v "#"  | while read line 
-do
-  # Take the id
-  file=$(echo $line | awk -v directory=$database_folder {'print directory$1'})
-  
-  # Take the sample
-  sample=$(echo $line | awk {'print $2'})
-	
-  # Take the lane
-  lane=$(echo $line | awk {'print $3'})	
-	
-  # Take the sample
-  rep=$(echo $line | awk {'print $4'})		
-	
-  # Take the sample
-  direction=$(echo $line | awk {'print $5'})			
-	
-  # Print
-  echo -e $file" "$sample"\t"$lane"\t"$rep"\t"$direction	
-done
