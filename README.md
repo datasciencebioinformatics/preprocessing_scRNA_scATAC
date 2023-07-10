@@ -70,7 +70,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 #### Create reference files
   - sudo /home/cellranger/cellranger-6.1.2/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/GRCh38.p13.genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.prepared.gtf # Human annotation formatted
   - sudo /home/cellranger/cellranger-6.1.2/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/GRCm39.genome.fa --genes=/home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.prepared.gtf # Mouse annotation formatted
-    
+  
 ## Step 6 - Call cellranger for single-cell rna-seq
 ##### Path to the folder with the files
   - metadata_file=/home/cellranger/database/metadata.txt
@@ -79,6 +79,8 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ##### Call script folder for processing cell ranger in each sample of the experiment
   - preprocessing_scRNA_scATAC/CallCellRanger_sc_RNA_NAExperiment.sh
 
+sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=DNA-M1 --transcriptome=/home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.prepared.gtf --fastqs=/home/cellranger/database/hypothalamu_scRNA_scATAC/ --sample=DNA-M1 --localcores=8 --localmem=16
+
 ## Step 7 - Call cellranger for single-cell atac-seq
 ##### Path to the folder with the files
   - metadata_file=/home/cellranger/database/metadata.txt
@@ -86,6 +88,5 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ##### Call script folder for processing cell ranger in each sample of the experiment
   - preprocessing_scRNA_scATAC/CallCellRanger_sc_ATAC_NAExperiment.sh
-    
-
+  
 
