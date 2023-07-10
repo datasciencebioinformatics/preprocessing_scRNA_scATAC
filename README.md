@@ -54,7 +54,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - /home/cellranger/cellranger-6.1.2/bin/cellranger sitecheck
   - /home/cellranger/cellranger-6.1.2/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt- 
 
-### Step 5 - Prepare CellRanger database :   
+## Step 5 - Prepare CellRanger database :   
 #### Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/GRCm39.genome.fa     # Human genome index
   - sudo samtools faidx /home/cellranger/database/GRCh38.p13.genome.fa # Mouse genome index
