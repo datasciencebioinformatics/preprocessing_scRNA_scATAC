@@ -42,7 +42,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 #### Untar annotation tar.gz
   - gzip -d gencode.v43.annotation.gtf.gz                                 #### unzip gencode.v43.annotation.gtf
-  - gzip -d gencode.vM32.annotation.gtf.gz                                #### unzip gencode.vM32.annotation.gtf
+  - gzip -d gencode.vM32.chr_patch_hapl_scaff.annotation.gtf.gz           #### unzip gencode.vM32.annotation.gtf
   - gzip -d GRCm39.genome.fa.gz                                           #### unzip GRCm39.genome.fa.gz
   - gzip -d GRCh38.p13.genome.fa.gz                                       #### unzip GRCh38.p13.genome.fa
 
@@ -56,9 +56,8 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
 
 #### Filter gft files
-sudo gffread /home/cellranger/database/gencode.v43.annotation.gtf -o /home/cellranger/database/gencode.v43.annotation.filtered.gtf
-sudo gffread /home/cellranger/database/gencode.vM32.annotation.gtf -o /home/cellranger/database/gencode.vM32.annotation.filtered.gtf
-
+  - sudo gffread /home/cellranger/database/gencode.v43.annotation.gtf -o /home/cellranger/database/gencode.v43.annotation.filtered.gtf
+  - sudo gffread /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf -o /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.filtered.gtf
 
 #### Prepare gft files
   - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value # Human gtf file
