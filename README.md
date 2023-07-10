@@ -1,62 +1,63 @@
-################################################################################################################
+##############################################################################################
 # preprocessing_scRNA_scATAC
 Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC. This step focuses on the installation, preparation and execution of Cellranger.
 
-## Installation of samtools and python packages
+## Step 1 - Installation of samtools and python packages
   - sudo apt install python3-docopt
   - sudo apt install python3-lz4
   - sudo apt install python3-numpy
   - sudo apt-get install samtools
   - sudo apt-get install biobambam2
   
-
-## CellRanger Installation
-## Download instructions from :
+## Step 2 -  CellRanger Installation
+### Download CellRanger follozing instructions from :
   - https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest#cr-wget
 
-## Download reference gene data and corresponding genome
+### Download reference gene data and corresponding genome
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/gencode.vM32.annotation.gtf.gz
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/gencode.v43.annotation.gtf.gz
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/GRCh38.p13.genome.fa.gz
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/GRCm39.genome.fa.gz    
     
-## Prepare a single directory for cellranger and database
-### Create dir
+### Step 3 - Prepare database and tool directory
+#### Create dir
   - mkdir /home/cellranger/                                           #### create cellranger folder
   - mkdir /home/cellranger/database/                                  #### create cellranger database
 
-### Go to cellranger folder
+#### Go to cellranger folder
   - cd /home/cellranger/                                              #### go to cellranger folder
   - chmod a+x -R /home/cellranger/                                    #### grant sudo permissiom folder- 
     
-### Move files to correspondent directories
+#### Move files to correspondent directories
   - mv ./gencode.vM32.annotation.gtf.gz /home/cellranger/database/            #### Move mouse annotation to database folder
   - mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/            #### Move human annotation to database folder 
   - mv ./GRCh38.p13.genome.fa.gz /home/cellranger/database/                   #### Move mouse genome to database folder
   - mv ./GRCm39.genome.fa.gz     /home/cellranger/database/                   #### Move human genome to database folder
-  - mv ./cellranger-7.1.0.tar.gz /home/cellranger/                            #### Move cellranger file to folder
-
-## Untar cell cellranger
+  - mv ./cellranger-7.1.0.tar.gz /home/cellranger/
+  -                          #### Move cellranger file to folder
+### Step 4 - Install CellRanger :
+#### Untar cell cellranger
   - cd /home/cellranger/database/                                         #### go to database folder- 
   - tar -xzvf cellranger-7.1.0.tar.gz                                     #### unzip cellranger
 
-## Untar annotation tar.gz
+#### Untar annotation tar.gz
   - gzip -d gencode.v43.annotation.gtf.gz                                 #### unzip gencode.v43.annotation.gtf
   - gzip -d gencode.vM32.annotation.gtf                                   #### unzip gencode.vM32.annotation.gtf
   - gzip -d GRCm39.genome.fa.gz                                           #### unzip GRCm39.genome.fa.gz
   - gzip -d GRCh38.p13.genome.fa.gz                                       #### unzip GRCh38.p13.genome.fa
-   
-## Create fasta indexes
+
+### Step 5 - Prepare CellRanger database :   
+#### Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/GRCm39.genome.fa     # Human genome index
   - sudo samtools faidx /home/cellranger/database/GRCh38.p13.genome.fa # Mouse genome index
 
-## Configure cellranger
+#### Configure cellranger
   - /home/cellranger/cellranger-7.1.0/bin/cellranger sitecheck
   - /home/cellranger/cellranger-7.1.0/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
 
-## Filter gft files
+#### Filter gft files
 
-## Prepare gft files
+#### Prepare gft files
   - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value # Human gtf file
   - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.vM32.annotation.gtf /home/cellranger/database/gencode.vM32.annotation.transcripts.gtf --attribute=key:allowable_value # Mouse gtf file
 
