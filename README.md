@@ -46,6 +46,14 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - gzip -d GRCm39.genome.fa.gz                                           #### unzip GRCm39.genome.fa.gz
   - gzip -d GRCh38.p13.genome.fa.gz                                       #### unzip GRCh38.p13.genome.fa
 
+#### Untar cell ranger
+  - cd /home/cellranger/
+  - tar -xzvf cellranger-6.1.2.tar.gz
+  - 
+#### Configure cellranger
+  - /home/cellranger/cellranger-6.1.2/bin/cellranger sitecheck
+  - /home/cellranger/cellranger-6.1.2/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt- 
+
 ### Step 5 - Prepare CellRanger database :   
 #### Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/GRCm39.genome.fa     # Human genome index
@@ -63,17 +71,9 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - /home/cellranger/cellranger-6.1.2/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.prepared.gtf --attribute=key:allowable_value # Human gtf file
   - /home/cellranger/cellranger-6.1.2/bin/cellranger mkgtf /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.filtered.gtf /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.prepared.gtf --attribute=key:allowable_value # Mouse gtf file
 
-## Create reference files
+#### Create reference files
   - sudo /home/cellranger/cellranger-6.1.2/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/GRCh38.p13.genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.prepared.gtf # Human annotation formatted
   - sudo /home/cellranger/cellranger-6.1.2/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/GRCm39.genome.fa --genes=/home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.prepared.gtf # Mouse annotation formatted
-
-## Untar cell ranger
-  - cd /home/cellranger/
-  - tar -xzvf cellranger-6.1.2.tar.gz
-
-## Configure cellranger
-  - /home/cellranger/cellranger-6.1.2/bin/cellranger sitecheck
-  - /home/cellranger/cellranger-6.1.2/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt
     
 ## Call cellranger for single-cell rna-seq
   -
