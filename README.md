@@ -58,7 +58,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 #### Create fasta indexes
   - sudo samtools faidx /home/cellranger/database/GRCm39.genome.fa     # Human genome index
   - sudo samtools faidx /home/cellranger/database/GRCh38.p13.genome.fa # Mouse genome index
-  - 
+    
 #### Filter gft files
   - sudo gffread /home/cellranger/database/gencode.v43.annotation.gtf -o /home/cellranger/database/gencode.v43.annotation.filtered.gtf
   - sudo gffread /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf -o /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.filtered.gtf
