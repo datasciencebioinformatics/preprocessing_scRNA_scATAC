@@ -99,7 +99,7 @@ metadata_file=/home/cellranger/database/metadata.txt
 #### Save the folder with the files
 database_folder=/home/cellranger/database/hypothalamu_scRNA_scATAC/
 
-# Call script folder for processing cell ranger in each sample of the experiment
+#### Call script folder for processing cell ranger in each sample of the experiment
 preprocessing_scRNA_scATAC/CallCellRangerExperiment.sh
 
 #########################################################################################
