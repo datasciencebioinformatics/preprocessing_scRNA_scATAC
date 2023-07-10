@@ -19,7 +19,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/GRCh38.p13.genome.fa.gz
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/GRCm39.genome.fa.gz    
     
-### Step 3 - Prepare database and tool directory
+## Step 3 - Prepare database and tool directory
 #### Create dir
   - mkdir /home/cellranger/                                           #### create cellranger folder
   - mkdir /home/cellranger/database/                                  #### create cellranger database
