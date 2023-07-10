@@ -105,9 +105,9 @@ cat /home/cellranger/database/metadata.txt | grep -v #  | while read line
 do
     # Take the id
         
-    # sample=   
-    
+    # sample=       
 done
+
 
 
 
