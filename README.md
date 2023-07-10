@@ -49,7 +49,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 #### Untar cell ranger
   - cd /home/cellranger/
   - tar -xzvf cellranger-6.1.2.tar.gz
-  - 
+    
 #### Configure cellranger
   - /home/cellranger/cellranger-6.1.2/bin/cellranger sitecheck
   - /home/cellranger/cellranger-6.1.2/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt- 
