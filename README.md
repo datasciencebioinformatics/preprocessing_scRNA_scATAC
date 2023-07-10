@@ -60,12 +60,12 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - sudo gffread /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf -o /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.filtered.gtf
 
 #### Prepare gft files
-  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.transcripts.gtf --attribute=key:allowable_value # Human gtf file
-  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.vM32.annotation.gtf /home/cellranger/database/gencode.vM32.annotation.transcripts.gtf --attribute=key:allowable_value # Mouse gtf file
+  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.prepared.gtf --attribute=key:allowable_value # Human gtf file
+  - /home/cellranger/cellranger-7.1.0/bin/cellranger mkgtf /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.filtered.gtf /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.prepared.gtf --attribute=key:allowable_value # Mouse gtf file
 
 ## Create reference files
-  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/GRCm39.genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.transcripts.gtf # Human annotation formatted
-  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/GRCh38.p13.genome.fa --genes=/home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf # Mouse annotation formatted
+  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/GRCm39.genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.prepared.gtf # Human annotation formatted
+  - sudo /home/cellranger/cellranger-7.1.0/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/GRCh38.p13.genome.fa --genes=/home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.prepared.gtf # Mouse annotation formatted
 
 ## Untar cell ranger
   - cd /home/cellranger/
