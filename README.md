@@ -1,4 +1,4 @@
-##############################################################################################
+##########################################################################################
 # preprocessing_scRNA_scATAC
 Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC. This step focuses on the installation, preparation and execution of Cellranger.
 
