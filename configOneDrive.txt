@@ -1,0 +1,8 @@
+#### Install rclone
+sudo apt install rclone -y
+
+#### configure rclone
+sudo rclone config
+
+#### mount configure rclone
+sudo rclone --vfs-cache-mode writes mount onedrive: ~/OneDrive
