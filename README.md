@@ -79,8 +79,12 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ##### Call script folder for processing cell ranger in each sample of the experiment
   - preprocessing_scRNA_scATAC/CallCellRanger_sc_RNA_NAExperiment.sh
 
-sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=DNA-M1 --transcriptome=/home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.prepared.gtf --fastqs=/home/cellranger/database/hypothalamu_scRNA_scATAC/ --sample=DNA-M1 --localcores=8 --localmem=16
-
+##### call cellranger count
+- cellranger /home/cellranger/cellranger-6.1.2/count --id=hypothalamu_scRNA_scATAC --transcriptome=refdata-gex-mm10-2020-A --fastqs=/home/cellranger/database/hypothalamu_scRNA_scATAC/ --sample=cDNA-M1 --localcores=8 --localmem=16
+                 
+##### call cellranger aggr
+- cellranger aggr --id=hypothalamu_scRNA_scATAC --csv=AGG123_libraries.csv                 
+                
 ## Step 7 - Call cellranger for single-cell atac-seq
 ##### Path to the folder with the files
   - metadata_file=/home/cellranger/database/metadata.txt
