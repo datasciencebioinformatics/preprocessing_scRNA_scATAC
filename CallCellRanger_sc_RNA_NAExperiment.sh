@@ -20,8 +20,15 @@ do
   rep=$(echo $line | awk {'print $5'})		
 	
   # Take the sample
-  direction=$(echo $line | awk {'print $6'})			
+  direction=$(echo $line | awk {'print $6'})
+
+  # Take the transcriptome
+  transcriptome==$(echo $line | awk {'print $7'})
 	
   # Print
   echo -e $experiment" "$file"\t"$sample"\t"$lane"\t"$rep"\t"$direction	
+
+  # Print the command line
+  echo /home/cellranger/cellranger-6.1.2/bin/cellranger /home/cellranger/cellranger-6.1.2/count --id=$experiment --transcriptome=$transcriptome --fastqs=/home/cellranger/database/hypothalamu_scRNA_scATAC/ --sample=$sample --localcores=8 --localmem=16
+  
 done
