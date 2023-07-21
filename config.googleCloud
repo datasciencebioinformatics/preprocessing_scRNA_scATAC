@@ -1,0 +1,23 @@
+# Install gffread  using git clone 
+git clone https://github.com/gpertea/gffread
+
+# Copy gffread to bin directory
+sudo cp /home/user/gffread/gffread /bin/ 
+
+# Export cellranger
+export PATH=/home/cellranger/cellranger-6.1.2/:$PATH 
+
+# Unzip reference genome
+gzip -d /home/cellranger/database/cellranger/testdata/refdata-gex-GRCh38-2020-A.tar.gz
+
+# Create fasta indexes
+sudo samtools faidx /home/cellranger/database/cellranger/testdata/Homo_sapiens.GRCh38.dna.chromosome.22.fa # Human genome index
+
+# Filter gft files
+sudo /home/cellranger/cellranger-6.1.2/bin/cellranger mkgtf /home/cellranger/database/cellranger/testdata/Homo_sapiens.GRCh38.104.chr_22.gtf /home/cellranger/database/cellranger/testdata/Homo_sapiens.GRCh38.104.chr_22.prepared.gtf --attribute=key:allowable_value # Human gtf file
+
+# Call cellranger for single-cell rna-seq
+sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=refdata-gex-GRCh38-2020-A --transcriptome=/home/cellranger/database/refdata-gex-GRCh38-2020-A --fastqs=/home/cellranger/database/cellranger/testdata/ --sample=testdata --localcores=8 --localmem=16
+
+# cellranger - pbmc_1k_v3_mini
+sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=testdata --transcriptome=/home/cellranger/database/refdata-gex-GRCh38-2020-A --fastqs=/home/cellranger/database/cellranger/testdata/ --sample=pbmc_1k_v3_mini --localcores=8 --localmem=16
