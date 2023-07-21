@@ -24,3 +24,6 @@ sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=refdata-gex-GRC
 
 # cellranger - pbmc_1k_v3_mini
 sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=testdata --transcriptome=/home/cellranger/database/refdata-gex-GRCh38-2020-A --fastqs=/home/cellranger/database/cellranger/testdata/ --sample=pbmc_1k_v3_mini --localcores=8 --localmem=16
+
+# Transfer data to local home
+sudo gcloud compute scp --recurse user@instance-1:/home/cellranger/database/cellranger/testdata/ /home/cellranger/database/testdata/ --zone "us-central1-a" --ssh-key-file=/home/user/.ssh/id_ed25519.pub --project "green-rookery-389316"
