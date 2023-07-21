@@ -1,4 +1,7 @@
-# Install gffread  using git clone 
+# Download teste data from github
+git clone https://github.com/qbic-pipelines/cellranger
+
+# Install gffread  using git clone
 git clone https://github.com/gpertea/gffread
 
 # Copy gffread to bin directory
