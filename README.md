@@ -18,7 +18,9 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf.gz
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/gencode.v43.annotation.gtf.gz
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/GRCh38.p13.genome.fa.gz
-  - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/GRCm39.genome.fa.gz    
+  - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/GRCm39.genome.fa.gz
+  - wget https://cf.10xgenomics.com/supp/cell-atac/refdata-cellranger-arc-GRCh38-2020-A-2.0.0.tar.gz
+  - wget https://cf.10xgenomics.com/supp/cell-atac/refdata-cellranger-arc-mm10-2020-A-2.0.0.tar.gz
     
 ## Step 3 - Prepare database and tool directory
 #### Create dir
@@ -39,7 +41,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ## Step 4 - Install CellRanger :
 #### Untar cell cellranger
-  - cd /home/cellranger/database/                                         #### go to database folder- 
+  - cd /home/cellranger/
   - tar -xzvf cellranger-6.1.2.tar.gz                                     #### unzip cellranger
   - tar -xzvf cellranger-atac-2.1.0.tar.gz
 
@@ -48,10 +50,6 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - gzip -d gencode.vM32.chr_patch_hapl_scaff.annotation.gtf.gz           #### unzip gencode.vM32.annotation.gtf
   - gzip -d GRCm39.genome.fa.gz                                           #### unzip GRCm39.genome.fa.gz
   - gzip -d GRCh38.p13.genome.fa.gz                                       #### unzip GRCh38.p13.genome.fa
-
-#### Untar cell ranger
-  - cd /home/cellranger/
-  - tar -xzvf cellranger-6.1.2.tar.gz
     
 #### Configure cellranger
   - /home/cellranger/cellranger-6.1.2/bin/cellranger sitecheck
