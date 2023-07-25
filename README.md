@@ -80,7 +80,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - preprocessing_scRNA_scATAC/CallCellRanger_sc_RNA_NAExperiment.sh
 
 ##### call cellranger count
-- cellranger /home/cellranger/cellranger-6.1.2/count --id=hypothalamu_scRNA_scATAC --transcriptome=refdata-gex-mm10-2020-A --fastqs=/home/cellranger/database/hypothalamu_scRNA_scATAC/ --sample=cDNA-M1 --localcores=8 --localmem=16
+- sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=pbmc_1k_v3_mini --transcriptome=/home/cellranger/refdata-gex-GRCh38-2020-A/ --fastqs=/home/cellranger/cellranger/testdata/ --sample=pbmc_1k_v3_mini --localcores=8 --localmem=32
                  
 ##### call cellranger aggr
 - cellranger aggr --id=hypothalamu_scRNA_scATAC --csv=AGG123_libraries.csv                 
