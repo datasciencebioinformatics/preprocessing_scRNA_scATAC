@@ -12,6 +12,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ## Step 2 -  CellRanger Installation
 ### Download CellRanger follozing instructions from :
   - https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest#cr-wget
+  - https://support.10xgenomics.com/single-cell-atac/software/downloads/latest
 
 ### Download reference gene data and corresponding genome
   - wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf.gz
