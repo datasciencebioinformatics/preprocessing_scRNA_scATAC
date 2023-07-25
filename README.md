@@ -35,11 +35,13 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - mv ./GRCh38.p13.genome.fa.gz /home/cellranger/database/                                        #### Move mouse genome to database folder
   - mv ./GRCm39.genome.fa.gz     /home/cellranger/database/                                        #### Move human genome to database folder
   - mv ./cellranger-6.1.2.tar.gz /home/cellranger/                                                 #### Move cellranger file to folder
+  - mv ./cellranger-atac-2.1.0.tar.gz /home/cellranger/                                            #### Move cellranger file to folder
 
 ## Step 4 - Install CellRanger :
 #### Untar cell cellranger
   - cd /home/cellranger/database/                                         #### go to database folder- 
   - tar -xzvf cellranger-6.1.2.tar.gz                                     #### unzip cellranger
+  - tar -xzvf cellranger-atac-2.1.0.tar.gz
 
 #### Untar annotation tar.gz
   - gzip -d gencode.v43.annotation.gtf.gz                                 #### unzip gencode.v43.annotation.gtf
