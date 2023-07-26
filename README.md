@@ -50,6 +50,8 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - gzip -d gencode.vM32.chr_patch_hapl_scaff.annotation.gtf.gz           #### unzip gencode.vM32.annotation.gtf
   - gzip -d GRCm39.genome.fa.gz                                           #### unzip GRCm39.genome.fa.gz
   - gzip -d GRCh38.p13.genome.fa.gz                                       #### unzip GRCh38.p13.genome.fa
+  - tar -xzvf refdata-cellranger-arc-GRCh38-2020-A-2.0.0.tar.gz
+  - tar -xzvf refdata-cellranger-arc-mm10-2020-A-2.0.0.tar.gz
     
 #### Configure cellranger
   - /home/cellranger/cellranger-6.1.2/bin/cellranger sitecheck
@@ -93,6 +95,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 
 ##### Call script folder for processing cell ranger in each sample of the experiment
   - preprocessing_scRNA_scATAC/CallCellRanger_sc_ATAC_NAExperiment.sh
-  - /home/cellranger/cellranger-atac-2.1.0/bin/cellranger-atac  mkfastq --id=tiny-bcl_2 --run=/home/cellranger/database/cellranger-atac-tiny-bcl-1.0.0/ --csv=cellranger-atac-tiny-bcl-simple-1.0.0.csv --output-dir=/home/cellranger/output/
+  - /home/cellranger/cellranger-atac-2.1.0/bin/cellranger-atac  mkfastq --id=tiny-bcl_2 --run=/home/cellranger/database/cellranger-atac-tiny-bcl-1.0.0/ --csv=cellranger-atac-tiny-bcl-simple-1.0.0.csv --output-dir=/home/cellranger/output/cellranger-atac/experiment_folder/
+  - sudo /home/cellranger/cellranger-atac-2.1.0/bin/cellranger-atac count --id=tiny-bcl_3 --reference=/home/cellranger/database/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/ --fastqs=/home/cellranger/output/cellranger-atac/experiment_folder/ --localcores=8 --localmem=16
   
 
