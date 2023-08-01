@@ -19,16 +19,16 @@ tar -xzvf ./refdata-gex-mm10-2020-A.tar.gz
 # Only mice data
 In the pipeline:
 # Create fasta indexes for mouse genome
-sudo samtools faidx /home/cellranger/database/GRCm39.genome.fa
+sudo samtools faidx /home/felipe/cellranger/database/GRCm39.genome.fa
 
 # Filter gft files - Mouse GRCm39.genome.fa
-sudo gffread /home/cellranger/database/gencode.vM33.annotation.gtf -o /home/cellranger/database/gencode.vM33.annotation.filtered.gtf
+sudo gffread /home/felipe/cellranger/database/gencode.vM33.annotation.gtf -o /home/cellranger/database/gencode.vM33.annotation.filtered.gtf
 
 # Prepare gft files  - Mouse gencode.vM33.annotation.gtf.gz
-/home/cellranger/cellranger-6.1.2/bin/cellranger mkgtf /home/cellranger/database/gencode.vM33.annotation.gtf /home/cellranger/database/gencode.vM33.annotation.prepared.gtf --attribute=key:allowable_value # Mouse gtf file
+/home/felipe/cellranger/cellranger-6.1.2/bin/cellranger mkgtf /home/felipe/cellranger/database/gencode.vM33.annotation.gtf /home/cellranger/database/gencode.vM33.annotation.prepared.gtf --attribute=key:allowable_value # Mouse gtf file
 
 # Create reference files  - Mouse
-sudo /home/cellranger/cellranger-6.1.2/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/GRCm39.genome.fa --genes=/home/cellranger/database/gencode.vM33.annotation.prepared.gtf # Mouse annotation formatted
+sudo /home/felipe/cellranger/cellranger-6.1.2/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/felipe/cellranger/database/GRCm39.genome.fa --genes=/home/cellranger/database/gencode.vM33.annotation.prepared.gtf # Mouse annotation formatted
 #################################################################################################################################
 # Call cellranger per mice
 # Mouse 1 
