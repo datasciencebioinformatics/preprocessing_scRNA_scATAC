@@ -27,3 +27,13 @@ sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=testdata --tran
 
 # Transfer data to local home
 sudo gcloud compute scp --recurse user@instance-1:/home/cellranger/database/cellranger/testdata/ /home/cellranger/database/testdata/ --zone "us-central1-a" --ssh-key-file=/home/user/.ssh/id_ed25519.pub --project "green-rookery-389316"
+
+###################################################################################################
+# Copy from hard driver to server instance-5
+sudo gcloud compute scp --recurse /media/felipe/2EBC0E29BC0DEBE1/Camundongos/snRNAseq\ mouse/cDNA-M1* user@instance-5:/home/user/sn_RNAseq/ --project "green-rookery-389316" 
+###################################################################################################
+# Copy from server to hardriver
+sudo gcloud compute scp --recurse user@instance-5:/home/user/hypothalamus/cDNA-M2/outs/ /home/felipe/hyphotalamus/snRNASseq/cDNA-M2/  --project "green-rookery-389316" 
+sudo gcloud compute scp --recurse user@instance-5:/home/user/hypothalamus/cDNA-M2/outs/ /media/felipe/2EBC0E29BC0DEBE1/snRNASeq_output/cDNA-M2/  --project "green-rookery-389316" --ssh-key-file=/home/felipe/felipe.key.pub
+sudo gcloud compute scp --recurse user@instance-5:/home/user/hypothalamus/cDNA-M2.tar.gz /media/felipe/2EBC0E29BC0DEBE1/snRNASeq_output/cDNA-M2/  --project "green-rookery-389316" --ssh-key-file=/home/felipe/felipe.key.pub
+##################################################################################################
