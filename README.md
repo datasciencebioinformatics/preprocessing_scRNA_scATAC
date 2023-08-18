@@ -83,7 +83,7 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
   - preprocessing_scRNA_scATAC/CallCellRanger_sc_RNA_NAExperiment.sh
 
 ##### call cellranger count
-- sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=pbmc_1k_v3_mini --transcriptome=/home/cellranger/refdata-gex-GRCh38-2020-A/ --fastqs=/home/cellranger/cellranger/testdata/ --sample=pbmc_1k_v3_mini --localcores=8 --localmem=32
+- sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=pbmc_1k_v3_mini --transcriptome=/home/cellranger/refdata-gex-GRCh38-2020-A/ --fastqs=/home/cellranger/cellranger/testdata/ --sample=pbmc_1k_v3_mini --localcores=8 --localmem=32 --chemistry=ARC-v1
                  
 ##### call cellranger aggr
 - cellranger aggr --id=hypothalamu_scRNA_scATAC --csv=AGG123_libraries.csv                 
@@ -96,6 +96,6 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ##### Call script folder for processing cell ranger in each sample of the experiment
   - preprocessing_scRNA_scATAC/CallCellRanger_sc_ATAC_NAExperiment.sh
   - cellranger/cellranger-atac-2.1.0/bin/cellranger-atac mkfastq --id=hypothalamus --run=/home/zenpoetryinsights/cellranger/database/cellranger-atac-tiny-bcl-1.0.0/ --csv=cellranger-atac-tiny-bcl-simple-1.0.0.csv
-  - sudo /home/cellranger/cellranger-atac-2.1.0/bin/cellranger-atac count --id=tiny-bcl_3 --reference=/home/cellranger/database/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/ --fastqs=/home/cellranger/output/cellranger-atac/experiment_folder/ --localcores=8 --localmem=16
+  - sudo /home/cellranger/cellranger-atac-2.1.0/bin/cellranger-atac count --id=tiny-bcl_3 --reference=/home/cellranger/database/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/ --fastqs=/home/cellranger/output/cellranger-atac/experiment_folder/ --localcores=8 --localmem=16 --chemistry=ARC-v1
   
 
