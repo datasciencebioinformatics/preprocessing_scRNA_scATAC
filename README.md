@@ -96,6 +96,6 @@ Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC.
 ##### Call script folder for processing cell ranger in each sample of the experiment
   - preprocessing_scRNA_scATAC/CallCellRanger_sc_ATAC_NAExperiment.sh
   - cellranger/cellranger-atac-2.1.0/bin/cellranger-atac mkfastq --id=hypothalamus --run=/home/zenpoetryinsights/cellranger/database/cellranger-atac-tiny-bcl-1.0.0/ --csv=cellranger-atac-tiny-bcl-simple-1.0.0.csv 
-  - sudo /home/cellranger/cellranger-atac-2.1.0/bin/cellranger-atac count --id=tiny-bcl_3 --reference=/home/cellranger/database/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/ --fastqs=/home/cellranger/output/cellranger-atac/experiment_folder/ --localcores=8 --localmem=16 --chemistry=ARC-v1
+  - /home/singlecell/cellranger/cellranger-atac-2.1.0/bin/cellranger-atac count --id=ATAC-M1 --fastqs=/home/singlecell/cellranger/sequences/ATAC-M1/ --reference=/home/singlecell/cellranger/cellranger-atac-2.1.0/ --sample=ATAC-M1 --chemistry=ARC-v1
   
 
