@@ -49,5 +49,7 @@ VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.m
 plot1 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "percent.mt")
 plot2 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 plot1 + plot2
+
+pbmc <- subset(pbmc.hypothalamus, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
 #####################################################################################
 
