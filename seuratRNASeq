@@ -55,7 +55,6 @@ png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_
 plot(PercentageFeatureSet)
 dev.off()
 
-
 # Visualize QC metrics as a violin plot
 VlnPlot<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
