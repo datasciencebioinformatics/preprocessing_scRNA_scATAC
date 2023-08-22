@@ -50,6 +50,12 @@ pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6, add.cell.ids = c("pbmc
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
 PercentageFeatureSet<-pbmc.hypothalamus[["percent.mt"]] <- PercentageFeatureSet(pbmc.hypothalamus, pattern = "^MT-")
 
+# Save PercentageFeatureSet
+png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_PercentageFeatureSet.png")
+plot(PercentageFeatureSet)
+dev.off()
+
+
 # Visualize QC metrics as a violin plot
 VlnPlot<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
