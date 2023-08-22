@@ -34,40 +34,28 @@ cDNAM6 <- CreateSeuratObject(counts = cDNAM6, project = "hypotha")
 # pbmc.hypothalamus
 pbmc.hypothalamus <- merge(cDNAM1, y = cDNAM2, add.cell.ids = c("cDNAM1", "cDNAM2"), project = "hypotha")
 
-print "First merge done!"
-
 # pbmc.hypothalamus
 pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM3, add.cell.ids = c("pbmc.hypothalamus", "cDNAM3"), project = "hypotha")
-
-print "Second merge done!"
 
 # pbmc.hypothalamus
 pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM4, add.cell.ids = c("pbmc.hypothalamus", "cDNAM4"), project = "hypotha")
 
-print "Third merge done!"
-
 # pbmc.hypothalamus
 pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM5, add.cell.ids = c("pbmc.hypothalamus", "cDNAM5"), project = "hypotha")
 
-print "Fourth merge done!"
-
 # pbmc.hypothalamus
 pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6, add.cell.ids = c("pbmc.hypothalamus", "cDNAM6"), project = "hypotha")
-
-print "Fifth merge done!"
 #####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
 pbmc.hypothalamus[["percent.mt"]] <- PercentageFeatureSet(pbmc.hypothalamus, pattern = "^MT-")
 
 # Visualize QC metrics as a violin plot
-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+VlnPlot<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "percent.mt")
 plot2 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-plot1 + plot2
-
-pbmc <- subset(pbmc.hypothalamus, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
+plot<-plot1 + plot2
 #####################################################################################
