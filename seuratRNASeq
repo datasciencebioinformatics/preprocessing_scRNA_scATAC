@@ -50,7 +50,7 @@ pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6, add.cell.ids = c("pbmc
 PercentageFeatureSet<-pbmc.hypothalamus[["percent.mt"]] <- PercentageFeatureSet(pbmc.hypothalamus, pattern = "^MT-")
 
 # Save PercentageFeatureSet
-png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_PercentageFeatureSet.png")
+png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_PercentageFeatureSet.png", , width = 12, height = 6, units = "cm")
 plot(PercentageFeatureSet)
 dev.off()
 #####################################################################################
@@ -58,7 +58,7 @@ dev.off()
 VlnPlot<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
 # Save VlnPlot
-png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_VlnPlot.png")
+png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_VlnPlot.png", width = 12, height = 6, units = "cm")
 plot(VlnPlot)
 dev.off()
 #####################################################################################
@@ -69,7 +69,7 @@ plot2 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "
 plot<-plot1 + plot2
 
 # Save FeatureScatter
-png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_FeatureScatter.png")
+png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_FeatureScatter.png", width = 12, height = 6, units = "cm")
 plot(plot)
 dev.off()
 #####################################################################################
