@@ -38,6 +38,9 @@ pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM5, add.cell.ids = c("pbmc
 pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6, add.cell.ids = c("pbmc.hypothalamus", "cDNAM6"), project = "hypothalamus")
 #####################################################################################
 # Second create quality plots
+# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+pbmc.hypothalamus[["percent.mt"]] <- PercentageFeatureSet(pbmc.hypothalamus, pattern = "^MT-")
+
 # Visualize QC metrics as a violin plot
-VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
