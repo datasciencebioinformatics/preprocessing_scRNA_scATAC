@@ -2,6 +2,8 @@ library(dplyr)
 library(Seurat)
 library(patchwork)
 
+#####################################################################################
+# First, load the tables 
 # Load table for each sample - cDNAM1
 cDNAM1<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M1/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
@@ -34,7 +36,8 @@ pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM5, add.cell.ids = c("pbmc
 
 # pbmc.hypothalamus
 pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6, add.cell.ids = c("pbmc.hypothalamus", "cDNAM6"), project = "hypothalamus")
-
+#####################################################################################
+# Second create quality plots
 # Visualize QC metrics as a violin plot
 VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
