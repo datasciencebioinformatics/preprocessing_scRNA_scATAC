@@ -1,27 +1,30 @@
+#####################################################################################
 library(dplyr)
 library(Seurat)
 library(patchwork)
-
+#####################################################################################
+# First, load the tables
 #####################################################################################
 # First, load the tables 
 # Load table for each sample - cDNAM1
-cDNAM1<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M1/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM1<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M1/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # Load table for each sample - cDNAM2
-cDNAM2<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M2/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM2<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M2/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # Load table for each sample - cDNAM3
-cDNAM3<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M3/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM3<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M3/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # Load table for each sample - cDNAM4
-cDNAM4<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M4/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM4<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M4/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # Load table for each sample - cDNAM5
-cDNAM5<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M5/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM5<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M5/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # Load table for each sample - cDNAM6
-cDNAM6<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M6/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM6<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M6/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
+# Load table for each sample - cDNAM1
 # pbmc.hypothalamus
 pbmc.hypothalamus <- merge(cDNAM1, y = cDNAM2, add.cell.ids = c("cDNAM1", "cDNAM2"), project = "hypothalamus")
 
