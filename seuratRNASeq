@@ -24,19 +24,29 @@ cDNAM6<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq
 
 # Load table for each sample - cDNAM1
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(cDNAM1, y = cDNAM2, add.cell.ids = c("cDNAM1", "cDNAM2"), project = "hypothalamus")
+pbmc.hypothalamus <- merge(cDNAM1, y = cDNAM2, add.cell.ids = c("cDNAM1", "cDNAM2"), project = "hypotha")
+
+print "First merge done!"
 
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM3, add.cell.ids = c("pbmc.hypothalamus", "cDNAM3"), project = "hypothalamus")
+pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM3, add.cell.ids = c("pbmc.hypothalamus", "cDNAM3"), project = "hypotha")
+
+print "Second merge done!"
 
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM4, add.cell.ids = c("pbmc.hypothalamus", "cDNAM4"), project = "hypothalamus")
+pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM4, add.cell.ids = c("pbmc.hypothalamus", "cDNAM4"), project = "hypotha")
+
+print "Third merge done!"
 
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM5, add.cell.ids = c("pbmc.hypothalamus", "cDNAM5"), project = "hypothalamus")
+pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM5, add.cell.ids = c("pbmc.hypothalamus", "cDNAM5"), project = "hypotha")
+
+print "Fourth merge done!"
 
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6, add.cell.ids = c("pbmc.hypothalamus", "cDNAM6"), project = "hypothalamus")
+pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6, add.cell.ids = c("pbmc.hypothalamus", "cDNAM6"), project = "hypotha")
+
+print "Fifth merge done!"
 #####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
