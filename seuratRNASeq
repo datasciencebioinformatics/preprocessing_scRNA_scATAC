@@ -28,6 +28,8 @@ cDNAM5 <- CreateSeuratObject(counts = cDNAM5, project = "hypotha")
 cDNAM6<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M6/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM6 <- CreateSeuratObject(counts = cDNAM6, project = "hypotha")
 
+#####################################################################################
+
 # Load table for each sample - cDNAM1
 # pbmc.hypothalamus
 pbmc.hypothalamus <- merge(cDNAM1, y = cDNAM2, add.cell.ids = c("cDNAM1", "cDNAM2"), project = "hypotha")
