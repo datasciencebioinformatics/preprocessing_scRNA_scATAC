@@ -14,11 +14,17 @@ cDNAM3<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M3/outs/filt
 # Load table for each sample - cDNAM4
 cDNAM4<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M4/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
-# Load table for each sample - cDNAM4
+# Load table for each sample - cDNAM5
 cDNAM5<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M5/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
-# Load table for each sample - cDNAM4
+# Load table for each sample - cDNAM6
 cDNAM6<-Read10X( data.dir="/home/felipe/Downloads/snRNASeq_out/cDNA-M6/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # pbmc.hypothalamus
 pbmc.hypothalamus <- merge(cDNAM1, y = cDNAM2, add.cell.ids = c("cDNAM1", "cDNAM2"), project = "hypothalamus")
+
+# pbmc.hypothalamus
+pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM3, add.cell.ids = c("pbmc.hypothalamus", "cDNAM3"), project = "hypothalamus")
+
+# pbmc.hypothalamus
+pbmc.hypothalamus <- merge(cDNAM1, y = cDNAM2, add.cell.ids = c("pbmc.hypothalamus", "cDNAM3"), project = "hypothalamus")
