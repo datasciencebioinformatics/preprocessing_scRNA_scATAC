@@ -104,6 +104,7 @@ dev.off()
 #####################################################################################
 # Scaling the data
 all.genes <- rownames(pbmc.hypothalamus)
+all.genes <- head(VariableFeatures(pbmc.hypothalamus), 250)
 pbmc.hypothalamus <- ScaleData(pbmc.hypothalamus, features = all.genes)
 #####################################################################################
 # Perform linear dimensional reduction
