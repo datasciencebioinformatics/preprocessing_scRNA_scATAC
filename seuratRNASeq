@@ -54,9 +54,10 @@ PercentageFeatureSet<-pbmc.hypothalamus[["percent.mt"]] <- PercentageFeatureSet(
 VlnPlot<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
 # Save VlnPlot
-png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_VlnPlot.png", width = 24, height = 10, res=600, units = "cm")
+png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_VlnPlot_features.png", width = 24, height = 16, res=600, units = "cm")
 plot(VlnPlot)
 dev.off()
+
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
@@ -69,3 +70,23 @@ png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_
 plot(plot)
 dev.off()
 #####################################################################################
+# Normalize the data
+pbmc.norm <- NormalizeData(pbmc.hypothalamus, normalization.method = "LogNormalize", scale.factor = 10000)
+
+#####################################################################################
+# Identification of highly variable features (feature selection)
+pbmc.hypothalamus <- FindVariableFeatures(pbmc.hypothalamus, selection.method = "vst", nfeatures = 2000)
+
+# Identify the 10 most highly variable genes
+top10 <- head(VariableFeatures(pbmc.hypothalamus), 10)
+
+# plot variable features with and without labels
+plot1 <- VariableFeaturePlot(pbmc.hypothalamus)
+plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+plot<- plot1 + plot2
+
+# Save FeatureScatter
+png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_FindVariableFeatures.png", width = 24, height = 10, res=600, units = "cm")
+plot(plot)
+dev.off()
+
