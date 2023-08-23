@@ -72,8 +72,8 @@ dev.off()
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
-plot1 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "percent.mt")
-plot2 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+plot1 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
 plot<-plot1 + plot2
 
 # Save FeatureScatter
