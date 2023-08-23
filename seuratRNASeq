@@ -57,13 +57,18 @@ PercentageFeatureSet<-pbmc.hypothalamus[["percent.mt"]] <- PercentageFeatureSet(
 
 #####################################################################################
 # Visualize QC metrics as a violin plot
-VlnPlot<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+VlnPlotA<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotB<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 
 # Save VlnPlot
-png(filename=paste(output_dir,"hypotha_VlnPlot_features.png",sep=""), width = 24, height = 10, res=600, units = "cm")
-plot(VlnPlot)
+png(filename=paste(output_dir,"hypotha_VlnPlot_featuresA.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot(VlnPlotA)
 dev.off()
 
+# Save VlnPlot
+png(filename=paste(output_dir,"hypotha_VlnPlot_featuresB.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot(VlnPlotB)
+dev.off()
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
