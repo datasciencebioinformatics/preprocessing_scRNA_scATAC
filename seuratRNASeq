@@ -103,3 +103,20 @@ pbmc.hypothalamus <- ScaleData(pbmc.hypothalamus, features = all.genes)
 #####################################################################################
 # Perform linear dimensional reduction
 pbmc.hypothalamus <- RunPCA(pbmc.hypothalamus, features = VariableFeatures(object = pbmc.hypothalamus))
+
+#####################################################################################
+# Perform linear dimensional reduction
+pbmc.hypothalamus <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.hypothalamus))
+
+# Examine and visualize PCA results a few different ways
+print(pbmc.hypothalamus[["pca"]], dims = 1:5, nfeatures = 5)
+
+# Create plots
+plot<-VizDimLoadings(pbmc.hypothalamus, dims = 1:2, reduction = "pca")
+
+# Save FeatureScatter
+png(filename=paste(output_dir,"hypotha_FindVariableFeatures.png",sep=""), width = 24, height = 10, res=600, units = "cm")
+plot(plot)
+dev.off()
+
+
