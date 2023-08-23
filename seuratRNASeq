@@ -84,6 +84,11 @@ dev.off()
 # Normalize the data
 pbmc.norm <- NormalizeData(pbmc.hypothalamus, normalization.method = "LogNormalize", scale.factor = 10000)
 
+# Scaling the data
+all.genes <- rownames(pbmc.hypothalamus)
+all.genes <- head(VariableFeatures(pbmc.hypothalamus), 100)
+pbmc.hypothalamus <- ScaleData(pbmc.hypothalamus, features = all.genes)
+
 #####################################################################################
 ## Identification of highly variable features (feature selection)
 pbmc.hypothalamus <- FindVariableFeatures(pbmc.hypothalamus, selection.method = "vst", nfeatures = 2000)
@@ -101,11 +106,7 @@ plot<- plot1 + plot2
 png(filename=paste(output_dir,"hypotha_FindVariableFeatures.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(plot)
 dev.off()
-#####################################################################################
-# Scaling the data
-all.genes <- rownames(pbmc.hypothalamus)
-all.genes <- head(VariableFeatures(pbmc.hypothalamus), 250)
-pbmc.hypothalamus <- ScaleData(pbmc.hypothalamus, features = all.genes)
+
 #####################################################################################
 # Perform linear dimensional reduction
 pbmc.hypothalamus <- RunPCA(pbmc.hypothalamus, features = VariableFeatures(object = pbmc.hypothalamus))
