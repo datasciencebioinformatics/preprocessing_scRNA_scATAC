@@ -60,7 +60,7 @@ PercentageFeatureSet<-pbmc.hypothalamus[["percent.mt"]] <- PercentageFeatureSet(
 VlnPlot<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
 # Save VlnPlot
-png(filename=paste(output_dir,"results/hypotha_VlnPlot_features.png",sep=""), width = 24, height = 10, res=600, units = "cm")
+png(filename=paste(output_dir,"hypotha_VlnPlot_features.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(VlnPlot)
 dev.off()
 
@@ -72,7 +72,7 @@ plot2 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "
 plot<-plot1 + plot2
 
 # Save FeatureScatter
-png(filename=paste(output_dir,"results/hypotha_FeatureScatter.png",sep=""), width = 24, height = 10, res=600, units = "cm")
+png(filename=paste(output_dir,"hypotha_FeatureScatter.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(plot)
 dev.off()
 #####################################################################################
@@ -93,7 +93,7 @@ plot<- plot1 + plot2
 
 # Save FeatureScatter
 #filename="/home/felipe/Downloads/snRNASeq_out/out/"
-png(filename=paste(output_dir,"results/hypotha_FindVariableFeatures.png",sep=""), width = 24, height = 10, res=600, units = "cm")
+png(filename=paste(output_dir,"hypotha_FindVariableFeatures.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(plot)
 dev.off()
 #####################################################################################
