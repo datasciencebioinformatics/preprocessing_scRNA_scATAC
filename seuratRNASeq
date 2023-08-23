@@ -5,6 +5,10 @@ library(patchwork)
 #####################################################################################
 # Set intput dir
 input_dir="/home/felipe/Camundongos/"
+
+# Set output dir
+input_dir="/home/felipe/Camundongos/"
+
 #####################################################################################
 # First, load the tables 
 # Load table for each sample - cDNAM1
@@ -57,7 +61,7 @@ PercentageFeatureSet<-pbmc.hypothalamus[["percent.mt"]] <- PercentageFeatureSet(
 VlnPlot<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
 # Save VlnPlot
-png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_VlnPlot_features.png", width = 24, height = 16, res=600, units = "cm")
+png(filename=paste(input_dir,"results/hypotha_VlnPlot_features.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(VlnPlot)
 dev.off()
 
@@ -69,7 +73,7 @@ plot2 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "
 plot<-plot1 + plot2
 
 # Save FeatureScatter
-png(filename="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/hypotha_FeatureScatter.png", width = 24, height = 10, res=600, units = "cm")
+png(filename=paste(input_dir,"results/hypotha_FeatureScatter.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(plot)
 dev.off()
 #####################################################################################
@@ -90,7 +94,7 @@ plot<- plot1 + plot2
 
 # Save FeatureScatter
 #filename="/home/felipe/Downloads/snRNASeq_out/out/"
-png(filename="./hypotha_FindVariableFeatures.png", width = 28, height = 14, res=600, units = "cm")
+png(filename=paste(input_dir,"results/hypotha_FindVariableFeatures.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(plot)
 dev.off()
 #####################################################################################
