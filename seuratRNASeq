@@ -53,6 +53,9 @@ cDNAM4.hypothalamus <- ScaleData(cDNAM4, features = all.genes4)
 cDNAM5.hypothalamus <- ScaleData(cDNAM5, features = all.genes5)
 cDNAM6.hypothalamus <- ScaleData(cDNAM6, features = all.genes6)
 
+all.genes <- rownames(pbmc.hypothalamus)
+pbmc.hypothalamus <- ScaleData(pbmc.hypothalamus, features = all.genes)
+
 #####################################################################################
 # Load table for each sample - cDNAM1
 # pbmc.hypothalamus
