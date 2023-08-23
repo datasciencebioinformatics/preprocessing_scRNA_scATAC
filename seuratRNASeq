@@ -85,7 +85,7 @@ dev.off()
 pbmc.norm <- NormalizeData(pbmc.hypothalamus, normalization.method = "LogNormalize", scale.factor = 10000)
 
 #####################################################################################
-# Identification of highly variable features (feature selection)
+## Identification of highly variable features (feature selection)
 pbmc.hypothalamus <- FindVariableFeatures(pbmc.hypothalamus, selection.method = "vst", nfeatures = 2000)
 
 # Identify the 10 most highly variable genes
