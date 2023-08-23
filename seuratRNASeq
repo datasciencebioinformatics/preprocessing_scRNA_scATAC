@@ -82,22 +82,26 @@ plot(plot)
 dev.off()
 #####################################################################################
 # Normalize the data
-pbmc.norm <- NormalizeData(pbmc.hypothalamus, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.hypothalamus <- NormalizeData(pbmc.hypothalamus, normalization.method = "LogNormalize", scale.factor = 10000)
+
+pbmc.hypothalamus <- FindVariableFeatures(pbmc.hypothalamus, selection.method = "vst", nfeatures = 2000)
 
 # Scaling the data
 all.genes <- rownames(pbmc.hypothalamus)
 all.genes <- head(VariableFeatures(pbmc.hypothalamus), 100)
 pbmc.hypothalamus <- ScaleData(pbmc.hypothalamus, features = all.genes)
 
+pbmc <- ScaleData(pbmc.hypothalamus, features = all.genes)
 #####################################################################################
 ## Identification of highly variable features (feature selection)
-pbmc.hypothalamus <- FindVariableFeatures(pbmc.hypothalamus, selection.method = "vst", nfeatures = 2000)
+FindVariableFeatures.hypothalamus <- FindVariableFeatures(GetAssayData(object = pbmc.hypothalamus, slot = "data"), selection.method = "vst")
+FindVariableFeatures.hypothalamus <- FindVariableFeatures(pbmc.hypothalamus, selection.method = "vst")
 
 # Identify the 10 most highly variable genes
-top10 <- head(VariableFeatures(pbmc.hypothalamus), 10)
+top10 <- head(VariableFeatures(FindVariableFeatures.hypothalamus), 10)
 
 # plot variable features with and without labels
-plot1 <- VariableFeaturePlot(pbmc.hypothalamus)
+plot1 <- VariableFeaturePlot(FindVariableFeatures.hypothalamus)
 plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
 plot<- plot1 + plot2
 
