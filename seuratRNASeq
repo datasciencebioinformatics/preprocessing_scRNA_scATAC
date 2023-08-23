@@ -35,21 +35,40 @@ cDNAM6<-Read10X( data.dir=paste(input_dir,"snRNASeq_output/cDNA-M6/outs/filtered
 cDNAM6 <- CreateSeuratObject(counts = cDNAM6, project = "hypotha")
 
 #####################################################################################
+# Normalize the data
+#pbmc.hypothalamus <- NormalizeData(cDNAM1, normalization.method = "LogNormalize", scale.factor = 10000)
+
+# Scaling the data
+all.genes1 <- rownames(cDNAM1)
+all.genes2 <- rownames(cDNAM2)
+all.genes3 <- rownames(cDNAM3)
+all.genes4 <- rownames(cDNAM4)
+all.genes5 <- rownames(cDNAM5)
+all.genes6 <- rownames(cDNAM6)
+
+cDNAM1.hypothalamus <- ScaleData(cDNAM1, features = all.genes1)
+cDNAM2.hypothalamus <- ScaleData(cDNAM2, features = all.genes2)
+cDNAM3.hypothalamus <- ScaleData(cDNAM3, features = all.genes3)
+cDNAM4.hypothalamus <- ScaleData(cDNAM4, features = all.genes4)
+cDNAM5.hypothalamus <- ScaleData(cDNAM5, features = all.genes5)
+cDNAM6.hypothalamus <- ScaleData(cDNAM6, features = all.genes6)
+
+#####################################################################################
 # Load table for each sample - cDNAM1
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(cDNAM1, y = cDNAM2, add.cell.ids = c("cDNAM1", "cDNAM2"), project = "hypotha")
+pbmc.hypothalamus <- merge(cDNAM1.hypothalamus, y = cDNAM2.hypothalamus, add.cell.ids = c("cDNAM1", "cDNAM2"), project = "hypotha")
 
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM3, add.cell.ids = c("pbmc.hypothalamus", "cDNAM3"), project = "hypotha")
+pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM3.hypothalamus, add.cell.ids = c("pbmc.hypothalamus", "cDNAM3"), project = "hypotha")
 
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM4, add.cell.ids = c("pbmc.hypothalamus", "cDNAM4"), project = "hypotha")
+pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM4.hypothalamus, add.cell.ids = c("pbmc.hypothalamus", "cDNAM4"), project = "hypotha")
 
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM5, add.cell.ids = c("pbmc.hypothalamus", "cDNAM5"), project = "hypotha")
+pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM5.hypothalamus, add.cell.ids = c("pbmc.hypothalamus", "cDNAM5"), project = "hypotha")
 
 # pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6, add.cell.ids = c("pbmc.hypothalamus", "cDNAM6"), project = "hypotha")
+pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6.hypothalamus, add.cell.ids = c("pbmc.hypothalamus", "cDNAM6"), project = "hypotha")
 #####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
@@ -80,21 +99,9 @@ plot<-plot1 + plot2
 png(filename=paste(output_dir,"hypotha_FeatureScatter.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(plot)
 dev.off()
-#####################################################################################
-# Normalize the data
-pbmc.hypothalamus <- NormalizeData(pbmc.hypothalamus, normalization.method = "LogNormalize", scale.factor = 10000)
 
-pbmc.hypothalamus <- FindVariableFeatures(pbmc.hypothalamus, selection.method = "vst", nfeatures = 2000)
-
-# Scaling the data
-all.genes <- rownames(pbmc.hypothalamus)
-all.genes <- head(VariableFeatures(pbmc.hypothalamus), 100)
-pbmc.hypothalamus <- ScaleData(pbmc.hypothalamus, features = all.genes)
-
-pbmc <- ScaleData(pbmc.hypothalamus, features = all.genes)
 #####################################################################################
 ## Identification of highly variable features (feature selection)
-FindVariableFeatures.hypothalamus <- FindVariableFeatures(GetAssayData(object = pbmc.hypothalamus, slot = "data"), selection.method = "vst")
 FindVariableFeatures.hypothalamus <- FindVariableFeatures(pbmc.hypothalamus, selection.method = "vst")
 
 # Identify the 10 most highly variable genes
@@ -117,7 +124,7 @@ pbmc.hypothalamus <- RunPCA(pbmc.hypothalamus, features = VariableFeatures(objec
 
 #####################################################################################
 # Perform linear dimensional reduction
-pbmc.hypothalamus <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.hypothalamus))
+pbmc.hypothalamus <- RunPCA(pbmc.hypothalamus, features = VariableFeatures(object = pbmc.hypothalamus))
 
 # Examine and visualize PCA results a few different ways
 print(pbmc.hypothalamus[["pca"]], dims = 1:5, nfeatures = 5)
