@@ -87,7 +87,13 @@ plot<- plot1 + plot2
 
 # Save FeatureScatter
 #filename="/home/felipe/Downloads/snRNASeq_out/out/"
-png(filename="./hypotha_FindVariableFeatures.png", width = 24, height = 12, res=600, units = "cm")
+png(filename="./hypotha_FindVariableFeatures.png", width = 28, height = 14, res=600, units = "cm")
 plot(plot)
 dev.off()
-
+#####################################################################################
+# Scaling the data
+all.genes <- rownames(pbmc.hypothalamus)
+pbmc.hypothalamus <- ScaleData(pbmc.hypothalamus, features = all.genes)
+#####################################################################################
+# Perform linear dimensional reduction
+pbmc.hypothalamus <- RunPCA(pbmc.hypothalamus, features = VariableFeatures(object = pbmc.hypothalamus))
