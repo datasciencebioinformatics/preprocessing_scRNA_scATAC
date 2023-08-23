@@ -1,4 +1,4 @@
-#####################################################################################
+s#####################################################################################
 library(dplyr)
 library(Seurat)
 library(patchwork)
@@ -7,7 +7,7 @@ library(patchwork)
 input_dir="/home/felipe/Camundongos/"
 
 # Set output dir
-output_dir="/home/felipe/Camundongos/"
+output_dir="/home/felipe/Camundongos/results/"
 #####################################################################################
 # First, load the tables 
 # Load table for each sample - cDNAM1
