@@ -3,29 +3,32 @@ library(dplyr)
 library(Seurat)
 library(patchwork)
 #####################################################################################
+# Set intput dir
+input_dir="/home/felipe/Camundongos/"
+#####################################################################################
 # First, load the tables 
 # Load table for each sample - cDNAM1
-cDNAM1<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M1/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM1<-Read10X(data.dir=paste(input_dir,"snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM1 <- CreateSeuratObject(counts = cDNAM1, project = "hypotha")
 
 # Load table for each sample - cDNAM2
-cDNAM2<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M2/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM2<-Read10X( data.dir=paste(input_dir,"snRNASeq_output/cDNA-M2/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM2 <- CreateSeuratObject(counts = cDNAM2, project = "hypotha")
 
 # Load table for each sample - cDNAM3
-cDNAM3<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M3/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM3<-Read10X( data.dir=paste(input_dir,"snRNASeq_output/cDNA-M3/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM3 <- CreateSeuratObject(counts = cDNAM3, project = "hypotha")
 
 # Load table for each sample - cDNAM4
-cDNAM4<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M4/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM4<-Read10X( data.dir=paste(input_dir,"snRNASeq_output/cDNA-M4/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM4 <- CreateSeuratObject(counts = cDNAM4, project = "hypotha")
 
 # Load table for each sample - cDNAM5
-cDNAM5<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M5/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM5<-Read10X( data.dir=paste(input_dir,"snRNASeq_output/cDNA-M5/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM5 <- CreateSeuratObject(counts = cDNAM5, project = "hypotha")
 
 # Load table for each sample - cDNAM6
-cDNAM6<-Read10X( data.dir="/home/zenpoetryinsights/hypothalamus/outputs/snRNASeq_out/cDNA-M6/outs/filtered_feature_bc_matrix/", gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM6<-Read10X( data.dir=paste(input_dir,"snRNASeq_output/cDNA-M6/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM6 <- CreateSeuratObject(counts = cDNAM6, project = "hypotha")
 
 #####################################################################################
