@@ -4,7 +4,7 @@ library(Seurat)
 library(patchwork)
 #####################################################################################
 # Set intput dir
-input_dir="/home/felipe/snRNASeq_output/cDNA-M1/"
+input_dir="/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix/"
 
 # Set output dir
 output_dir="/home/felipe/snRNASeq_output/results/"
