@@ -36,10 +36,23 @@ cDNAM6 <- CreateSeuratObject(counts = cDNAM6, project = "hypotha")
 
 #####################################################################################
 # Normalize the data
-#pbmc.hypothalamus <- NormalizeData(cDNAM1, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.cDNAM1 <- NormalizeData(cDNAM1, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.cDNAM2 <- NormalizeData(cDNAM2, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.cDNAM3 <- NormalizeData(cDNAM3, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.cDNAM4 <- NormalizeData(cDNAM4, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.cDNAM5 <- NormalizeData(cDNAM5, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.cDNAM6 <- NormalizeData(cDNAM6, normalization.method = "LogNormalize", scale.factor = 10000)
 
 all.genes <- rownames(pbmc.hypothalamus)
-pbmc.hypothalamus <- ScaleData(pbmc.hypothalamus, features = all.genes)
+
+pbmc.cDNAM1 <- ScaleData(pbmc.cDNAM1, features = all.genes)
+pbmc.cDNAM2 <- ScaleData(pbmc.cDNAM2, features = all.genes)
+pbmc.cDNAM3 <- ScaleData(pbmc.cDNAM3, features = all.genes)
+pbmc.cDNAM4 <- ScaleData(pbmc.cDNAM4, features = all.genes)
+pbmc.cDNAM5 <- ScaleData(pbmc.cDNAM5, features = all.genes)
+pbmc.cDNAM6 <- ScaleData(pbmc.cDNAM6, features = all.genes)
+
+
 
 #####################################################################################
 # Load table for each sample - cDNAM1
