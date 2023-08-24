@@ -4,14 +4,14 @@ library(Seurat)
 library(patchwork)
 #####################################################################################
 # Set intput dir
-input_dir="/home/felipe/snRNASeq_output/"
+input_dir="/home/felipe/snRNASeq_output/cDNA-M1/"
 
 # Set output dir
 output_dir="/home/felipe/snRNASeq_output/results/"
 #####################################################################################
 # First, load the tables 
 # Load table for all sample - aggreagate cellranger for the six samples
-filtered_feature_bc_matrix<-Read10X(data.dir=input_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNA-M1.pbmc<-Read10X(data.dir=input_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # Load table for all sample - aggreagate cellranger for the six samples
 pbmc <- CreateSeuratObject(counts = filtered_feature_bc_matrix, project = "hypotha")
