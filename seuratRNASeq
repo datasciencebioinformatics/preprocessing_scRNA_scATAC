@@ -4,8 +4,7 @@ library(Seurat)
 library(patchwork)
 #####################################################################################
 # Set intput dir
-input_dir="/home/felipe/snRNASeq_output/aggregate/outs/count/filtered_feature_bc_matrix/"
-#input_dir="/home/zenpoetryinsights/snRNASeq_output/aggregate/outs/count/filtered_feature_bc_matrix/"
+input_dir="/home/felipe/snRNASeq_output/"
 
 # Set output dir
 output_dir="/home/felipe/snRNASeq_output/results/"
