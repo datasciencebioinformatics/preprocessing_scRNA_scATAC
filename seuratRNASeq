@@ -21,12 +21,12 @@ cDNAM1.pbmc <- ScaleData(cDNAM1.pbmc)
 #####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
-PercentageFeatureSet<-pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
+cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "^MT-")
 
 #####################################################################################
 # Visualize QC metrics as a violin plot
-VlnPlotA<-VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
-VlnPlotB<-VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
+VlnPlotA<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotB<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 
 # Save VlnPlot
 png(filename=paste(output_dir,"hypotha_VlnPlot_featuresA.png",sep=""), width = 24, height = 10, res=800, units = "cm")
@@ -40,8 +40,8 @@ dev.off()
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
-plot1 <- FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
-plot2 <- FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
+plot1 <- FeatureScatter(cDNAM1.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2 <- FeatureScatter(cDNAM1.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
 FeatureScatter<-plot1 + plot2
 
 # Save FeatureScatter
@@ -60,10 +60,10 @@ object_scale_data<-LayerData(object = cDNAM1.pbmc, layer="scale.data")
 object_scale_data<-GetAssayData(object = cDNAM1.pbmc[["RNA"]], slot = "scale.data")
 
 ## pbmc
-cDNAM1.pbmc <- FindVariableFeatures(object= )
+cDNAM1.varialble <- FindVariableFeatures(object=object_scale_data )
 
 # Identify the 10 most highly variable genes
-top10 <- head(VariableFeatures(FindVariableFeatures.hypothalamus), 10)
+top10 <- head(VariableFeatures(cDNAM1.pbmc), 10)
 
 # plot variable features with and without labels
 plot1 <- VariableFeaturePlot(FindVariableFeatures.hypothalamus)
