@@ -50,9 +50,6 @@ plot(FeatureScatter)
 dev.off()
 
 #####################################################################################
-# cDNAM1.pbmc
-cDNAM1.pbmc <- FindVariableFeatures(cDNAM1.pbmc, selection.method = "vst", nfeatures = 2000)
-
 ## Identification of highly variable features (feature selection)
 object_scale_data<-LayerData(object = cDNAM1.pbmc, layer="scale.data")
 
@@ -61,6 +58,8 @@ object_scale_data<-GetAssayData(object = cDNAM1.pbmc[["RNA"]], slot = "scale.dat
 
 ## pbmc
 cDNAM1.varialble <- FindVariableFeatures(object=object_scale_data )
+
+VariableFeatures(cDNAM1.varialble)
 
 # Identify the 10 most highly variable genes
 top10 <- head(VariableFeatures(cDNAM1.pbmc), 10)
