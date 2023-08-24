@@ -4,81 +4,34 @@ library(Seurat)
 library(patchwork)
 #####################################################################################
 # Set intput dir
-input_dir="/home/felipe/Camundongos/"
+input_dir="/home/felipe/snRNASeq_output/aggregate/outs/count/filtered_feature_bc_matrix/"
+#input_dir="/home/zenpoetryinsights/snRNASeq_output/aggregate/outs/count/filtered_feature_bc_matrix/"
 
 # Set output dir
-output_dir="/home/felipe/Camundongos/results/"
+output_dir="/home/felipe/snRNASeq_output/results/"
 #####################################################################################
 # First, load the tables 
-# Load table for each sample - cDNAM1
-cDNAM1<-Read10X(data.dir=paste(input_dir,"/cDNA-M1/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
-cDNAM1 <- CreateSeuratObject(counts = cDNAM1, project = "hypotha")
+# Load table for all sample - aggreagate cellranger for the six samples
+filtered_feature_bc_matrix<-Read10X(data.dir=input_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
-# Load table for each sample - cDNAM2
-cDNAM2<-Read10X( data.dir=paste(input_dir,"/cDNA-M2/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
-cDNAM2 <- CreateSeuratObject(counts = cDNAM2, project = "hypotha")
-
-# Load table for each sample - cDNAM3
-cDNAM3<-Read10X( data.dir=paste(input_dir,"/cDNA-M3/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
-cDNAM3 <- CreateSeuratObject(counts = cDNAM3, project = "hypotha")
-
-# Load table for each sample - cDNAM4
-cDNAM4<-Read10X( data.dir=paste(input_dir,"/cDNA-M4/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
-cDNAM4 <- CreateSeuratObject(counts = cDNAM4, project = "hypotha")
-
-# Load table for each sample - cDNAM5
-cDNAM5<-Read10X( data.dir=paste(input_dir,"/cDNA-M5/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
-cDNAM5 <- CreateSeuratObject(counts = cDNAM5, project = "hypotha")
-
-# Load table for each sample - cDNAM6
-cDNAM6<-Read10X( data.dir=paste(input_dir,"/cDNA-M6/outs/filtered_feature_bc_matrix/",sep=""), gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
-cDNAM6 <- CreateSeuratObject(counts = cDNAM6, project = "hypotha")
+# Load table for all sample - aggreagate cellranger for the six samples
+pbmc <- CreateSeuratObject(counts = filtered_feature_bc_matrix, project = "hypotha")
 
 #####################################################################################
 # Normalize the data
-pbmc.cDNAM1 <- NormalizeData(cDNAM1, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.cDNAM2 <- NormalizeData(cDNAM2, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.cDNAM3 <- NormalizeData(cDNAM3, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.cDNAM4 <- NormalizeData(cDNAM4, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.cDNAM5 <- NormalizeData(cDNAM5, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.cDNAM6 <- NormalizeData(cDNAM6, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 
-all.genes <- rownames(pbmc.hypothalamus)
-
-pbmc.cDNAM1 <- ScaleData(pbmc.cDNAM1, features = all.genes)
-pbmc.cDNAM2 <- ScaleData(pbmc.cDNAM2, features = all.genes)
-pbmc.cDNAM3 <- ScaleData(pbmc.cDNAM3, features = all.genes)
-pbmc.cDNAM4 <- ScaleData(pbmc.cDNAM4, features = all.genes)
-pbmc.cDNAM5 <- ScaleData(pbmc.cDNAM5, features = all.genes)
-pbmc.cDNAM6 <- ScaleData(pbmc.cDNAM6, features = all.genes)
-
-
-
-#####################################################################################
-# Load table for each sample - cDNAM1
-# pbmc.hypothalamus
-pbmc.hypothalamus <- merge(cDNAM1, y = cDNAM2, add.cell.ids = c("cDNAM1", "cDNAM2"), project = "hypotha")
-
-# pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM3, add.cell.ids = c("pbmc.hypothalamus", "cDNAM3"), project = "hypotha")
-
-# pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM4, add.cell.ids = c("pbmc.hypothalamus", "cDNAM4"), project = "hypotha")
-
-# pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM5, add.cell.ids = c("pbmc.hypothalamus", "cDNAM5"), project = "hypotha")
-
-# pbmc.hypothalamus
-pbmc.hypothalamus <- merge(pbmc.hypothalamus, y = cDNAM6, add.cell.ids = c("pbmc.hypothalamus", "cDNAM6"), project = "hypotha")
+# Scale the data
+pbmc <- ScaleData(pbmc)
 #####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
-PercentageFeatureSet<-pbmc.hypothalamus[["percent.mt"]] <- PercentageFeatureSet(pbmc.hypothalamus, pattern = "^MT-")
+PercentageFeatureSet<-pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
 
 #####################################################################################
 # Visualize QC metrics as a violin plot
-VlnPlotA<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
-VlnPlotB<-VlnPlot(pbmc.hypothalamus, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
+VlnPlotA<-VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotB<-VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 
 # Save VlnPlot
 png(filename=paste(output_dir,"hypotha_VlnPlot_featuresA.png",sep=""), width = 24, height = 10, res=800, units = "cm")
@@ -92,18 +45,27 @@ dev.off()
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
-plot1 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
-plot2 <- FeatureScatter(pbmc.hypothalamus, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-plot<-plot1 + plot2
+plot1 <- FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2 <- FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
+FeatureScatter<-plot1 + plot2
 
 # Save FeatureScatter
-png(filename=paste(output_dir,"hypotha_FeatureScatter.png",sep=""), width = 24, height = 10, res=600, units = "cm")
-plot(plot)
+png(filename=paste(output_dir,"hypotha_FeatureScatter2.png",sep=""), width = 24, height = 10, res=600, units = "cm")
+plot(FeatureScatter)
 dev.off()
 
 #####################################################################################
+# 
+pbmc <- FindVariableFeatures(pbmc, selection.method = "vst", nfeatures = 2000)
+
 ## Identification of highly variable features (feature selection)
-FindVariableFeatures.hypothalamus <- FindVariableFeatures(pbmc.hypothalamus, selection.method = "vst")
+object_scale_data<-LayerData(object = pbmc, layer="scale.data")
+
+## Cerate object
+object_scale_data<-CreateSeuratObject(counts = object_scale_data)
+
+## pbmc
+pbmc <- FindVariableFeatures(object=pbmc)
 
 # Identify the 10 most highly variable genes
 top10 <- head(VariableFeatures(FindVariableFeatures.hypothalamus), 10)
@@ -121,11 +83,11 @@ dev.off()
 
 #####################################################################################
 # Perform linear dimensional reduction
-pbmc.hypothalamus <- RunPCA(pbmc.hypothalamus, features = VariableFeatures(object = pbmc.hypothalamus))
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
 
 #####################################################################################
 # Perform linear dimensional reduction
-pbmc.hypothalamus <- RunPCA(pbmc.hypothalamus, features = VariableFeatures(object = pbmc.hypothalamus))
+pbmc.hypothalamus <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.hypothalamus))
 
 # Examine and visualize PCA results a few different ways
 print(pbmc.hypothalamus[["pca"]], dims = 1:5, nfeatures = 5)
@@ -137,5 +99,3 @@ plot<-VizDimLoadings(pbmc.hypothalamus, dims = 1:2, reduction = "pca")
 png(filename=paste(output_dir,"hypotha_FindVariableFeatures.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(plot)
 dev.off()
-
-
