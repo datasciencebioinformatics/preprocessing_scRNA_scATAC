@@ -292,12 +292,12 @@ cDNAM6.pbmc <- NormalizeData(cDNAM6.pbmc, normalization.method = "LogNormalize",
 ## pbmc
 ## I have tried to use FindVariableFeatures
 ## but only applied to object_scale_data not to cDNAM1.pbmc
-cDNAM1.varialble <- FindVariableFeatures(object=cDNAM1.pbmc , selection.method = "vst", slot = "scale.data")
-cDNAM2.varialble <- FindVariableFeatures(object=cDNAM2.pbmc , selection.method = "vst", slot = "scale.data")
-cDNAM3.varialble <- FindVariableFeatures(object=cDNAM3.pbmc , selection.method = "vst", slot = "scale.data")
-cDNAM4.varialble <- FindVariableFeatures(object=cDNAM4.pbmc , selection.method = "vst", slot = "scale.data")
-cDNAM5.varialble <- FindVariableFeatures(object=cDNAM5.pbmc , selection.method = "vst", slot = "scale.data")
-cDNAM6.varialble <- FindVariableFeatures(object=cDNAM6.pbmc , selection.method = "vst", slot = "scale.data")
+cDNAM1.varialble <- FindVariableFeatures(object=cDNAM1.pbmc , selection.method = "vst")
+cDNAM2.varialble <- FindVariableFeatures(object=cDNAM2.pbmc , selection.method = "vst")
+cDNAM3.varialble <- FindVariableFeatures(object=cDNAM3.pbmc , selection.method = "vst")
+cDNAM4.varialble <- FindVariableFeatures(object=cDNAM4.pbmc , selection.method = "vst")
+cDNAM5.varialble <- FindVariableFeatures(object=cDNAM5.pbmc , selection.method = "vst")
+cDNAM6.varialble <- FindVariableFeatures(object=cDNAM6.pbmc , selection.method = "vst")
 
 ## pbmc
 library("Matrix")
