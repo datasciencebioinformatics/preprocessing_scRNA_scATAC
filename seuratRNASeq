@@ -187,38 +187,38 @@ dev.off()
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
-plot1 <- FeatureScatter(cDNAM1.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
-plot2 <- FeatureScatter(cDNAM1.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
+plot1.cDNAM1 <- FeatureScatter(cDNAM1.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2.cDNAM1 <- FeatureScatter(cDNAM1.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
 FeatureScatter_cDNAM1<-plot1 + plot2
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
-plot1 <- FeatureScatter(cDNAM2.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
-plot2 <- FeatureScatter(cDNAM2.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
+plot1.cDNAM2 <- FeatureScatter(cDNAM2.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2.cDNAM2 <- FeatureScatter(cDNAM2.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
 FeatureScatter_cDNAM2<-plot1 + plot2
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
-plot1 <- FeatureScatter(cDNAM3.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
-plot2 <- FeatureScatter(cDNAM3.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
+plot1.cDNAM3 <- FeatureScatter(cDNAM3.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2.cDNAM3 <- FeatureScatter(cDNAM3.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
 FeatureScatter_cDNAM3<-plot1 + plot2
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
-plot1 <- FeatureScatter(cDNAM4.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
-plot2 <- FeatureScatter(cDNAM4.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
+plot1.cDNAM4 <- FeatureScatter(cDNAM4.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2.cDNAM4 <- FeatureScatter(cDNAM4.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
 FeatureScatter_cDNAM4<-plot1 + plot2
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
-plot1 <- FeatureScatter(cDNAM5.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
-plot2 <- FeatureScatter(cDNAM5.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
+plot1.cDNAM5 <- FeatureScatter(cDNAM5.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2.cDNAM5 <- FeatureScatter(cDNAM5.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
 FeatureScatter_cDNAM5<-plot1 + plot2
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
-plot1 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
-plot2 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
+plot1.cDNAM6 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2.cDNAM6 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
 FeatureScatter_cDNAM6<-plot1 + plot2
 
 # Save FeatureScatter
@@ -251,6 +251,8 @@ png(filename=paste(output_dir,"hypotha_FeatureScatter6.png",sep=""), width = 24,
 plot(FeatureScatter_cDNAM6)
 dev.off()
 
+# FeatureScatter
+merge1=rbind(plot2.cDNAM1$data,plot2.cDNAM2$data,plot2.cDNAM3$data,plot2.cDNAM4$data,plot2.cDNAM5$data,plot2.cDNAM6$data)
 
 
 #####################################################################################
