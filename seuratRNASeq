@@ -40,13 +40,6 @@ cDNAM4.pbmc <- ScaleData(cDNAM4.pbmc)
 cDNAM5.pbmc <- ScaleData(cDNAM5.pbmc)
 cDNAM6.pbmc <- ScaleData(cDNAM6.pbmc)
 
-# Scale the data
-cDNAM1.pbmc <- ScaleData(cDNAM1.pbmc)
-cDNAM2.pbmc <- ScaleData(cDNAM2.pbmc)
-cDNAM3.pbmc <- ScaleData(cDNAM3.pbmc)
-cDNAM4.pbmc <- ScaleData(cDNAM4.pbmc)
-cDNAM5.pbmc <- ScaleData(cDNAM5.pbmc)
-cDNAM6.pbmc <- ScaleData(cDNAM6.pbmc)
 #####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
@@ -60,7 +53,42 @@ cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "^MT-
 #####################################################################################
 # Visualize QC metrics as a violin plot
 # Visualize QC metrics as a violin plot
-VlnPlotA<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM1<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM2<-VlnPlot(cDNAM2.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM3<-VlnPlot(cDNAM3.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM4<-VlnPlot(cDNAM4.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM5<-VlnPlot(cDNAM5.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM6<-VlnPlot(cDNAM6.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+
+# Save VlnPlot
+png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM1.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot(VlnPlotA.cDNAM1)
+dev.off()
+# Save VlnPlot
+png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM2.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot(VlnPlotA.cDNAM2)
+dev.off()
+# Save VlnPlot
+png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM3.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot(VlnPlotA.cDNAM3)
+dev.off()
+# Save VlnPlot
+png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM4.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot(VlnPlotA.cDNAM4)
+dev.off()
+# Save VlnPlot
+png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM5.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot(VlnPlotA.cDNAM5)
+dev.off()
+# Save VlnPlot
+png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM6.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot(VlnPlotA.cDNAM6)
+dev.off()
+
+
+
+
+
 VlnPlotB<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 
 # Save VlnPlot
