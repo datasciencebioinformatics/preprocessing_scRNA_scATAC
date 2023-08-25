@@ -271,6 +271,11 @@ plot( FeatureScatter)
 dev.off()
 
 #####################################################################################
+install.packages(c("SeuratObject", "Seurat"))
+library(SeuratObject)
+library(Seurat)
+
+
 ## Identification of highly variable features (feature selection)
 cDNAM1.pbmc <- NormalizeData(cDNAM1.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 cDNAM2.pbmc <- NormalizeData(cDNAM2.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
