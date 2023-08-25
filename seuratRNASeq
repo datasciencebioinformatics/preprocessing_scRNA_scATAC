@@ -280,7 +280,7 @@ object_scale_data<-GetAssayData(object = cDNAM1.pbmc[["RNA"]], slot = "scale.dat
 ## pbmc
 ## I have tried to use FindVariableFeatures
 ## but only applied to object_scale_data not to cDNAM1.pbmc
-cDNAM1.varialble <- FindVariableFeatures(object=object_scale_data , selection.method = "vst", nfeatures = 2000)
+cDNAM1.varialble <- FindVariableFeatures(object=cDNAM1.pbmc , selection.method = "vst", nfeatures = 2000)
 
 ## pbmc
 library("Matrix")
