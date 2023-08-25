@@ -147,12 +147,7 @@ df_cDNAM6<-data.frame(Sample="cDNAM6", VlnPlotA.cDNAM6$data,Primer=rownames(VlnP
 merge1=rbind(df_cDNAM1,df_cDNAM2,df_cDNAM3,df_cDNAM4,df_cDNAM5,df_cDNAM6)
 
 # Combine nmerges
-VlnPlotA<-ggplot(merge1, aes(x=Sample, y=nFeature_RNA,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1)) + ggtitle("nFeature_RNA")
-
-# Plot
-png(filename=paste(output_dir,"hypotha_VlnPlotA_combined.png",sep=""), width = 24, height = 10, res=800, units = "cm")
-plot( VlnPlotA)
-dev.off()
+VlnPlotA<-ggplot(merge1, aes(x=Sample, y=nFeature_RNA,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1)) + theme(axis.title.x = element_blank())+ ggtitle("QC metrics as a violin plot")
 
 #####################################################################################
 # Visualize QC metrics as a violin plot (combine)
@@ -171,7 +166,6 @@ VlnPlotA.cDNAM4.data<-data.frame(Sample="cDNAM4", Primer=rownames(VlnPlotA.cDNAM
 VlnPlotA.cDNAM5.data<-data.frame(Sample="cDNAM5", Primer=rownames(VlnPlotA.cDNAM5$data), VlnPlotA.cDNAM5$data)
 VlnPlotA.cDNAM6.data<-data.frame(Sample="cDNAM6", Primer=rownames(VlnPlotA.cDNAM6$data), VlnPlotA.cDNAM6$data)
 
-
 df_cDNAM1<-data.frame(Sample="cDNAM1", VlnPlotA.cDNAM1$data,Primer=rownames(VlnPlotA.cDNAM1.data))
 df_cDNAM2<-data.frame(Sample="cDNAM2", VlnPlotA.cDNAM2$data,Primer=rownames(VlnPlotA.cDNAM2.data))
 df_cDNAM3<-data.frame(Sample="cDNAM3", VlnPlotA.cDNAM3$data,Primer=rownames(VlnPlotA.cDNAM3.data))
@@ -183,9 +177,12 @@ df_cDNAM6<-data.frame(Sample="cDNAM6", VlnPlotA.cDNAM6$data,Primer=rownames(VlnP
 merge1=rbind(df_cDNAM1,df_cDNAM2,df_cDNAM3,df_cDNAM4,df_cDNAM5,df_cDNAM6)
 
 # Combine nmerges
-VlnPlotB<-ggplot(merge1, aes(x=Sample, y=nCount_RNA,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1)) + ggtitle("nCount_RNA")
+VlnPlotB<-ggplot(merge1, aes(x=Sample, y=nCount_RNA,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1))
 
-
+# Plot
+png(filename=paste(output_dir,"hypotha_VlnPlotA_combined.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot( grid.arrange(VlnPlotA, VlnPlotB, nrow = 2))
+dev.off()
 
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
