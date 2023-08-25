@@ -33,11 +33,14 @@ png(filename=paste(output_dir,"hypotha_VlnPlot_featuresA.png",sep=""), width = 2
 plot(VlnPlotA)
 dev.off()
 
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhBgKhGgBUhVs9lUASPKc7Y7FocSmb9Pc2wU5n7Cn4Gfu9bxC5w-DVGpvFpzPYSVVHpnqpSm5AYAgY_d1MX45jGJxbMp5c2dAUbAdyj7xfTPBI0Lp0Dr-5ce-mnrXqaseWkd3ISv7JavAtfzqBvKmP3Z3bYgPGBUbsGXI0wna_cqXsPN-64lvZJPRkh/s2400/plot_number_of_cases_per_period.png)
 
 # Save VlnPlot
 png(filename=paste(output_dir,"hypotha_VlnPlot_featuresB.png",sep=""), width = 24, height = 10, res=800, units = "cm")
 plot(VlnPlotB)
 dev.off()
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhBgKhGgBUhVs9lUASPKc7Y7FocSmb9Pc2wU5n7Cn4Gfu9bxC5w-DVGpvFpzPYSVVHpnqpSm5AYAgY_d1MX45jGJxbMp5c2dAUbAdyj7xfTPBI0Lp0Dr-5ce-mnrXqaseWkd3ISv7JavAtfzqBvKmP3Z3bYgPGBUbsGXI0wna_cqXsPN-64lvZJPRkh/s2400/plot_number_of_cases_per_period.png)
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
@@ -49,6 +52,8 @@ FeatureScatter<-plot1 + plot2
 png(filename=paste(output_dir,"hypotha_FeatureScatter2.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(FeatureScatter)
 dev.off()
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhBgKhGgBUhVs9lUASPKc7Y7FocSmb9Pc2wU5n7Cn4Gfu9bxC5w-DVGpvFpzPYSVVHpnqpSm5AYAgY_d1MX45jGJxbMp5c2dAUbAdyj7xfTPBI0Lp0Dr-5ce-mnrXqaseWkd3ISv7JavAtfzqBvKmP3Z3bYgPGBUbsGXI0wna_cqXsPN-64lvZJPRkh/s2400/plot_number_of_cases_per_period.png)
 
 #####################################################################################
 ## Identification of highly variable features (feature selection)
