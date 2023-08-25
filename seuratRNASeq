@@ -271,6 +271,7 @@ plot( FeatureScatter)
 dev.off()
 
 #####################################################################################
+Identification of highly variable features (feature selection)
 ## Identification of highly variable features (feature selection)
 object_scale_data<-LayerData(object = cDNAM1.pbmc, layer="scale.data")
 
