@@ -41,9 +41,6 @@ cDNAM4.pbmc <- ScaleData(cDNAM4.pbmc)
 cDNAM5.pbmc <- ScaleData(cDNAM5.pbmc)
 cDNAM6.pbmc <- ScaleData(cDNAM6.pbmc)
 
-# Load table for all sample - aggreagate cellranger for the six samples
-cDNAM2.pbmc <- CreateSeuratObject(counts = cDNAM2.Read10X, project = "hypotha")
-
 # Scale the data
 cDNAM1.pbmc <- ScaleData(cDNAM1.pbmc)
 cDNAM2.pbmc <- ScaleData(cDNAM2.pbmc)
@@ -77,8 +74,6 @@ dev.off()
 png(filename=paste(output_dir,"hypotha_VlnPlot_featuresB.png",sep=""), width = 24, height = 10, res=800, units = "cm")
 plot(VlnPlotB)
 dev.off()
-
-
 
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
