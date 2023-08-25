@@ -2,6 +2,7 @@
 library(dplyr)
 library(Seurat)
 library(patchwork)
+library(gridExtra)
 #####################################################################################
 # Set intput dir
 input_dir="/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix/"
@@ -25,6 +26,7 @@ cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "^MT-
 
 #####################################################################################
 # Visualize QC metrics as a violin plot
+# Visualize QC metrics as a violin plot
 VlnPlotA<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
 VlnPlotB<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 
@@ -37,6 +39,8 @@ dev.off()
 png(filename=paste(output_dir,"hypotha_VlnPlot_featuresB.png",sep=""), width = 24, height = 10, res=800, units = "cm")
 plot(VlnPlotB)
 dev.off()
+
+grid.arrange(VlnPlotA, VlnPlotB, nrow = 1)
 
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
