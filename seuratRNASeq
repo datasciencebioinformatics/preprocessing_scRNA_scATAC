@@ -284,7 +284,7 @@ cDNAM1.varialble <- FindVariableFeatures(object=object_scale_data , selection.me
 
 ## pbmc
 library("Matrix")
-cDNAM1.pbmc <- CreateSeuratObject(counts = as(as.matrix(cDNAM1.varialble), "sparseMatrix"))
+cDNAM1.FindVariableFeatures <- CreateSeuratObject(counts = as(as.matrix(cDNAM1.varialble), "sparseMatrix"))
 
 # Identify the 10 most highly variable genes
 top10 <- head(VariableFeatures(cDNAM1.pbmc), 10)
