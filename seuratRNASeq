@@ -3,6 +3,11 @@ library(dplyr)
 library(Seurat)
 library(patchwork)
 library(gridExtra)
+
+#####################################################################################
+install.packages(c("SeuratObject", "Seurat"))
+library(SeuratObject)
+library(Seurat)
 #####################################################################################
 # Set intput dir
 cDNA_M1_dir="/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix/"
