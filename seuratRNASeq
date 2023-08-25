@@ -33,14 +33,11 @@ png(filename=paste(output_dir,"hypotha_VlnPlot_featuresA.png",sep=""), width = 2
 plot(VlnPlotA)
 dev.off()
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhBgKhGgBUhVs9lUASPKc7Y7FocSmb9Pc2wU5n7Cn4Gfu9bxC5w-DVGpvFpzPYSVVHpnqpSm5AYAgY_d1MX45jGJxbMp5c2dAUbAdyj7xfTPBI0Lp0Dr-5ce-mnrXqaseWkd3ISv7JavAtfzqBvKmP3Z3bYgPGBUbsGXI0wna_cqXsPN-64lvZJPRkh/s2400/plot_number_of_cases_per_period.png)
-
 # Save VlnPlot
 png(filename=paste(output_dir,"hypotha_VlnPlot_featuresB.png",sep=""), width = 24, height = 10, res=800, units = "cm")
 plot(VlnPlotB)
 dev.off()
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhBgKhGgBUhVs9lUASPKc7Y7FocSmb9Pc2wU5n7Cn4Gfu9bxC5w-DVGpvFpzPYSVVHpnqpSm5AYAgY_d1MX45jGJxbMp5c2dAUbAdyj7xfTPBI0Lp0Dr-5ce-mnrXqaseWkd3ISv7JavAtfzqBvKmP3Z3bYgPGBUbsGXI0wna_cqXsPN-64lvZJPRkh/s2400/plot_number_of_cases_per_period.png)
 #####################################################################################
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
@@ -53,8 +50,6 @@ png(filename=paste(output_dir,"hypotha_FeatureScatter2.png",sep=""), width = 24,
 plot(FeatureScatter)
 dev.off()
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhBgKhGgBUhVs9lUASPKc7Y7FocSmb9Pc2wU5n7Cn4Gfu9bxC5w-DVGpvFpzPYSVVHpnqpSm5AYAgY_d1MX45jGJxbMp5c2dAUbAdyj7xfTPBI0Lp0Dr-5ce-mnrXqaseWkd3ISv7JavAtfzqBvKmP3Z3bYgPGBUbsGXI0wna_cqXsPN-64lvZJPRkh/s2400/plot_number_of_cases_per_period.png)
-
 #####################################################################################
 ## Identification of highly variable features (feature selection)
 object_scale_data<-LayerData(object = cDNAM1.pbmc, layer="scale.data")
@@ -66,7 +61,6 @@ object_scale_data<-GetAssayData(object = cDNAM1.pbmc[["RNA"]], slot = "scale.dat
 ## I have tried to use FindVariableFeatures
 ## but only applied to object_scale_data not to cDNAM1.pbmc
 cDNAM1.varialble <- FindVariableFeatures(object=object_scale_data , selection.method = "vst", nfeatures = 2000)
-
 
 CreateSeuratObject(counts = as(as.matrix(object_scale_data), "sparseMatrix"))
 
