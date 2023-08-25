@@ -33,6 +33,7 @@ png(filename=paste(output_dir,"hypotha_VlnPlot_featuresA.png",sep=""), width = 2
 plot(VlnPlotA)
 dev.off()
 
+
 # Save VlnPlot
 png(filename=paste(output_dir,"hypotha_VlnPlot_featuresB.png",sep=""), width = 24, height = 10, res=800, units = "cm")
 plot(VlnPlotB)
