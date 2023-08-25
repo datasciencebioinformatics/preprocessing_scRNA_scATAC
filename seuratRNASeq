@@ -136,24 +136,25 @@ VlnPlotA.cDNAM5.data<-data.frame(Sample="cDNAM5", Primer=rownames(VlnPlotA.cDNAM
 VlnPlotA.cDNAM6.data<-data.frame(Sample="cDNAM6", Primer=rownames(VlnPlotA.cDNAM6$data), VlnPlotA.cDNAM6$data)
 
 
-df_cDNAM1<-data.frame(Sample="cDNAM1", VlnPlotA.cDNAM1$data)
-df_cDNAM2<-data.frame(Sample="cDNAM2", VlnPlotA.cDNAM2$data)
-df_cDNAM3<-data.frame(Sample="cDNAM3", VlnPlotA.cDNAM3$data)
-df_cDNAM4<-data.frame(Sample="cDNAM4", VlnPlotA.cDNAM4$data)
-df_cDNAM5<-data.frame(Sample="cDNAM5", VlnPlotA.cDNAM5$data)
-df_cDNAM6<-data.frame(Sample="cDNAM6", VlnPlotA.cDNAM6$data)
+df_cDNAM1<-data.frame(Sample="cDNAM1", VlnPlotA.cDNAM1$data,Primer=rownames(df_cDNAM1))
+df_cDNAM2<-data.frame(Sample="cDNAM2", VlnPlotA.cDNAM2$data,Primer=rownames(df_cDNAM2))
+df_cDNAM3<-data.frame(Sample="cDNAM3", VlnPlotA.cDNAM3$data,Primer=rownames(df_cDNAM3))
+df_cDNAM4<-data.frame(Sample="cDNAM4", VlnPlotA.cDNAM4$data,Primer=rownames(df_cDNAM4))
+df_cDNAM5<-data.frame(Sample="cDNAM5", VlnPlotA.cDNAM5$data,Primer=rownames(df_cDNAM5))
+df_cDNAM6<-data.frame(Sample="cDNAM6", VlnPlotA.cDNAM6$data,Primer=rownames(df_cDNAM6))
 
 
 ggplot(VlnPlotA_dataframe, aes(x=Sample, y=nFeature_RNA,fill=Sample)) +  geom_violin() + theme_bw()
 
 # Createpair merges
-merge1=merge(df_cDNAM1,df_cDNAM2,by="Sample",all=TRUE,suffixes="")
-merge2=merge(df_cDNAM3,df_cDNAM4,by="Sample",all=TRUE,suffixes="")
-merge3=merge(df_cDNAM5,df_cDNAM6,by="Sample",all=TRUE,suffixes="")
+merge1=merge(df_cDNAM1,df_cDNAM2,by="Sample",all=TRUE,suffixes="")[,1:4]
+merge2=merge(df_cDNAM3,df_cDNAM4,by="Sample",all=TRUE,suffixes="")[,1:4]
+merge3=merge(df_cDNAM5,df_cDNAM6,by="Sample",all=TRUE,suffixes="")[,1:4]
 
 # Combine nmerges
-merge4=merge(merge1,merge2,by="Sample",all=TRUE,suffixes="") 
-merge4=merge(merge4,merge3,by="Sample",all=TRUE,suffixes="") 
+merge4=merge(merge1,merge3,by="Sample",all=TRUE,suffixes="")[,1:4] 
+merge5=merge(merge3,merge4,by="Sample",all=TRUE,suffixes="")[,1:4] 
+
 
 
 merge(merge1,merge2,by="Sample",all=TRUE)
