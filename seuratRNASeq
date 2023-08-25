@@ -272,32 +272,29 @@ dev.off()
 
 #####################################################################################
 ## Identification of highly variable features (feature selection)
-object_scale_data<-LayerData(object = cDNAM1.pbmc, layer="scale.data")
-
-## Cerate object
-object_scale_data<-GetAssayData(object = cDNAM1.pbmc[["RNA"]], slot = "scale.data")
+cDNAM1.pbmc <- NormalizeData(cDNAM1.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 
 ## pbmc
 ## I have tried to use FindVariableFeatures
 ## but only applied to object_scale_data not to cDNAM1.pbmc
-cDNAM1.varialble <- FindVariableFeatures(object=cDNAM1.pbmc , selection.method = "vst", nfeatures = 2000)
+cDNAM1.varialble <- FindVariableFeatures(object=cDNAM1.pbmc , selection.method = "vst", slot = "scale.data")
 
 ## pbmc
 library("Matrix")
-cDNAM1.FindVariableFeatures <- CreateSeuratObject(counts = as(as.matrix(cDNAM1.varialble), "sparseMatrix"))
 
 # Identify the 10 most highly variable genes
-top10 <- head(VariableFeatures(cDNAM1.pbmc), 10)
+top10 <- head(VariableFeatures(cDNAM1.varialble), 10)
 
 # plot variable features with and without labels
-plot1 <- VariableFeaturePlot(FindVariableFeatures.hypothalamus)
-plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
-plot<- plot1 + plot2
+library("ggplot2")
+plot1.cDNAM1 <- VariableFeaturePlot(cDNAM1.varialble) + theme(legend.position="none")
+plot2.cDNAM1 <- LabelPoints(plot = plot1.cDNAM1, points = top10, repel = TRUE)
+cDNAM1.plot <- plot1.cDNAM1 + plot2.cDNAM1
 
 # Save FeatureScatter
 #filename="/home/felipe/Downloads/snRNASeq_out/out/"
-png(filename=paste(output_dir,"hypotha_FindVariableFeatures.png",sep=""), width = 24, height = 10, res=600, units = "cm")
-plot(plot)
+png(filename=paste(output_dir,"hypotha_FindVariableFeatures.cDNAM1.png",sep=""), width = 14, height = 9, res=600, units = "cm")
+plot(cDNAM1.plot)
 dev.off()
 #####################################################################################
 ## Identification of highly variable features (feature selection)
