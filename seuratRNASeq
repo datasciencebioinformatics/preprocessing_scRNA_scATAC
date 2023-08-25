@@ -85,11 +85,12 @@ png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM6.png",sep=""), width = 24, 
 plot(VlnPlotA.cDNAM6)
 dev.off()
 
-
-
-
-
-VlnPlotB<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
+VlnPlotB.cDNAM1<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
+VlnPlotB.cDNAM2<-VlnPlot(cDNAM2.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
+VlnPlotB.cDNAM3<-VlnPlot(cDNAM3.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
+VlnPlotB.cDNAM4<-VlnPlot(cDNAM4.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
+VlnPlotB.cDNAM5<-VlnPlot(cDNAM5.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
+VlnPlotB.cDNAM6<-VlnPlot(cDNAM6.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 
 # Save VlnPlot
 png(filename=paste(output_dir,"hypotha_VlnPlot_featuresA.png",sep=""), width = 24, height = 10, res=800, units = "cm")
