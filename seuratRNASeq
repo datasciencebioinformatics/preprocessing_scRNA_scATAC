@@ -149,12 +149,10 @@ merge1=rbind(df_cDNAM1,df_cDNAM2,df_cDNAM3,df_cDNAM4,df_cDNAM5,df_cDNAM6)
 # Combine nmerges
 VlnPlotA<-ggplot(merge1, aes(x=Sample, y=nFeature_RNA,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1))
 
-
+# Plot
 png(filename=paste(output_dir,"hypotha_VlnPlotA_combined.png",sep=""), width = 24, height = 10, res=800, units = "cm")
 plot( VlnPlotA)
 dev.off()
-
-
 
 
 #####################################################################################
