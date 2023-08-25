@@ -16,6 +16,7 @@ cDNA_M3_dir="/home/felipe/snRNASeq_output/cDNA-M3/outs/filtered_feature_bc_matri
 cDNA_M4_dir="/home/felipe/snRNASeq_output/cDNA-M4/outs/filtered_feature_bc_matrix/"
 cDNA_M5_dir="/home/felipe/snRNASeq_output/cDNA-M5/outs/filtered_feature_bc_matrix/"
 cDNA_M6_dir="/home/felipe/snRNASeq_output/cDNA-M6/outs/filtered_feature_bc_matrix/"
+cDNA_agg_dir="/home/felipe/snRNASeq_output/aggregate/outs/count/filtered_feature_bc_matrix/"
 
 # Set output dir
 output_dir="/home/felipe/snRNASeq_output/results/"
@@ -28,6 +29,7 @@ cDNAM3.Read10X<-Read10X(data.dir=cDNA_M3_dir, gene.column = 2, cell.column = 1, 
 cDNAM4.Read10X<-Read10X(data.dir=cDNA_M4_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM5.Read10X<-Read10X(data.dir=cDNA_M5_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM6.Read10X<-Read10X(data.dir=cDNA_M6_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+aggregate.Read10X<-Read10X(data.dir=cDNA_agg_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # Load table for all sample - aggreagate cellranger for the six samples
 cDNAM1.pbmc <- CreateSeuratObject(counts = cDNAM1.Read10X, project = "hypotha")
@@ -36,6 +38,7 @@ cDNAM3.pbmc <- CreateSeuratObject(counts = cDNAM3.Read10X, project = "hypotha")
 cDNAM4.pbmc <- CreateSeuratObject(counts = cDNAM4.Read10X, project = "hypotha")
 cDNAM5.pbmc <- CreateSeuratObject(counts = cDNAM5.Read10X, project = "hypotha")
 cDNAM6.pbmc <- CreateSeuratObject(counts = cDNAM6.Read10X, project = "hypotha")
+aggregate.pbmc <- CreateSeuratObject(counts = aggregate.Read10X, project = "hypotha")
 
 # Scale the data
 cDNAM1.pbmc <- ScaleData(cDNAM1.pbmc)
@@ -44,6 +47,7 @@ cDNAM3.pbmc <- ScaleData(cDNAM3.pbmc)
 cDNAM4.pbmc <- ScaleData(cDNAM4.pbmc)
 cDNAM5.pbmc <- ScaleData(cDNAM5.pbmc)
 cDNAM6.pbmc <- ScaleData(cDNAM6.pbmc)
+aggregate.pbmc <- ScaleData(aggregate.pbmc)
 
 #####################################################################################
 # Second create quality plots
@@ -54,6 +58,7 @@ cDNAM3.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM3.pbmc, pattern = "^MT-
 cDNAM4.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM4.pbmc, pattern = "^MT-")
 cDNAM5.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM5.pbmc, pattern = "^MT-")
 cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "^MT-")
+aggregate.pbmc[["percent.mt"]] <- PercentageFeatureSet(aggregate.pbmc, pattern = "^MT-")
 
 #####################################################################################
 # Visualize QC metrics as a violin plot
@@ -288,6 +293,7 @@ cDNAM3.pbmc <- NormalizeData(cDNAM3.pbmc, normalization.method = "LogNormalize",
 cDNAM4.pbmc <- NormalizeData(cDNAM4.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 cDNAM5.pbmc <- NormalizeData(cDNAM5.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 cDNAM6.pbmc <- NormalizeData(cDNAM6.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+aggregate.pbmc <- NormalizeData(aggregate.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 
 ## pbmc
 ## I have tried to use FindVariableFeatures
@@ -298,6 +304,7 @@ cDNAM3.varialble <- FindVariableFeatures(object=cDNAM3.pbmc , selection.method =
 cDNAM4.varialble <- FindVariableFeatures(object=cDNAM4.pbmc , selection.method = "vst")
 cDNAM5.varialble <- FindVariableFeatures(object=cDNAM5.pbmc , selection.method = "vst")
 cDNAM6.varialble <- FindVariableFeatures(object=cDNAM6.pbmc , selection.method = "vst")
+aggregate.pbmc <- FindVariableFeatures(object=aggregate.pbmc , selection.method = "vst")
 
 ## pbmc
 library("Matrix")
@@ -309,17 +316,80 @@ top10.cDNAM3 <- head(VariableFeatures(cDNAM3.varialble), 10)
 top10.cDNAM4 <- head(VariableFeatures(cDNAM4.varialble), 10)
 top10.cDNAM5 <- head(VariableFeatures(cDNAM5.varialble), 10)
 top10.cDNAM6 <- head(VariableFeatures(cDNAM6.varialble), 10)
+top10.aggregate <- head(VariableFeatures(aggregate.pbmc), 10)
 
 # plot variable features with and without labels
 library("ggplot2")
 plot1.cDNAM1 <- VariableFeaturePlot(cDNAM1.varialble) + theme(legend.position="none")
-plot2.cDNAM1 <- LabelPoints(plot = plot1.cDNAM1, points = top10, repel = TRUE)
+plot2.cDNAM1 <- LabelPoints(plot = plot1.cDNAM1, points = top10.cDNAM1, repel = TRUE)
 cDNAM1.plot <- plot1.cDNAM1 + plot2.cDNAM1
+
+plot1.cDNAM2 <- VariableFeaturePlot(cDNAM2.varialble) + theme(legend.position="none")
+plot2.cDNAM2 <- LabelPoints(plot = plot1.cDNAM2, points = top10.cDNAM2, repel = TRUE)
+cDNAM2.plot <- plot1.cDNAM2 + plot2.cDNAM2
+
+plot1.cDNAM3 <- VariableFeaturePlot(cDNAM3.varialble) + theme(legend.position="none")
+plot2.cDNAM3 <- LabelPoints(plot = plot1.cDNAM3, points = top10.cDNAM3, repel = TRUE)
+cDNAM3.plot <- plot1.cDNAM3 + plot2.cDNAM3
+
+plot1.cDNAM4 <- VariableFeaturePlot(cDNAM4.varialble) + theme(legend.position="none")
+plot2.cDNAM4 <- LabelPoints(plot = plot1.cDNAM4, points = top10.cDNAM4, repel = TRUE)
+cDNAM4.plot <- plot1.cDNAM4 + plot2.cDNAM4
+
+plot1.cDNAM5 <- VariableFeaturePlot(cDNAM5.varialble) + theme(legend.position="none")
+plot2.cDNAM5 <- LabelPoints(plot = plot1.cDNAM5, points = top10.cDNAM5, repel = TRUE)
+cDNAM5.plot <- plot1.cDNAM5 + plot2.cDNAM5
+
+plot1.cDNAM6 <- VariableFeaturePlot(cDNAM6.varialble) + theme(legend.position="none")
+plot2.cDNAM6 <- LabelPoints(plot = plot1.cDNAM6, points = top10.cDNAM6, repel = TRUE)
+cDNAM6.plot <- plot1.cDNAM6 + plot2.cDNAM6
+
+plot1.aggregate <- VariableFeaturePlot(aggregate.pbmc) + theme(legend.position="none")
+plot2.aggregate <- LabelPoints(plot = plot1.aggregate , points = top10.aggregate, repel = TRUE)
+aggregate.plot <- plot1.aggregate + plot2.aggregate
+
+
+
 
 # Save FeatureScatter
 #filename="/home/felipe/Downloads/snRNASeq_out/out/"
 png(filename=paste(output_dir,"hypotha_FindVariableFeatures.cDNAM1.png",sep=""), width = 14, height = 9, res=600, units = "cm")
 plot(cDNAM1.plot)
 dev.off()
+
+# Save FeatureScatter
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_FindVariableFeatures.cDNAM2.png",sep=""), width = 14, height = 9, res=600, units = "cm")
+plot(cDNAM2.plot)
+dev.off()
+
+# Save FeatureScatter
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_FindVariableFeatures.cDNAM3.png",sep=""), width = 14, height = 9, res=600, units = "cm")
+plot(cDNAM3.plot)
+dev.off()
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_FindVariableFeatures.cDNAM4.png",sep=""), width = 14, height = 9, res=600, units = "cm")
+plot(cDNAM4.plot)
+dev.off()
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_FindVariableFeatures.cDNAM5.png",sep=""), width = 14, height = 9, res=600, units = "cm")
+plot(cDNAM5.plot)
+dev.off()
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_FindVariableFeatures.cDNAM6.png",sep=""), width = 14, height = 9, res=600, units = "cm")
+plot(cDNAM6.plot)
+dev.off()
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_FindVariableFeatures.aggregate.png",sep=""), width = 14, height = 9, res=600, units = "cm")
+plot(aggregate.plot)
+dev.off()
+
 #####################################################################################
+
+
 ## Identification of highly variable features (feature selection)
