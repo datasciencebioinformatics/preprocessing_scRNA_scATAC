@@ -180,7 +180,7 @@ merge1=rbind(df_cDNAM1,df_cDNAM2,df_cDNAM3,df_cDNAM4,df_cDNAM5,df_cDNAM6)
 VlnPlotB<-ggplot(merge1, aes(x=Sample, y=nCount_RNA,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1))
 
 # Plot
-png(filename=paste(output_dir,"hypotha_VlnPlotA_combined.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+png(filename=paste(output_dir,"hypotha_VlnPlotA_combined.png",sep=""), width = 24, height = 20, res=800, units = "cm")
 plot( grid.arrange(VlnPlotA, VlnPlotB, nrow = 2))
 dev.off()
 
