@@ -273,17 +273,32 @@ dev.off()
 #####################################################################################
 ## Identification of highly variable features (feature selection)
 cDNAM1.pbmc <- NormalizeData(cDNAM1.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+cDNAM2.pbmc <- NormalizeData(cDNAM2.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+cDNAM3.pbmc <- NormalizeData(cDNAM3.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+cDNAM4.pbmc <- NormalizeData(cDNAM4.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+cDNAM5.pbmc <- NormalizeData(cDNAM5.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+cDNAM6.pbmc <- NormalizeData(cDNAM6.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 
 ## pbmc
 ## I have tried to use FindVariableFeatures
 ## but only applied to object_scale_data not to cDNAM1.pbmc
 cDNAM1.varialble <- FindVariableFeatures(object=cDNAM1.pbmc , selection.method = "vst", slot = "scale.data")
+cDNAM2.varialble <- FindVariableFeatures(object=cDNAM2.pbmc , selection.method = "vst", slot = "scale.data")
+cDNAM3.varialble <- FindVariableFeatures(object=cDNAM3.pbmc , selection.method = "vst", slot = "scale.data")
+cDNAM4.varialble <- FindVariableFeatures(object=cDNAM4.pbmc , selection.method = "vst", slot = "scale.data")
+cDNAM5.varialble <- FindVariableFeatures(object=cDNAM5.pbmc , selection.method = "vst", slot = "scale.data")
+cDNAM6.varialble <- FindVariableFeatures(object=cDNAM6.pbmc , selection.method = "vst", slot = "scale.data")
 
 ## pbmc
 library("Matrix")
 
 # Identify the 10 most highly variable genes
-top10 <- head(VariableFeatures(cDNAM1.varialble), 10)
+top10.cDNAM1 <- head(VariableFeatures(cDNAM1.varialble), 10)
+top10.cDNAM2 <- head(VariableFeatures(cDNAM2.varialble), 10)
+top10.cDNAM3 <- head(VariableFeatures(cDNAM3.varialble), 10)
+top10.cDNAM4 <- head(VariableFeatures(cDNAM4.varialble), 10)
+top10.cDNAM5 <- head(VariableFeatures(cDNAM5.varialble), 10)
+top10.cDNAM6 <- head(VariableFeatures(cDNAM6.varialble), 10)
 
 # plot variable features with and without labels
 library("ggplot2")
