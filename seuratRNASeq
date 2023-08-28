@@ -3,9 +3,9 @@ library(dplyr)
 library(Seurat)
 library(patchwork)
 library(gridExtra)
-
+library(ggplot2)
 #####################################################################################
-install.packages(c("SeuratObject", "Seurat"))
+#install.packages(c("SeuratObject", "Seurat"))
 library(SeuratObject)
 library(Seurat)
 #####################################################################################
@@ -468,4 +468,83 @@ plot1.cDNAM6 <- VizDimLoadings(cDNAM6.pbmc, dims = 1:2, reduction = "pca")
 png(filename=paste(output_dir,"hypotha_VizDimLoadings.cDNAM6.png",sep=""), width = 24, height = 16, res=600, units = "cm")
 	## Create plot
 	plot(plot1.cDNAM6)
+dev.off()
+#####################################################################################
+## Perform linear dimensional reduction
+aggregate.pbmc <- RunPCA(aggregate.pbmc, features = VariableFeatures(object = aggregate.pbmc))
+1
+## Perform linear dimensional reduction
+aggregate.pbmc <- VizDimLoadings(aggregate.pbmc, dims = 1:2, reduction = "pca")
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_VizDimLoadings.aggregate.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+	## Create plot
+	plot(aggregate.pbmc)
+dev.off()
+
+#####################################################################################
+# Perform linear dimensional reduction
+plot1.cDNAM1 <-  DimPlot(cDNAM1.pbmc, reduction = "pca") + ggtitle("cDNAM1") + theme(legend.position = "none")  + scale_color_manual(values=c("black"))
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_DimPlot.cDNAM1.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM1)
+dev.off()
+
+
+# Perform linear dimensional reduction
+plot1.cDNAM2 <-  DimPlot(cDNAM2.pbmc, reduction = "pca") + ggtitle("cDNAM2") + theme(legend.position = "none")  + scale_color_manual(values=c("black"))
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_DimPlot.cDNAM2.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM2)
+dev.off()
+
+# Perform linear dimensional reduction
+plot1.cDNAM3 <-  DimPlot(cDNAM3.pbmc, reduction = "pca") + ggtitle("cDNAM3") + theme(legend.position = "none")  + scale_color_manual(values=c("black"))
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_DimPlot.cDNAM3.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM3)
+dev.off()
+
+
+# Perform linear dimensional reduction
+plot1.cDNAM4 <-  DimPlot(cDNAM4.pbmc, reduction = "pca") + ggtitle("cDNAM4") + theme(legend.position = "none")  + scale_color_manual(values=c("black"))
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_DimPlot.cDNAM4.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM4)
+dev.off()
+
+
+# Perform linear dimensional reduction
+plot1.cDNAM5 <-  DimPlot(cDNAM5.pbmc, reduction = "pca") + ggtitle("cDNAM5") + theme(legend.position = "none")  + scale_color_manual(values=c("black"))
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_DimPlot.cDNAM5.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM5)
+dev.off()
+
+# Perform linear dimensional reduction
+plot1.cDNAM6 <-  DimPlot(cDNAM6.pbmc, reduction = "pca") + ggtitle("cDNAM6") + theme(legend.position = "none")  + scale_color_manual(values=c("black"))
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_DimPlot.cDNAM6.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM6)
+dev.off()
+
+# Perform linear dimensional reduction
+plot1.aggregate <-  DimPlot(aggregate.pbmc, reduction = "pca") + ggtitle("aggregate all 6 samples") + theme(legend.position = "none")  + scale_color_manual(values=c("black"))
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_DimPlot.aggregate.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	## Create plot
+	plot(plot1.aggregate)
 dev.off()
