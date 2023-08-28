@@ -9,6 +9,9 @@ install.packages(c("SeuratObject", "Seurat"))
 library(SeuratObject)
 library(Seurat)
 #####################################################################################
+# Save whole workspace to working directory
+#load("./all_data.RData")
+
 # Set intput dir
 cDNA_M1_dir="/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix/"
 cDNA_M2_dir="/home/felipe/snRNASeq_output/cDNA-M2/outs/filtered_feature_bc_matrix/"
@@ -49,6 +52,8 @@ cDNAM5.pbmc <- ScaleData(cDNAM5.pbmc)
 cDNAM6.pbmc <- ScaleData(cDNAM6.pbmc)
 aggregate.pbmc <- ScaleData(aggregate.pbmc)
 
+# Save whole workspace to working directory
+#save.image("./all_data.RData")
 #####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
@@ -199,7 +204,7 @@ dev.off()
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1.cDNAM1 <- FeatureScatter(cDNAM1.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
 plot2.cDNAM1 <- FeatureScatter(cDNAM1.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-FeatureScatter_cDNAM1<-plot1 + plot2
+FeatureScatter_cDNAM1<-plot1.cDNAM1  + plot2.cDNAM1 
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
@@ -211,25 +216,25 @@ FeatureScatter_cDNAM2<-plot1 + plot2
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1.cDNAM3 <- FeatureScatter(cDNAM3.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
 plot2.cDNAM3 <- FeatureScatter(cDNAM3.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-FeatureScatter_cDNAM3<-plot1 + plot2
+FeatureScatter_cDNAM3<-plot1.cDNAM2 + plot2.cDNAM2
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1.cDNAM4 <- FeatureScatter(cDNAM4.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
 plot2.cDNAM4 <- FeatureScatter(cDNAM4.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-FeatureScatter_cDNAM4<-plot1 + plot2
+FeatureScatter_cDNAM4<-plot1.cDNAM4 + plot2.cDNAM4
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1.cDNAM5 <- FeatureScatter(cDNAM5.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
 plot2.cDNAM5 <- FeatureScatter(cDNAM5.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-FeatureScatter_cDNAM5<-plot1 + plot2
+FeatureScatter_cDNAM5<-plot1.cDNAM5 + plot2.cDNAM5
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1.cDNAM6 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
 plot2.cDNAM6 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-FeatureScatter_cDNAM6<-plot1 + plot2
+FeatureScatter_cDNAM6<-plot1.cDNAM6 + plot2.cDNAM6
 
 # Save FeatureScatter
 png(filename=paste(output_dir,"hypotha_FeatureScatter1.png",sep=""), width = 24, height = 10, res=600, units = "cm")
@@ -349,8 +354,6 @@ plot2.aggregate <- LabelPoints(plot = plot1.aggregate , points = top10.aggregate
 aggregate.plot <- plot1.aggregate + plot2.aggregate
 
 
-
-
 # Save FeatureScatter
 #filename="/home/felipe/Downloads/snRNASeq_out/out/"
 png(filename=paste(output_dir,"hypotha_FindVariableFeatures.cDNAM1.png",sep=""), width = 14, height = 9, res=600, units = "cm")
@@ -390,6 +393,79 @@ plot(aggregate.plot)
 dev.off()
 
 #####################################################################################
+## Perform linear dimensional reduction
+cDNAM1.pbmc <- RunPCA(cDNAM1.pbmc, features = VariableFeatures(object = cDNAM1.varialble))
+
+## Perform linear dimensional reduction
+plot1.cDNAM1 <- VizDimLoadings(cDNAM1.pbmc, dims = 1:2, reduction = "pca") 
 
 
-## Identification of highly variable features (feature selection)
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_VizDimLoadings.cDNAM1.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM1)
+dev.off()
+
+## Perform linear dimensional reduction
+cDNAM2.pbmc <- RunPCA(cDNAM2.pbmc, features = VariableFeatures(object = cDNAM2.varialble))
+
+## Perform linear dimensional reduction
+plot1.cDNAM2 <- VizDimLoadings(cDNAM2.pbmc, dims = 1:2, reduction = "pca") 
+
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_VizDimLoadings.cDNAM2.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM2)
+dev.off()
+
+#####################################################################################
+## Perform linear dimensional reduction
+cDNAM3.pbmc <- RunPCA(cDNAM3.pbmc, features = VariableFeatures(object = cDNAM3.varialble))
+
+## Perform linear dimensional reduction
+plot1.cDNAM3 <- VizDimLoadings(cDNAM3.pbmc, dims = 1:2, reduction = "pca") 
+ 
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_VizDimLoadings.cDNAM3.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM3)
+dev.off()
+
+## Perform linear dimensional reduction
+cDNAM4.pbmc <- RunPCA(cDNAM4.pbmc, features = VariableFeatures(object = cDNAM4.varialble))
+
+## Perform linear dimensional reduction
+plot1.cDNAM4 <- VizDimLoadings(cDNAM4.pbmc, dims = 1:2, reduction = "pca") 
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_VizDimLoadings.cDNAM4.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM4)
+dev.off()
+
+#####################################################################################
+## Perform linear dimensional reduction
+cDNAM5.pbmc <- RunPCA(cDNAM5.pbmc, features = VariableFeatures(object = cDNAM5.varialble))
+
+## Perform linear dimensional reduction
+plot1.cDNAM5 <- VizDimLoadings(cDNAM5.pbmc, dims = 1:2, reduction = "pca")
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_VizDimLoadings.cDNAM5.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM5)
+dev.off()
+
+## Perform linear dimensional reduction
+cDNAM6.pbmc <- RunPCA(cDNAM6.pbmc, features = VariableFeatures(object = cDNAM6.varialble))
+
+## Perform linear dimensional reduction
+plot1.cDNAM6 <- VizDimLoadings(cDNAM6.pbmc, dims = 1:2, reduction = "pca")
+
+#filename="/home/felipe/Downloads/snRNASeq_out/out/"
+png(filename=paste(output_dir,"hypotha_VizDimLoadings.cDNAM6.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+	## Create plot
+	plot(plot1.cDNAM6)
+dev.off()
