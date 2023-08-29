@@ -4,6 +4,7 @@ library(Seurat)
 library(patchwork)
 library(gridExtra)
 library(ggplot2)
+
 #####################################################################################
 #install.packages(c("SeuratObject", "Seurat"))
 library(SeuratObject)
@@ -286,7 +287,7 @@ plot( FeatureScatter)
 dev.off()
 
 #####################################################################################
-install.packages(c("SeuratObject", "Seurat"))
+#install.packages(c("SeuratObject", "Seurat"))
 library(SeuratObject)
 library(Seurat)
 
@@ -548,3 +549,6 @@ png(filename=paste(output_dir,"hypotha_DimPlot.aggregate.png",sep=""), width = 1
 	## Create plot
 	plot(plot1.aggregate)
 dev.off()
+
+#####################################################################################
+DimHeatmap(cDNAM1.pbmc, dims = 1, cells = 500, balanced = TRUE)
