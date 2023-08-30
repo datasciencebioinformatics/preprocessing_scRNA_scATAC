@@ -2,11 +2,10 @@
 # preprocessing_scRNA_scATAC
 #### Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC. This step focuses on the installation, preparation and execution of Cellranger.
 #### Step 1 - Installation of samtools and python packages
-sudo apt install python3-docopt
-sudo apt install python3-lz4
-sudo apt install python3-numpy
-sudo apt-get install samtools
-sudo apt-get install biobambam2
+    sudo apt install python3-docopt
+    sudo apt install python3-numpy
+    sudo apt-get install samtools
+    sudo apt-get install biobambam2
 
 # Step 2 - CellRanger Installation
 # Download CellRanger follozing instructions from :
