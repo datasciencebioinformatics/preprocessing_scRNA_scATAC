@@ -4,7 +4,7 @@ library(Seurat)
 library(patchwork)
 library(gridExtra)
 library(ggplot2)
-
+library(plyr)
 #####################################################################################
 #install.packages(c("SeuratObject", "Seurat"))
 library(SeuratObject)
@@ -648,6 +648,11 @@ library(Seurat)
 #####################################################################################
 output_dir="./"
 
+load(file = "aggregate.RData")
+
+# Finding differentially expressed features (cluster biomarkers)
+# pbmc=aggregate.pbmc
+
 # Calulate predicted annotation
 MouseRNAseqData <- MouseRNAseqData()
 ImmGenData <- ImmGenData()
@@ -687,15 +692,62 @@ pbmc[["predicted.ImmGenData"]] <- aggregate.ImmGenData.pbmc$labels
 pbmc[["predicted.DatabaseImmuneCellExpressionData"]] <- aggregate.DatabaseImmuneCellExpressionData.pbmc$labels
 
 # Calculate plots
-pbmc.DimPlot   <- DimPlot(pbmc, reduction = "umap") + ggtitle("aggregate all 6 samples :  FindNeighbors + FindClusters") + theme_bw()
 pbmc.anontated <- DimPlot(pbmc, group.by = c("predicted.MouseRNAseqData"),label=TRUE ) + theme_bw() +ggtitle("predicted.MouseRNAseqData")
 pbmc.anontated2 <- DimPlot(pbmc, group.by = c("predicted.ImmGenData"),label=TRUE ) + theme_bw()+ggtitle("predicted.ImmGenData")
 pbmc.anontated3 <- DimPlot(pbmc, group.by = c("predicted.DatabaseImmuneCellExpressionData"),label=TRUE ) + theme_bw()+ggtitle("predicted.DatabaseImmuneCellExpressionData")
 
+#####################################################################################
+save(pbmc.anontated, file = "pbmc.anontated.RData")
+save(pbmc.anontated2, file = "pbmc.anontated2.RData")
+save(pbmc.anontated3, file = "pbmc.anontated3.RData")
+
+# Finding differentially expressed features (cluster biomarkers)
+# pbmc=aggregate.pbmc
+
+# Calculate UMAP
+pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst")
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
+pbmc <- RunUMAP(pbmc, dims = 1:30)
+pbmc <- FindNeighbors(pbmc, dims = 1:30)
+pbmc <- FindClusters(pbmc, resolution = 0.5)
+pbmc.DimPlot <- DimPlot(pbmc, label = TRUE) + NoLegend() + ggtitle("pbmc")
+
+# variable 'group')
+library(dplyr)
+m <- FindAllMarkers(object = pbmc, only.pos = TRUE,
+                    min.pct = 0.1, return.thresh = 0.05, 
+                    logfc.threshold = 0.25, test.use = "wilcox")
+selected_markers_top2<- m %>% group_by(cluster) %>% top_n(2, abs(avg_log2FC))
+
+# Create data.frame
+df_selected_markers_top2=data.frame(selected_markers_top2)
+
+# Save identifies
+idendities=levels(df_selected_markers_top2$cluster)
+
+# For each identity
+pbmc <- RenameIdents(pbmc, "0"=df_selected_markers_top2[df_selected_markers_top2$cluster=="0","gene"][1])
+pbmc <- RenameIdents(pbmc, "1"=df_selected_markers_top2[df_selected_markers_top2$cluster=="1","gene"][1])
+pbmc <- RenameIdents(pbmc, "2"=df_selected_markers_top2[df_selected_markers_top2$cluster=="2","gene"][1])
+pbmc <- RenameIdents(pbmc, "3"=df_selected_markers_top2[df_selected_markers_top2$cluster=="3","gene"][1])
+pbmc <- RenameIdents(pbmc, "4"=df_selected_markers_top2[df_selected_markers_top2$cluster=="4","gene"][1])
+pbmc <- RenameIdents(pbmc, "5"=df_selected_markers_top2[df_selected_markers_top2$cluster=="5","gene"][1])
+pbmc <- RenameIdents(pbmc, "6"=df_selected_markers_top2[df_selected_markers_top2$cluster=="6","gene"][1])
+pbmc <- RenameIdents(pbmc, "7"=df_selected_markers_top2[df_selected_markers_top2$cluster=="7","gene"][1])
+pbmc <- RenameIdents(pbmc, "8"=df_selected_markers_top2[df_selected_markers_top2$cluster=="8","gene"][1])
+pbmc <- RenameIdents(pbmc, "9"=df_selected_markers_top2[df_selected_markers_top2$cluster=="9","gene"][1])
+pbmc <- RenameIdents(pbmc, "10"=df_selected_markers_top2[df_selected_markers_top2$cluster=="10","gene"][1])
+pbmc <- RenameIdents(pbmc, "11"=df_selected_markers_top2[df_selected_markers_top2$cluster=="11","gene"][1])
+pbmc <- RenameIdents(pbmc, "12"=df_selected_markers_top2[df_selected_markers_top2$cluster=="12","gene"][1])
+pbmc <- RenameIdents(pbmc, "13"=df_selected_markers_top2[df_selected_markers_top2$cluster=="13","gene"][1])
+pbmc <- RenameIdents(pbmc, "14"=df_selected_markers_top2[df_selected_markers_top2$cluster=="14","gene"][1])
+pbmc <- RenameIdents(pbmc, "15"=df_selected_markers_top2[df_selected_markers_top2$cluster=="15","gene"][1])
+
+pbmc.makers   <- DimPlot(pbmc,label=TRUE) + ggtitle("aggregate all 6 samples :  selected markers top avg_log2FC") + theme_bw()
+
+
 # aggregate.DimHeatmap
 png(filename=paste(output_dir,"singleR.aggregate.png",sep=""), width = 32, height = 24, res=600, units = "cm")
-	plot( grid.arrange(pbmc.DimPlot, pbmc.anontated,pbmc.anontated2,pbmc.anontated3, nrow = 2,ncol=2))
+	plot( grid.arrange(pbmc.makers, pbmc.anontated,pbmc.anontated2,pbmc.anontated3, nrow = 2,ncol=2))
 dev.off()
-
-
-#####################################################################################
