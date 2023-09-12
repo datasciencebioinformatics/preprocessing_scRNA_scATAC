@@ -91,7 +91,7 @@ VlnPlotA.cDNAM3<-VlnPlot(cDNAM3.pbmc, features = c("nFeature_RNA", "nCount_RNA",
 VlnPlotA.cDNAM4<-VlnPlot(cDNAM4.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
 VlnPlotA.cDNAM5<-VlnPlot(cDNAM5.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
 VlnPlotA.cDNAM6<-VlnPlot(cDNAM6.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
-VlnPlotA.aggregate<-VlnPlot(aggregate.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.aggregate<-VlnPlot(aggregate.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)+ ggtitle("QC metrics as a violin plot")
 
 # Save VlnPlot
 png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM1.png",sep=""), width = 24, height = 10, res=800, units = "cm")
@@ -118,12 +118,17 @@ png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM6.png",sep=""), width = 24, 
 plot(VlnPlotA.cDNAM6)
 dev.off()
 
+png(filename=paste(output_dir,"hypotha_VlnPlot_aggregate.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot(VlnPlotA.aggregate)
+dev.off()
+
 VlnPlotB.cDNAM1<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 VlnPlotB.cDNAM2<-VlnPlot(cDNAM2.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 VlnPlotB.cDNAM3<-VlnPlot(cDNAM3.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 VlnPlotB.cDNAM4<-VlnPlot(cDNAM4.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 VlnPlotB.cDNAM5<-VlnPlot(cDNAM5.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
 VlnPlotB.cDNAM6<-VlnPlot(cDNAM6.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="white", pt.size = 0.0001, ncol = 3)
+
 
 # Save VlnPlot
 png(filename=paste(output_dir,"hypotha_VlnPlotB_cDNAM1.png",sep=""), width = 24, height = 10, res=800, units = "cm")
@@ -151,6 +156,10 @@ png(filename=paste(output_dir,"hypotha_VlnPlotB_cDNAM6.png",sep=""), width = 24,
 plot( VlnPlotB.cDNAM6)
 dev.off()
 
+png(filename=paste(output_dir,"hypotha_VlnPlotB_cDNAM6.png",sep=""), width = 24, height = 10, res=800, units = "cm")
+plot( VlnPlotB.cDNAM6)
+dev.off()
+
 #####################################################################################
 # Visualize QC metrics as a violin plot (combine)
 VlnPlotA.cDNAM1<-VlnPlot(cDNAM1.pbmc, features = c("nFeature_RNA"), cols="gray0", pt.size = 0, ncol = 3)
@@ -159,6 +168,8 @@ VlnPlotA.cDNAM3<-VlnPlot(cDNAM3.pbmc, features = c("nFeature_RNA"), cols="gray0"
 VlnPlotA.cDNAM4<-VlnPlot(cDNAM4.pbmc, features = c("nFeature_RNA"), cols="gray0", pt.size = 0, ncol = 3)
 VlnPlotA.cDNAM5<-VlnPlot(cDNAM5.pbmc, features = c("nFeature_RNA"), cols="gray0", pt.size = 0, ncol = 3)
 VlnPlotA.cDNAM6<-VlnPlot(cDNAM6.pbmc, features = c("nFeature_RNA"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM6<-VlnPlot(cDNAM6.pbmc, features = c("nFeature_RNA"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.aggregate<-VlnPlot(aggregate.pbmc, features = c("nFeature_RNA"), cols="gray0", pt.size = 0, ncol = 3)
 
 # VlnPlotA.cDNAM1.data
 VlnPlotA.cDNAM1.data<-data.frame(Sample="cDNAM1", Primer=rownames(VlnPlotA.cDNAM1$data), VlnPlotA.cDNAM1$data)
@@ -167,7 +178,8 @@ VlnPlotA.cDNAM3.data<-data.frame(Sample="cDNAM3", Primer=rownames(VlnPlotA.cDNAM
 VlnPlotA.cDNAM4.data<-data.frame(Sample="cDNAM4", Primer=rownames(VlnPlotA.cDNAM4$data), VlnPlotA.cDNAM4$data)
 VlnPlotA.cDNAM5.data<-data.frame(Sample="cDNAM5", Primer=rownames(VlnPlotA.cDNAM5$data), VlnPlotA.cDNAM5$data)
 VlnPlotA.cDNAM6.data<-data.frame(Sample="cDNAM6", Primer=rownames(VlnPlotA.cDNAM6$data), VlnPlotA.cDNAM6$data)
-
+VlnPlotA.cDNAM6.data<-data.frame(Sample="cDNAM6", Primer=rownames(VlnPlotA.cDNAM6$data), VlnPlotA.cDNAM6$data)
+VlnPlotA.aggregate.data<-data.frame(Sample="cDNAM6", Primer=rownames(VlnPlotA.aggregate$data), VlnPlotA.aggregate$data)
 
 df_cDNAM1<-data.frame(Sample="cDNAM1", VlnPlotA.cDNAM1$data,Primer=rownames(VlnPlotA.cDNAM1.data))
 df_cDNAM2<-data.frame(Sample="cDNAM2", VlnPlotA.cDNAM2$data,Primer=rownames(VlnPlotA.cDNAM2.data))
@@ -175,9 +187,10 @@ df_cDNAM3<-data.frame(Sample="cDNAM3", VlnPlotA.cDNAM3$data,Primer=rownames(VlnP
 df_cDNAM4<-data.frame(Sample="cDNAM4", VlnPlotA.cDNAM4$data,Primer=rownames(VlnPlotA.cDNAM4.data))
 df_cDNAM5<-data.frame(Sample="cDNAM5", VlnPlotA.cDNAM5$data,Primer=rownames(VlnPlotA.cDNAM5.data))
 df_cDNAM6<-data.frame(Sample="cDNAM6", VlnPlotA.cDNAM6$data,Primer=rownames(VlnPlotA.cDNAM6.data))
+df_aggregate<-data.frame(Sample="aggregate", VlnPlotA.aggregate$data,Primer=rownames(VlnPlotA.aggregate.data))
 
 # Createpair merges
-merge1=rbind(df_cDNAM1,df_cDNAM2,df_cDNAM3,df_cDNAM4,df_cDNAM5,df_cDNAM6)
+merge1=rbind(df_cDNAM1,df_cDNAM2,df_cDNAM3,df_cDNAM4,df_cDNAM5,df_cDNAM6,df_aggregate)
 
 # Combine nmerges
 VlnPlotA<-ggplot(merge1, aes(x=Sample, y=nFeature_RNA,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1)) + theme(axis.title.x = element_blank())+ ggtitle("QC metrics as a violin plot")
@@ -285,6 +298,14 @@ plot1.cDNAM6 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = 
 plot2.cDNAM6 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
 FeatureScatter_cDNAM6<-plot1.cDNAM6  + plot2.cDNAM6 
 
+# FeatureScatter is typically used to visualize feature-feature relationships, but can be used
+# for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
+plot1.aggregate <- FeatureScatter(aggregate.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
+plot2.aggregate <- FeatureScatter(aggregate.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
+FeatureScatter_aggregate<-plot1.aggregate  + plot2.aggregate
+
+
+
 # Save FeatureScatter
 png(filename=paste(output_dir,"hypotha_FeatureScatter1.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(FeatureScatter_cDNAM1)
@@ -314,6 +335,12 @@ dev.off()
 png(filename=paste(output_dir,"hypotha_FeatureScatter6.png",sep=""), width = 24, height = 10, res=600, units = "cm")
 plot(FeatureScatter_cDNAM6)
 dev.off()
+
+# Save FeatureScatter
+png(filename=paste(output_dir,"hypotha_FeatureScatteraggregate.png",sep=""), width = 24, height = 10, res=600, units = "cm")
+plot(FeatureScatter_aggregate)
+dev.off()
+
 
 # VlnPlotA.cDNAM1.data
 FeatureScatter.cDNAM1.data<-data.frame(Sample="cDNAM1", Primer=rownames(plot2.cDNAM1$data), plot2.cDNAM1$data)
@@ -383,7 +410,7 @@ top10.cDNAM3 <- head(VariableFeatures(cDNAM3.varialble), 10)
 top10.cDNAM4 <- head(VariableFeatures(cDNAM4.varialble), 10)
 top10.cDNAM5 <- head(VariableFeatures(cDNAM5.varialble), 10)
 top10.cDNAM6 <- head(VariableFeatures(cDNAM6.varialble), 10)
-top10.aggregate <- head(VariableFeatures(aggregate.pbmc), 10)
+top10.aggregate <- head(VariableFeatures(aggregate.varialble), 10)
 
 # plot variable features with and without labels
 library("ggplot2")
@@ -411,7 +438,7 @@ plot1.cDNAM6 <- VariableFeaturePlot(cDNAM6.varialble) + theme(legend.position="n
 plot2.cDNAM6 <- LabelPoints(plot = plot1.cDNAM6, points = top10.cDNAM6, repel = TRUE)
 cDNAM6.plot <- plot1.cDNAM6 + plot2.cDNAM6
 
-plot1.aggregate <- VariableFeaturePlot(aggregate.pbmc) + theme(legend.position="none")
+plot1.aggregate <- VariableFeaturePlot(aggregate.varialble) + theme(legend.position="none")
 plot2.aggregate <- LabelPoints(plot = plot1.aggregate , points = top10.aggregate, repel = TRUE)
 aggregate.plot <- plot1.aggregate + plot2.aggregate
 
