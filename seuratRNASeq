@@ -323,16 +323,29 @@ FeatureScatter.cDNAM4.data<-data.frame(Sample="cDNAM4", Primer=rownames(plot2.cD
 FeatureScatter.cDNAM5.data<-data.frame(Sample="cDNAM5", Primer=rownames(plot2.cDNAM5$data), plot2.cDNAM5$data)
 FeatureScatter.cDNAM6.data<-data.frame(Sample="cDNAM6", Primer=rownames(plot2.cDNAM6$data), plot2.cDNAM6$data)
 
+# VlnPlotA.cDNAM2.data
+FeatureScatter.cDNAM1.data_1<-data.frame(Sample="cDNAM1", Primer=rownames(plot1.cDNAM1$data), plot1.cDNAM1$data)
+FeatureScatter.cDNAM2.data_1<-data.frame(Sample="cDNAM2", Primer=rownames(plot1.cDNAM2$data), plot1.cDNAM2$data)
+FeatureScatter.cDNAM3.data_1<-data.frame(Sample="cDNAM3", Primer=rownames(plot1.cDNAM3$data), plot1.cDNAM3$data)
+FeatureScatter.cDNAM4.data_1<-data.frame(Sample="cDNAM4", Primer=rownames(plot1.cDNAM4$data), plot1.cDNAM4$data)
+FeatureScatter.cDNAM5.data_1<-data.frame(Sample="cDNAM5", Primer=rownames(plot1.cDNAM5$data), plot1.cDNAM5$data)
+FeatureScatter.cDNAM6.data_1<-data.frame(Sample="cDNAM6", Primer=rownames(plot1.cDNAM6$data), plot1.cDNAM6$data)
+
 # FeatureScatter
 merge1=rbind(FeatureScatter.cDNAM1.data,FeatureScatter.cDNAM2.data,FeatureScatter.cDNAM3.data,FeatureScatter.cDNAM4.data,FeatureScatter.cDNAM5.data,FeatureScatter.cDNAM6.data)
+merge2=rbind(FeatureScatter.cDNAM1.data_1,FeatureScatter.cDNAM2.data_1,FeatureScatter.cDNAM3.data_1,FeatureScatter.cDNAM4.data_1,FeatureScatter.cDNAM5.data_1,FeatureScatter.cDNAM6.data_1)
 
 # Combine nmerges
-FeatureScatter<-ggplot(merge1, aes(x=nCount_RNA, y=nFeature_RNA,fill=Sample, colour=Sample)) +  geom_point() + theme_bw() + scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1)) + ggtitle("nCount_RNA-nFeature_RNA relationship")
+#FeatureScatter<-ggplot(merge1, aes(x=nCount_RNA, y=nFeature_RNA,fill=Sample,shape=Sample,colour=Sample)) +  geom_point() + theme_bw() + scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1)) + ggtitle("nCount_RNA-nFeature_RNA relationship")
+FeatureScatter<-ggplot(merge1, aes(x=nCount_RNA, y=nFeature_RNA,fill=Sample,shape=Sample)) +  geom_point() + theme_bw() +  guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1)) + ggtitle("nCount_RNA-nFeature_RNA relationship")
+FeatureScatter2<-ggplot(merge2, aes(y=percent.mt, x=nCount_RNA,fill=Sample,shape=Sample)) +  geom_point() + theme_bw() +  guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1)) + ggtitle("nCount_RNA-percent.mt relationship")
 
 # Plot
-png(filename=paste(output_dir,"hypotha_FeatureScatter.png",sep=""), width = 14, height = 14, res=800, units = "cm")
-plot( FeatureScatter)
+png(filename=paste(output_dir,"hypotha_FeatureScatter.png",sep=""), width = 12, height = 14, res=800, units = "cm")
+plot( grid.arrange(FeatureScatter, FeatureScatter2, nrow = 2))
 dev.off()
+
+
 
 #####################################################################################
 install.packages(c("SeuratObject", "Seurat"))
