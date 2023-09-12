@@ -62,12 +62,12 @@ save(cDNAM6.pbmc, file = "cDNAM1.RData")
 save(aggregate.pbmc, file = "aggregate.RData")
 
 
-load(file = "DimPlot1.RData")
-load(file = "DimPlot2.RData")
-load(file = "DimPlot3.RData")
-load(file = "DimPlot4.RData")
-load(file = "DimPlot5.RData")
-load(file = "DimPlot6.RData")
+load(file = "cDNAM1.RData")
+load(file = "cDNAM2.RData")
+load(file = "cDNAM3.RData")
+load(file = "cDNAM4.RData")
+load(file = "cDNAM5.RData")
+load(file = "cDNAM6.RData")
 load(file = "aggregate.RData")
 
 # Save whole workspace to working directory
