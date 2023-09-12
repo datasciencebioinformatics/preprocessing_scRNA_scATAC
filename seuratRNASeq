@@ -184,6 +184,37 @@ VlnPlotA<-ggplot(merge1, aes(x=Sample, y=nFeature_RNA,fill="black")) +  geom_vio
 
 #####################################################################################
 # Visualize QC metrics as a violin plot (combine)
+VlnPlotA.cDNAM1<-VlnPlot(cDNAM1.pbmc, features = c("percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM2<-VlnPlot(cDNAM2.pbmc, features = c("percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM3<-VlnPlot(cDNAM3.pbmc, features = c("percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM4<-VlnPlot(cDNAM4.pbmc, features = c("percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM5<-VlnPlot(cDNAM5.pbmc, features = c("percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.cDNAM6<-VlnPlot(cDNAM6.pbmc, features = c("percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+
+# VlnPlotA.cDNAM1.data
+VlnPlotA.cDNAM1.data<-data.frame(Sample="cDNAM1", Primer=rownames(VlnPlotA.cDNAM1$data), VlnPlotA.cDNAM1$data)
+VlnPlotA.cDNAM2.data<-data.frame(Sample="cDNAM2", Primer=rownames(VlnPlotA.cDNAM2$data), VlnPlotA.cDNAM2$data)
+VlnPlotA.cDNAM3.data<-data.frame(Sample="cDNAM3", Primer=rownames(VlnPlotA.cDNAM3$data), VlnPlotA.cDNAM3$data)
+VlnPlotA.cDNAM4.data<-data.frame(Sample="cDNAM4", Primer=rownames(VlnPlotA.cDNAM4$data), VlnPlotA.cDNAM4$data)
+VlnPlotA.cDNAM5.data<-data.frame(Sample="cDNAM5", Primer=rownames(VlnPlotA.cDNAM5$data), VlnPlotA.cDNAM5$data)
+VlnPlotA.cDNAM6.data<-data.frame(Sample="cDNAM6", Primer=rownames(VlnPlotA.cDNAM6$data), VlnPlotA.cDNAM6$data)
+
+df_cDNAM1<-data.frame(Sample="cDNAM1", VlnPlotA.cDNAM1$data,Primer=rownames(VlnPlotA.cDNAM1.data))
+df_cDNAM2<-data.frame(Sample="cDNAM2", VlnPlotA.cDNAM2$data,Primer=rownames(VlnPlotA.cDNAM2.data))
+df_cDNAM3<-data.frame(Sample="cDNAM3", VlnPlotA.cDNAM3$data,Primer=rownames(VlnPlotA.cDNAM3.data))
+df_cDNAM4<-data.frame(Sample="cDNAM4", VlnPlotA.cDNAM4$data,Primer=rownames(VlnPlotA.cDNAM4.data))
+df_cDNAM5<-data.frame(Sample="cDNAM5", VlnPlotA.cDNAM5$data,Primer=rownames(VlnPlotA.cDNAM5.data))
+df_cDNAM6<-data.frame(Sample="cDNAM6", VlnPlotA.cDNAM6$data,Primer=rownames(VlnPlotA.cDNAM6.data))
+
+# Createpair merges
+merge1=rbind(df_cDNAM1,df_cDNAM2,df_cDNAM3,df_cDNAM4,df_cDNAM5,df_cDNAM6)
+
+# Combine nmerges
+VlnPlotB<-ggplot(merge1, aes(x=Sample, y=percent.mt,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1)) + theme(axis.title.x = element_blank())#+ ggtitle("QC metrics as a violin plot")+ theme(axis.title.x = element_blank())
+
+
+#####################################################################################
+# Visualize QC metrics as a violin plot (combine)
 VlnPlotA.cDNAM1<-VlnPlot(cDNAM1.pbmc, features = c("nCount_RNA"), cols="gray0", pt.size = 0, ncol = 3)
 VlnPlotA.cDNAM2<-VlnPlot(cDNAM2.pbmc, features = c("nCount_RNA"), cols="gray0", pt.size = 0, ncol = 3)
 VlnPlotA.cDNAM3<-VlnPlot(cDNAM3.pbmc, features = c("nCount_RNA"), cols="gray0", pt.size = 0, ncol = 3)
@@ -210,11 +241,11 @@ df_cDNAM6<-data.frame(Sample="cDNAM6", VlnPlotA.cDNAM6$data,Primer=rownames(VlnP
 merge1=rbind(df_cDNAM1,df_cDNAM2,df_cDNAM3,df_cDNAM4,df_cDNAM5,df_cDNAM6)
 
 # Combine nmerges
-VlnPlotB<-ggplot(merge1, aes(x=Sample, y=nCount_RNA,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1))
+VlnPlotC<-ggplot(merge1, aes(x=Sample, y=nCount_RNA,fill="black")) +  geom_violin() + theme_bw() + scale_fill_manual(values=c("black"))+ guides(fill="none")  + theme(axis.text.x=element_text(angle=90, hjust=1))+ guides(fill="none") + theme(axis.title.x = element_blank())
 
 # Plot
-png(filename=paste(output_dir,"hypotha_VlnPlotA_combined.png",sep=""), width = 24, height = 16, res=800, units = "cm")
-plot( grid.arrange(VlnPlotA, VlnPlotB, nrow = 2))
+png(filename=paste(output_dir,"hypotha_VlnPlotA_combined.png",sep=""), width = 24, height = 24, res=800, units = "cm")
+plot( grid.arrange(VlnPlotA, VlnPlotC,VlnPlotB, nrow = 3))
 dev.off()
 
 #####################################################################################
@@ -228,19 +259,19 @@ FeatureScatter_cDNAM1<-plot1.cDNAM1  + plot2.cDNAM1
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1.cDNAM2 <- FeatureScatter(cDNAM2.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
 plot2.cDNAM2 <- FeatureScatter(cDNAM2.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-FeatureScatter_cDNAM2<-plot1 + plot2
+FeatureScatter_cDNAM2<-plot1.cDNAM2  + plot2.cDNAM2
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1.cDNAM3 <- FeatureScatter(cDNAM3.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
 plot2.cDNAM3 <- FeatureScatter(cDNAM3.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-FeatureScatter_cDNAM3<-plot1.cDNAM2 + plot2.cDNAM2
+FeatureScatter_cDNAM3<-plot1.cDNAM3  + plot2.cDNAM3
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1.cDNAM4 <- FeatureScatter(cDNAM4.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
 plot2.cDNAM4 <- FeatureScatter(cDNAM4.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-FeatureScatter_cDNAM4<-plot1.cDNAM4 + plot2.cDNAM4
+FeatureScatter_cDNAM4<-plot1.cDNAM4  + plot2.cDNAM4 
 
 # FeatureScatter is typically used to visualize feature-feature relationships, but can be used
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
@@ -252,7 +283,7 @@ FeatureScatter_cDNAM5<-plot1.cDNAM5 + plot2.cDNAM5
 # for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 plot1.cDNAM6 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt", cols="gray0")
 plot2.cDNAM6 <- FeatureScatter(cDNAM6.pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols="gray0")
-FeatureScatter_cDNAM6<-plot1.cDNAM6 + plot2.cDNAM6
+FeatureScatter_cDNAM6<-plot1.cDNAM6  + plot2.cDNAM6 
 
 # Save FeatureScatter
 png(filename=paste(output_dir,"hypotha_FeatureScatter1.png",sep=""), width = 24, height = 10, res=600, units = "cm")
