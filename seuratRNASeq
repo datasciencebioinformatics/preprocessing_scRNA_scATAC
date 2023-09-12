@@ -75,14 +75,13 @@ load(file = "aggregate.RData")
 #####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
-cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "^MT-")
-cDNAM2.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM2.pbmc, pattern = "^MT-")
-cDNAM3.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM3.pbmc, pattern = "^MT-")
-cDNAM4.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM4.pbmc, pattern = "^MT-")
-cDNAM5.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM5.pbmc, pattern = "^MT-")
-cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "^MT-")
-aggregate.pbmc[["percent.mt"]] <- PercentageFeatureSet(aggregate.pbmc, pattern = "^MT-")
-
+cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "mt")
+cDNAM2.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM2.pbmc, pattern = "mt")
+cDNAM3.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM3.pbmc, pattern = "mt")
+cDNAM4.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM4.pbmc, pattern = "mt")
+cDNAM5.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM5.pbmc, pattern = "mt")
+cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
+aggregate.pbmc[["percent.mt"]] <- PercentageFeatureSet(aggregate.pbmc, pattern = "mt")
 #####################################################################################
 # Visualize QC metrics as a violin plot
 # Visualize QC metrics as a violin plot
@@ -92,6 +91,7 @@ VlnPlotA.cDNAM3<-VlnPlot(cDNAM3.pbmc, features = c("nFeature_RNA", "nCount_RNA",
 VlnPlotA.cDNAM4<-VlnPlot(cDNAM4.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
 VlnPlotA.cDNAM5<-VlnPlot(cDNAM5.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
 VlnPlotA.cDNAM6<-VlnPlot(cDNAM6.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
+VlnPlotA.aggregate<-VlnPlot(aggregate.pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 3)
 
 # Save VlnPlot
 png(filename=paste(output_dir,"hypotha_VlnPlot_cDNAM1.png",sep=""), width = 24, height = 10, res=800, units = "cm")
