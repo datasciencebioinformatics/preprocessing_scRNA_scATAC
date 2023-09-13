@@ -73,6 +73,12 @@ load(file = "aggregate.RData")
 # Save whole workspace to working directory
 #save.image("./all_data.RData")
 #####################################################################################
+colnames(x = pbmc)
+Cells(object = pbmc)
+rownames(x = pbmc)
+ncol(x = pbmc)
+nrow(x = pbmc)
+#####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
 cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "mt")
