@@ -73,11 +73,7 @@ load(file = "aggregate.RData")
 # Save whole workspace to working directory
 #save.image("./all_data.RData")
 #####################################################################################
-colnames(x = pbmc)
-Cells(object = pbmc)
-rownames(x = pbmc)
-ncol(x = pbmc)
-nrow(x = pbmc)
+pbmc.big <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc,cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3", "cDNAM4","cDNAM5","cDNAM6"), project = "hypothalamus")
 #####################################################################################
 # Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
