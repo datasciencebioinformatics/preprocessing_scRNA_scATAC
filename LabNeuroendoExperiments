@@ -18,3 +18,14 @@ Cellranger ATAC = -
 Seurat
 Seurat RNA  = running
 Seurat ATAC = -
+
+# Camila
+Integrative analises (RNA+ATAC)-Human
+Número de amostras : 32
+Cellranger 
+Cellranger RNA  = waiting server
+Cellranger ATAC = waiting server
+Seurat
+Seurat RNA  = waiting server
+Seurat ATAC = waiting server
+Seurat integrative = waiting server
