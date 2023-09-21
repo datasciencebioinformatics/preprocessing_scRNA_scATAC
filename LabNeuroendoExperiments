@@ -1,0 +1,10 @@
+# Felipe Leal Valentim
+Integrative analises (RNA+ATAC)-Human+Mouse
+Número de amostras : 6
+Cellranger 
+Cellranger RNA  = done
+Cellranger ATAC = waiting server
+Seurat
+Seurat RNA  = done
+Seurat ATAC = waiting cellranger
+Seurat integrative = waiting cellranger
