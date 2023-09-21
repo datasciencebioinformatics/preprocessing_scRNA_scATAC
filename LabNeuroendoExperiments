@@ -8,3 +8,13 @@ Seurat
 Seurat RNA  = done
 Seurat ATAC = waiting cellranger
 Seurat integrative = waiting cellranger
+
+# Rafaela
+Integrative analises RNA Human 
+Número de amostras : 3
+Cellranger 
+Cellranger RNA  = done in other server
+Cellranger ATAC = -
+Seurat
+Seurat RNA  = running
+Seurat ATAC = -
