@@ -58,7 +58,7 @@ save(cDNAM2.pbmc, file = "cDNAM2.RData")
 save(cDNAM3.pbmc, file = "cDNAM3.RData")
 save(cDNAM4.pbmc, file = "cDNAM4.RData")
 save(cDNAM5.pbmc, file = "cDNAM5.RData")
-save(cDNAM6.pbmc, file = "cDNAM1.RData")
+save(cDNAM6.pbmc, file = "cDNAM6.RData")
 save(aggregate.pbmc, file = "aggregate.RData")
 
 
