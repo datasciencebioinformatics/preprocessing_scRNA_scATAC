@@ -5,8 +5,6 @@ library(patchwork)
 library(gridExtra)
 library(ggplot2)
 library(plyr)
-#####################################################################################
-#install.packages(c("SeuratObject", "Seurat"))
 library(SeuratObject)
 library(Seurat)
 #####################################################################################
@@ -20,11 +18,9 @@ cDNA_M3_dir="/home/felipe/snRNASeq_output/cDNA-M3/outs/filtered_feature_bc_matri
 cDNA_M4_dir="/home/felipe/snRNASeq_output/cDNA-M4/outs/filtered_feature_bc_matrix/"
 cDNA_M5_dir="/home/felipe/snRNASeq_output/cDNA-M5/outs/filtered_feature_bc_matrix/"
 cDNA_M6_dir="/home/felipe/snRNASeq_output/cDNA-M6/outs/filtered_feature_bc_matrix/"
-cDNA_agg_dir="/home/felipe/snRNASeq_output/aggr/aggr/outs/count/filtered_feature_bc_matrix/"
 
 # Set output dir
 output_dir="/home/felipe/snRNASeq_output/results/"
-#####################################################################################
 # First, load the tables 
 # Load table for all sample - aggreagate cellranger for the six samples
 cDNAM1.Read10X<-Read10X(data.dir=cDNA_M1_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
@@ -33,7 +29,6 @@ cDNAM3.Read10X<-Read10X(data.dir=cDNA_M3_dir, gene.column = 2, cell.column = 1, 
 cDNAM4.Read10X<-Read10X(data.dir=cDNA_M4_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM5.Read10X<-Read10X(data.dir=cDNA_M5_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 cDNAM6.Read10X<-Read10X(data.dir=cDNA_M6_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
-aggregate.Read10X<-Read10X(data.dir=cDNA_agg_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # Load table for all sample - aggreagate cellranger for the six samples
 cDNAM1.pbmc <- CreateSeuratObject(counts = cDNAM1.Read10X, project = "hypotha")
@@ -42,41 +37,7 @@ cDNAM3.pbmc <- CreateSeuratObject(counts = cDNAM3.Read10X, project = "hypotha")
 cDNAM4.pbmc <- CreateSeuratObject(counts = cDNAM4.Read10X, project = "hypotha")
 cDNAM5.pbmc <- CreateSeuratObject(counts = cDNAM5.Read10X, project = "hypotha")
 cDNAM6.pbmc <- CreateSeuratObject(counts = cDNAM6.Read10X, project = "hypotha")
-aggregate.pbmc <- CreateSeuratObject(counts = aggregate.Read10X, project = "hypotha")
 
-# Scale the data
-cDNAM1.pbmc <- ScaleData(cDNAM1.pbmc)
-cDNAM2.pbmc <- ScaleData(cDNAM2.pbmc)
-cDNAM3.pbmc <- ScaleData(cDNAM3.pbmc)
-cDNAM4.pbmc <- ScaleData(cDNAM4.pbmc)
-cDNAM5.pbmc <- ScaleData(cDNAM5.pbmc)
-cDNAM6.pbmc <- ScaleData(cDNAM6.pbmc)
-aggregate.pbmc <- ScaleData(aggregate.pbmc)
-
-save(cDNAM1.pbmc, file = "cDNAM1.RData")
-save(cDNAM2.pbmc, file = "cDNAM2.RData")
-save(cDNAM3.pbmc, file = "cDNAM3.RData")
-save(cDNAM4.pbmc, file = "cDNAM4.RData")
-save(cDNAM5.pbmc, file = "cDNAM5.RData")
-save(cDNAM6.pbmc, file = "cDNAM6.RData")
-save(aggregate.pbmc, file = "aggregate.RData")
-
-
-load(file = "cDNAM1.RData")
-load(file = "cDNAM2.RData")
-load(file = "cDNAM3.RData")
-load(file = "cDNAM4.RData")
-load(file = "cDNAM5.RData")
-load(file = "cDNAM6.RData")
-load(file = "aggregate.RData")
-
-# Save whole workspace to working directory
-#save.image("./all_data.RData")
-#####################################################################################
-pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
-pbmc.merge.aggregate <- aggregate.pbmc
-#####################################################################################
-# Second create quality plots
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
 cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "mt")
 cDNAM2.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM2.pbmc, pattern = "mt")
@@ -84,7 +45,20 @@ cDNAM3.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM3.pbmc, pattern = "mt")
 cDNAM4.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM4.pbmc, pattern = "mt")
 cDNAM5.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM5.pbmc, pattern = "mt")
 cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
-aggregate.pbmc[["percent.mt"]] <- PercentageFeatureSet(aggregate.pbmc, pattern = "mt")
+
+#Criar as tabelas de %
+
+for (i in )
+#QC realizar o controle de qualidade
+data = srat[[]]
+Data$Mean2 = ifelse(Data$percent.t < 2, "True", "False")
+Data$Mean1 = ifelse(Data$percent.t < 1, "True", "False")
+Data$Mean5 = ifelse(Data$percent.t < 5, "True", "False")
+write_xlsx
+
+#####################################################################################
+pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
+pbmc.merge.samples = subset(pbmc.merge.samples, subset = percent.mt < X)
 #####################################################################################
 # Visualize QC metrics as a violin plot
 # Visualize QC metrics as a violin plot
