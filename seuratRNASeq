@@ -708,15 +708,10 @@ library(Seurat)
 
 #####################################################################################
 # DatabaseImmuneCellExpressionData
-
 # The DICE reference consists of bulk RNA-seq samples of sorted cell populations from the project of the same name (Schmiedel et al. 2018).
-
 # MouseRNAseqData
-
 # This reference consists of a collection of mouse bulk RNA-seq data sets downloaded from the gene expression omnibus (Benayoun et al. 2019). A variety of cell types are available, again mostly from blood but also covering several other tissues.
-
 # ImmGenData
-
 # The ImmGen reference consists of microarray profiles of pure mouse immune cells from the project of the same name (Heng et al. 2008). This is currently the most highly resolved immune reference - possibly overwhelmingly so, given the granularity of the fine labels.
 
 #####################################################################################
@@ -731,6 +726,57 @@ load(file = "aggregate.RData")
 MouseRNAseqData <- MouseRNAseqData()
 ImmGenData <- ImmGenData()
 DatabaseImmuneCellExpressionData <- celldex::DatabaseImmuneCellExpressionData()
+
+
+#############################################################################
+# Calculate UMAP
+pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst",nfeatures = 2000) # Consider the 2000 genes
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
+pbmc <- RunUMAP(pbmc, dims = 1:30) # Optmize number of dimensions  ElbowPlot =10,15
+pbmc <- FindNeighbors(pbmc, dims = 1:30) # Optmize number of dimensions  ElbowPlot =10,15
+pbmc <- FindClusters(pbmc, resolution = 0.5) # Opmize resolution resolution
+
+# Create inside a loop
+resolution=c(0.25,0.5,0.75)
+
+
+
+#############################################################################
+Son=pbmc
+DefaultAssay(Son) <- "integrated"
+Son <- FindClusters(Son, resolution = 1)
+DimPlot(Son, label = T)
+DefaultAssay(Son) <- "RNA"
+clustavg<-AverageExpression(Son)
+clustdf<-as.data.frame(clustavg$RNA)
+clustdf<-t(clustdf)
+clustdf<-as_tibble(clustdf, rownames = "cluster")
+marks<-c("Mog","Mobp","Opalin","Agt","Gfap","Slc1a2","Elavl2","Syt9","Syt1","Snap25",
+         "Slc6a13", "Gfap","Apoe","Aqp4","Pcdh15","Pdgfra","Tnr","Tagln","Cyyr1",
+         "Cldn5","Adgrl4","Arhgap15", "Dock8", "Slc9a9","Srgap2","Cx3cr1","Tnr",
+         "Slc47a1","Acta2","Tagln","Cyyr1","Mrc1","C1qa","Kcnj8","Caprin2","Myh11", 
+         "Atp13a5","Abcc9","Ebf1","Rgs5")
+marks = data.frame(marks)
+colnames(marks)[1] = "Gene"
+df2<- clustdf %>% dplyr::select("cluster",marks$Gene) 
+df2$orig_cluster<-df2$cluster
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 4, "Other Neurons", "NN"))
+df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Agt > 4, "Astrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Immune Cells", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Myh11 > 4, "SMCs", df2$ID))#Tagln
+df2<- df2 %>% mutate(ID = ifelse(Slc6a13 > 4, "VLMCs", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Tnr > 0.5 & Pdgfra > 0.5, "OPCs", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Abcc9 > 1 & Rgs5 > 1, "Pericytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Cldn5 > 3 , "Endothelial Cells", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 2 & Caprin2 > 6, "MCNs", df2$ID))
+y<-dplyr::select(df2,cluster)
+Idents(Son)<-plyr::mapvalues(Idents(Son), from = df2$cluster, to = df2$ID)
+Son$group<-Idents(Son)
+table(Son$group)
+DimPlot(Son, label = F) / VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend()
+#############################################################################3
 
 # DataFrame with all samples and files with samples
 df_samples_file=data.frame(Samples=c("cDNAM1","cDNAM2","cDNAM3","cDNAM4","cDNAM5","cDNAM6","aggregate.pbmc"),Files=c("DimPlot1.RData","DimPlot2.RData","DimPlot3.RData","DimPlot4.RData","DimPlot5.RData","DimPlot6.RData","aggregate.RData"))
@@ -749,11 +795,11 @@ pbmc=aggregate.pbmc
 
 # Calculate UMAP
 pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst")
+pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst",nfeatures = 2000) # Consider the 2000 genes
 pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
-pbmc <- RunUMAP(pbmc, dims = 1:30)
-pbmc <- FindNeighbors(pbmc, dims = 1:30)
-pbmc <- FindClusters(pbmc, resolution = 0.5)
+pbmc <- RunUMAP(pbmc, dims = 1:30) # Optmize number of dimensions dims=ElbowPlot
+pbmc <- FindNeighbors(pbmc, dims = 1:30) # Optmize number of dimensions dims=ElbowPlot
+pbmc <- FindClusters(pbmc, resolution = 0.5) # Opmize resolution resolution
 
 
 # Annotate celltype
