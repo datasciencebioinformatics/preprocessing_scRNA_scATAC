@@ -20,7 +20,7 @@ cDNA_M3_dir="/home/felipe/snRNASeq_output/cDNA-M3/outs/filtered_feature_bc_matri
 cDNA_M4_dir="/home/felipe/snRNASeq_output/cDNA-M4/outs/filtered_feature_bc_matrix/"
 cDNA_M5_dir="/home/felipe/snRNASeq_output/cDNA-M5/outs/filtered_feature_bc_matrix/"
 cDNA_M6_dir="/home/felipe/snRNASeq_output/cDNA-M6/outs/filtered_feature_bc_matrix/"
-cDNA_agg_dir="/home/felipe/snRNASeq_output/aggregate/outs/count/filtered_feature_bc_matrix/"
+cDNA_agg_dir="/home/felipe/snRNASeq_output/aggr/aggr/outs/count/filtered_feature_bc_matrix/"
 
 # Set output dir
 output_dir="/home/felipe/snRNASeq_output/results/"
