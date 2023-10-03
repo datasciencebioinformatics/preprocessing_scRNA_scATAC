@@ -46,6 +46,8 @@ cDNAM4.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM4.pbmc, pattern = "mt")
 cDNAM5.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM5.pbmc, pattern = "mt")
 cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
 
+#####################################################################################
+# Analise % mitocondrial
 #Criar as tabelas de %
 
 for (i in )
