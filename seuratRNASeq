@@ -764,8 +764,9 @@ DatabaseImmuneCellExpressionData <- celldex::DatabaseImmuneCellExpressionData()
 #############################################################################
 # Calculate UMAP
 pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst",nfeatures = 2000) # Consider the 2000 genes
 pbmc<- ScaleData(pbmc)
+pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst",nfeatures = 2000,arg="scale.data") # Consider the 2000 genes
+
 pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
 pbmc <- RunUMAP(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
 pbmc <- FindNeighbors(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
