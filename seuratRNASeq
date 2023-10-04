@@ -766,17 +766,17 @@ DatabaseImmuneCellExpressionData <- celldex::DatabaseImmuneCellExpressionData()
 pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst",nfeatures = 2000) # Consider the 2000 genes
 pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
-pbmc <- RunUMAP(pbmc, dims = 1:30) # Optmize number of dimensions  ElbowPlot =10,15
-pbmc <- FindNeighbors(pbmc, dims = 1:30) # Optmize number of dimensions  ElbowPlot =10,15
-pbmc <- FindClusters(pbmc, resolution = 0.5) # Opmize resolution resolution
+pbmc <- RunUMAP(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
+pbmc <- FindNeighbors(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
+
 
 # Create inside a loop
 resolution=c(0.25,0.5,0.75,1)
 
-
+# For each value in the reslution vector
 for (x in resolution) 
 {
-  print(x)
+  	pbmc <- FindClusters(pbmc, resolution = x) # Opmize resolution resolution
 } 
 
 
