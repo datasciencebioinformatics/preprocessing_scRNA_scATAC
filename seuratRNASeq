@@ -7,6 +7,7 @@ library(ggplot2)
 library(plyr)
 library(SeuratObject)
 library(Seurat)
+
 #####################################################################################
 # Save whole workspace to working directory
 #load("./all_data.RData")
@@ -45,6 +46,62 @@ cDNAM3.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM3.pbmc, pattern = "mt")
 cDNAM4.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM4.pbmc, pattern = "mt")
 cDNAM5.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM5.pbmc, pattern = "mt")
 cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
+
+#####################################################################################
+# Merge samples
+pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
+
+
+#QC realizar o controle de qualidade
+pbmc.merge.samples$percent.mt.1<-pbmc.merge.samples$percent.mt[which(pbmc.merge.samples$percent.mt < 1)]
+pbmc.merge.samples$percent.mt.2<-pbmc.merge.samples$percent.mt[which(pbmc.merge.samples$percent.mt < 2)]
+pbmc.merge.samples$percent.mt.5<-pbmc.merge.samples$percent.mt[which(pbmc.merge.samples$percent.mt < 5)]
+
+# Filter percent.mt =2
+pbmc.merge.samples.mt.1 = subset(pbmc.merge.samples, subset = percent.mt < 1)
+pbmc.merge.samples.mt.2 = subset(pbmc.merge.samples, subset = percent.mt < 2)
+pbmc.merge.samples.mt.5 = subset(pbmc.merge.samples, subset = percent.mt < 5)
+
+# Percent mt
+VlnPlotA.merge.percent.mt<-VlnPlot(pbmc.merge.samples, features = c("percent.mt","percent.mt.1", "percent.mt.2", "percent.mt.5"), cols="gray0", pt.size = 0, ncol = 4)
+
+# cDNAM1.DimHeatma
+png(filename=paste(output_dir,"VlnPlotA.merge.percent.mt.png",sep=""), width = 24, height = 12, res=800, units = "cm")
+	VlnPlotA.merge.percent.mt
+dev.off()
+
+
+# Create plots
+VlnPlotA.merge.percent.all<-VlnPlot(pbmc.merge.samples, features =  c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 4)
+VlnPlotA.merge.percent.mt.1<-VlnPlot(pbmc.merge.samples.mt.1, features =  c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 4)
+VlnPlotA.merge.percent.mt.2<-VlnPlot(pbmc.merge.samples.mt.2, features =  c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 4)
+VlnPlotA.merge.percent.mt.5<-VlnPlot(pbmc.merge.samples.mt.5, features =  c("nFeature_RNA", "nCount_RNA", "percent.mt"), cols="gray0", pt.size = 0, ncol = 4)
+
+
+# cDNAM1.DimHeatma
+png(filename=paste(output_dir,"VlnPlotA.merge.percent.all.png",sep=""), width = 24, height = 12, res=800, units = "cm")
+	VlnPlotA.merge.percent.all
+dev.off()
+
+# cDNAM1.DimHeatma
+png(filename=paste(output_dir,"VlnPlotA.merge.percent.mt.1.png",sep=""), width = 24, height = 12, res=800, units = "cm")
+	VlnPlotA.merge.percent.mt.1
+dev.off()
+
+# cDNAM1.DimHeatma
+png(filename=paste(output_dir,"VlnPlotA.merge.percent.mt.2.png",sep=""), width = 24, height = 12, res=800, units = "cm")
+	VlnPlotA.merge.percent.mt.2
+dev.off()
+
+# cDNAM1.DimHeatma
+png(filename=paste(output_dir,"VlnPlotA.merge.percent.mt.5.png",sep=""), width = 24, height = 12, res=800, units = "cm")
+	VlnPlotA.merge.percent.mt.5
+dev.off()
+
+#####################################################################################
+pbmc.merge.samples= subset(pbmc.merge.samples, subset = percent.mt < 2)
+
+#####################################################################################
 
 #####################################################################################
 # Analise % mitocondrial
