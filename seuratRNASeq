@@ -765,6 +765,7 @@ DatabaseImmuneCellExpressionData <- celldex::DatabaseImmuneCellExpressionData()
 # Calculate UMAP
 pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst",nfeatures = 2000) # Consider the 2000 genes
+pbmc<- ScaleData(pbmc)
 pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
 pbmc <- RunUMAP(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
 pbmc <- FindNeighbors(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
@@ -773,44 +774,46 @@ pbmc <- FindNeighbors(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPl
 # Create inside a loop
 resolution=c(0.25,0.5,0.75,1)
 
+# List of plots
+c<-list()
+
 # For each value in the reslution vector
 for (x in resolution) 
-{
-  	pbmc <- FindClusters(pbmc, resolution = x) # Opmize resolution resolution
+{	
+	Son=pbmc
+	DefaultAssay(Son) <- "integrated"
+	DimPlot(Son, label = T)
+	DefaultAssay(Son) <- "RNA"
+	clustavg<-AverageExpression(Son)
+	clustdf<-as.data.frame(clustavg$RNA)
+	clustdf<-t(clustdf)
+	clustdf<-as_tibble(clustdf, rownames = "cluster")
+	marks<-c("Mog","Mobp","Opalin","Agt","Gfap","Slc1a2","Elavl2","Syt9","Syt1","Snap25",
+	         "Slc6a13", "Gfap","Apoe","Aqp4","Pcdh15","Pdgfra","Tnr","Tagln","Cyyr1",
+	         "Cldn5","Adgrl4","Arhgap15", "Dock8", "Slc9a9","Srgap2","Cx3cr1","Tnr",
+	         "Slc47a1","Acta2","Tagln","Cyyr1","Mrc1","C1qa","Kcnj8","Caprin2","Myh11", 
+	         "Atp13a5","Abcc9","Ebf1","Rgs5","CD14")
+	marks = data.frame(marks)
+	colnames(marks)[1] = "Gene"
+	df2<- clustdf %>% dplyr::select("cluster",marks$Gene) 
+	df2$orig_cluster<-df2$cluster
+	df2<- df2 %>% mutate(ID = ifelse(Snap25 > 2, "Neurons", "NN"))
+	df2<- df2 %>% mutate(ID = ifelse(CD14 > 2, "Oligodendrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Agt > 4, "Astrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Immune Cells", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Tnr > 0.5 & Pdgfra > 0.5, "OPCs", df2$ID))
+	y<-dplyr::select(df2,cluster)
+	Idents(Son)<-plyr::mapvalues(Idents(Son), from = df2$cluster, to = df2$ID)
+	Son$group<-Idents(Son)
+	table(Son$group)
+
+	myplots[[x]] <- DimPlot(Son, label = F) / VlnPlot(pbmc, features = "Agt", pt.size = 0) + NoLegend()
 } 
 
 
 
-#############################################################################
-Son=pbmc
-DefaultAssay(Son) <- "integrated"
-Son <- FindClusters(Son, resolution = 1)
-DimPlot(Son, label = T)
-DefaultAssay(Son) <- "RNA"
-clustavg<-AverageExpression(Son)
-clustdf<-as.data.frame(clustavg$RNA)
-clustdf<-t(clustdf)
-clustdf<-as_tibble(clustdf, rownames = "cluster")
-marks<-c("Mog","Mobp","Opalin","Agt","Gfap","Slc1a2","Elavl2","Syt9","Syt1","Snap25",
-         "Slc6a13", "Gfap","Apoe","Aqp4","Pcdh15","Pdgfra","Tnr","Tagln","Cyyr1",
-         "Cldn5","Adgrl4","Arhgap15", "Dock8", "Slc9a9","Srgap2","Cx3cr1","Tnr",
-         "Slc47a1","Acta2","Tagln","Cyyr1","Mrc1","C1qa","Kcnj8","Caprin2","Myh11", 
-         "Atp13a5","Abcc9","Ebf1","Rgs5")
-marks = data.frame(marks)
-colnames(marks)[1] = "Gene"
-df2<- clustdf %>% dplyr::select("cluster",marks$Gene) 
-df2$orig_cluster<-df2$cluster
-df2<- df2 %>% mutate(ID = ifelse(Snap25 > 2, "Neurons", "NN"))
-df2<- df2 %>% mutate(ID = ifelse(CD14 > 2, "Oligodendrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Agt > 4, "Astrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Immune Cells", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Tnr > 0.5 & Pdgfra > 0.5, "OPCs", df2$ID))
-y<-dplyr::select(df2,cluster)
-Idents(Son)<-plyr::mapvalues(Idents(Son), from = df2$cluster, to = df2$ID)
-Son$group<-Idents(Son)
-table(Son$group)
-DimPlot(Son, label = F) / VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend()
+
 #############################################################################3
 
 # DataFrame with all samples and files with samples
