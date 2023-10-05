@@ -51,6 +51,9 @@ cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
 # Merge samples
 pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
 
+# Subset according percent.mt < 2
+pbmc.merge.samples = subset(pbmc.merge.samples, subset = percent.mt < 2)
+#####################################################################################
 
 #QC realizar o controle de qualidade
 pbmc.merge.samples$percent.mt.1<-pbmc.merge.samples$percent.mt[which(pbmc.merge.samples$percent.mt < 1)]
