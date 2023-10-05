@@ -1,0 +1,131 @@
+#####################################################################################
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(gridExtra)
+library(ggplot2)
+library(plyr)
+library(SeuratObject)
+library(Seurat)
+
+#####################################################################################
+# Save whole workspace to working directory
+#load("./all_data.RData")
+
+# Set intput dir
+cDNA_M1_dir="/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix/"
+cDNA_M2_dir="/home/felipe/snRNASeq_output/cDNA-M2/outs/filtered_feature_bc_matrix/"
+cDNA_M3_dir="/home/felipe/snRNASeq_output/cDNA-M3/outs/filtered_feature_bc_matrix/"
+cDNA_M4_dir="/home/felipe/snRNASeq_output/cDNA-M4/outs/filtered_feature_bc_matrix/"
+cDNA_M5_dir="/home/felipe/snRNASeq_output/cDNA-M5/outs/filtered_feature_bc_matrix/"
+cDNA_M6_dir="/home/felipe/snRNASeq_output/cDNA-M6/outs/filtered_feature_bc_matrix/"
+
+# Set output dir
+output_dir="/home/felipe/snRNASeq_output/results/"
+# First, load the tables 
+# Load table for all sample - aggreagate cellranger for the six samples
+cDNAM1.Read10X<-Read10X(data.dir=cDNA_M1_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM2.Read10X<-Read10X(data.dir=cDNA_M2_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM3.Read10X<-Read10X(data.dir=cDNA_M3_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM4.Read10X<-Read10X(data.dir=cDNA_M4_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM5.Read10X<-Read10X(data.dir=cDNA_M5_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+cDNAM6.Read10X<-Read10X(data.dir=cDNA_M6_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+
+# Load table for all sample - aggreagate cellranger for the six samples
+cDNAM1.pbmc <- CreateSeuratObject(counts = cDNAM1.Read10X, project = "hypotha")
+cDNAM2.pbmc <- CreateSeuratObject(counts = cDNAM2.Read10X, project = "hypotha")
+cDNAM3.pbmc <- CreateSeuratObject(counts = cDNAM3.Read10X, project = "hypotha")
+cDNAM4.pbmc <- CreateSeuratObject(counts = cDNAM4.Read10X, project = "hypotha")
+cDNAM5.pbmc <- CreateSeuratObject(counts = cDNAM5.Read10X, project = "hypotha")
+cDNAM6.pbmc <- CreateSeuratObject(counts = cDNAM6.Read10X, project = "hypotha")
+
+# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "mt")
+cDNAM2.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM2.pbmc, pattern = "mt")
+cDNAM3.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM3.pbmc, pattern = "mt")
+cDNAM4.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM4.pbmc, pattern = "mt")
+cDNAM5.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM5.pbmc, pattern = "mt")
+cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
+
+#####################################################################################
+# Merge samples
+pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
+pbmc.merge.samples = subset(pbmc.merge.samples, subset = percent.mt < 2)
+
+pbmc.merge.samples=cDNAM2.pbmc
+#####################################################################################
+#####################################################################################
+library(celldex)
+library(SingleR)
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(gridExtra)
+library(ggplot2)
+library(SeuratObject)
+library(Seurat)
+
+#############################################################################
+# Calculate UMAP
+pbmc <- NormalizeData(pbmc.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc<- ScaleData(pbmc)
+pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst",nfeatures = 2000) # Consider the 2000 genes
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
+pbmc <- RunUMAP(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
+pbmc <- FindNeighbors(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
+#############################################################################
+# Create inside a loop
+resolutions=c(0.25,0.5,0.75,1)
+
+# List of plots
+myplots<-list()
+
+# For each value in the reslution vector
+for (index in 1:length(resolution)) 
+{	
+	Son <- FindClusters(Son, resolution = resolutions[index])
+	DimPlot(Son, label = T)
+	DefaultAssay(Son) <- "RNA"
+	clustavg<-AverageExpression(Son)
+	clustdf<-as.data.frame(clustavg$RNA)
+	clustdf<-t(clustdf)
+	clustdf<-as_tibble(clustdf, rownames = "cluster")
+	marks<-c("Mog","Mobp","Opalin","Agt","Gfap","Slc1a2","Elavl2","Syt9","Syt1","Snap25",
+		 "Slc6a13", "Gfap","Apoe","Aqp4","Pcdh15","Pdgfra","Tnr","Tagln","Cyyr1",
+		 "Cldn5","Adgrl4","Arhgap15", "Dock8", "Slc9a9","Srgap2","Cx3cr1","Tnr",
+		 "Slc47a1","Acta2","Tagln","Cyyr1","Mrc1","C1qa","Kcnj8","Caprin2","Myh11", 
+		 "Atp13a5","Abcc9","Ebf1","Rgs5")
+	marks = data.frame(marks)
+	colnames(marks)[1] = "Gene"
+	df2<- clustdf %>% dplyr::select("cluster",marks$Gene) 
+	df2$orig_cluster<-df2$cluster
+	df2<- df2 %>% mutate(ID = ifelse(Snap25 > 4, "Other Neurons", "NN"))
+	df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Agt > 4, "Astrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Immune Cells", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Myh11 > 4, "SMCs", df2$ID))#Tagln
+	df2<- df2 %>% mutate(ID = ifelse(Slc6a13 > 4, "VLMCs", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Tnr > 0.5 & Pdgfra > 0.5, "OPCs", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Abcc9 > 1 & Rgs5 > 1, "Pericytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Cldn5 > 3 , "Endothelial Cells", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Snap25 > 2 & Caprin2 > 6, "MCNs", df2$ID))
+	y<-dplyr::select(df2,cluster)
+	Idents(Son)<-plyr::mapvalues(Idents(Son), from = df2$cluster, to = df2$ID)
+	Son$group<-Idents(Son)
+	table(Son$group)
+			
+	# cDNAM1.DimHeatmap
+	png(filename=paste(output_dir,paste(paste("FindClusters_resolution_",index,sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
+		plot(DimPlot(Son, label = F) + ggtitle (paste("FindClusters resolution = ",index,sep="")))
+	dev.off()
+	
+	# cDNAM1.DimHeatma
+	png(filename=paste(output_dir,paste(paste("FindClusters_VlnPlot_",index,sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
+		 plot(VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle (paste("FindClusters resolution = ",index,sep="")))
+	dev.off()
+} 
+# 
+
+
+
+p
