@@ -48,15 +48,36 @@ cDNAM5.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM5.pbmc, pattern = "mt")
 cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
 
 #####################################################################################
+# Scale data and save in an object to do it once
+cDNAM1.pbmc<- ScaleData(cDNAM1.pbmc)
+save(cDNAM1.pbmc,file="./cDNAM1.pbmc.RData")
+cDNAM2.pbmc<- ScaleData(cDNAM2.pbmc)
+save(cDNAM2.pbmc,file="./cDNAM2.pbmc.RData")
+cDNAM3.pbmc<- ScaleData(cDNAM3.pbmc)
+save(cDNAM3.pbmc,file="./cDNAM3.pbmc.RData")
+cDNAM4.pbmc<- ScaleData(cDNAM4.pbmc)
+save(cDNAM4.pbmc,file="./cDNAM4.pbmc.RData")
+cDNAM5.pbmc<- ScaleData(cDNAM5.pbmc)
+save(cDNAM5.pbmc,file="./cDNAM5.pbmc.RData")
+cDNAM6.pbmc<- ScaleData(cDNAM6.pbmc)
+save(cDNAM6.pbmc,file="./cDNAM6.pbmc.RData")
+#####################################################################################
+# Load Scale data objects
+load("./cDNAM1.pbmc.RData")
+load("./cDNAM2.pbmc.RData")
+load("./cDNAM3.pbmc.RData")
+load("./cDNAM4.pbmc.RData")
+load("./cDNAM5.pbmc.RData")
+load("./cDNAM6.pbmc.RData")
+#####################################################################################
 # Merge samples
 pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
 pbmc.merge.samples = subset(pbmc.merge.samples, subset = percent.mt < 2)
-
-pbmc.merge.samples=cDNAM2.pbmc
 #####################################################################################
+save(pbmc.merge.samples,file="./pbmc.merge.samples.RData")
 #####################################################################################
-library(celldex)
-library(SingleR)
+#library(celldex)
+#library(SingleR)
 library(dplyr)
 library(Seurat)
 library(patchwork)
@@ -64,15 +85,28 @@ library(gridExtra)
 library(ggplot2)
 library(SeuratObject)
 library(Seurat)
-
+load("./pbmc.merge.samples.RData")
 #############################################################################
 # Calculate UMAP
 pbmc <- NormalizeData(pbmc.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
 pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst",nfeatures = 2000) # Consider the 2000 genes
-pbmc<- ScaleData(pbmc)
+
+# Diet Seurat - keep only data on the seurat object
+pbmc.merge.samples<-DietSeurat(pbmc.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
+
+# Scale data
+pbmc<- ScaleData(pbmc.merge.samples,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = pbmc.varialble))
+
+# Run PCA
 pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
+
+# Run UMAP
 pbmc <- RunUMAP(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
+
+# Run FindNeighbors
 pbmc <- FindNeighbors(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
+
+
 #############################################################################
 # Create inside a loop
 resolutions=c(0.25,0.5,0.75,1)
@@ -116,16 +150,12 @@ for (index in 1:length(resolution))
 			
 	# cDNAM1.DimHeatmap
 	png(filename=paste(output_dir,paste(paste("FindClusters_resolution_",index,sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
-		plot(DimPlot(Son, label = F) + ggtitle (paste("FindClusters resolution = ",index,sep="")))
+		plot(DimPlot(Son, label = F) + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep="")))
 	dev.off()
 	
 	# cDNAM1.DimHeatma
 	png(filename=paste(output_dir,paste(paste("FindClusters_VlnPlot_",index,sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
-		 plot(VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle (paste("FindClusters resolution = ",index,sep="")))
+		 plot(VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep="")))
 	dev.off()
 } 
 # 
-
-
-
-p
