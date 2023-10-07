@@ -82,13 +82,14 @@ pbmc <- RunUMAP(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10
 pbmc <- FindNeighbors(pbmc, dims = 1:10) # Optmize number of dimensions  ElbowPlot =10,15
 #############################################################################
 # Create inside a loop
-resolutions=c(0.25,0.5,0.75,1)
+resolutions=c(0.10,0.15,0.2,0.25,0.5,0.6,0.75,0.85,1)
 
 # List of plots
-myplots<-list()
+myplotsA<-list()
+myplotsB<-list()
 
 # For each value in the reslution vector
-for (index in 1:length(resolution)) 
+for (index in 1:length(resolutions)) 
 {	
 	Son=pbmc
 	Son <- FindClusters(Son, resolution = resolutions[index])
@@ -125,11 +126,18 @@ for (index in 1:length(resolution))
 	# cDNAM1.DimHeatmap
 	png(filename=paste(output_dir,paste(paste("FindClusters_resolution_",index,sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
 		plot(DimPlot(Son, label = F) + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep="")))
-	dev.off()
-	
+	dev.off()		
 	# cDNAM1.DimHeatma
 	png(filename=paste(output_dir,paste(paste("FindClusters_VlnPlot_",index,sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
 		 plot(VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep="")))
 	dev.off()
+	myplotsA[[index]]<-DimPlot(Son, label = F) + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep=""))
+	myplotsB[[index]]<-VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep=""))
 } 
-# 
+grid.arrange(myplotsA[[1]], myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]], myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]] nrow = 3)
+grid.arrange(myplotsB[[1]], myplotsB[[2]],myplotsB[[3]],myplotsB[[4]],myplotsB[[5]], myplotsB[[6]],myplotsB[[7]],myplotsB[[8]],myplotsB[[9]] nrow = 3)
+
+
+
+grid.arrange(myplotsB[[1]], myplotsB[[2]],myplotsB[[3]],myplotsB[[4]], nrow = 2)
+
