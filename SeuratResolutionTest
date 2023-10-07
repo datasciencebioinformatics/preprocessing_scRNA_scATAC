@@ -134,8 +134,16 @@ for (index in 1:length(resolutions))
 	myplotsA[[index]]<-DimPlot(Son, label = F) + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep=""))
 	myplotsB[[index]]<-VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep=""))
 } 
-grid.arrange(myplotsA[[1]], myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]], myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]] nrow = 3)
-grid.arrange(myplotsB[[1]], myplotsB[[2]],myplotsB[[3]],myplotsB[[4]],myplotsB[[5]], myplotsB[[6]],myplotsB[[7]],myplotsB[[8]],myplotsB[[9]] nrow = 3)
+# FindClusters_resolution
+png(filename=paste(output_dir,"FindClusters_resolution.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+	grid.arrange(myplotsA[[1]], myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]], myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]] nrow = 3)
+dev.off()
+# FindClusters_VlnPlot
+png(filename=paste(output_dir,"FindClusters_VlnPlot.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+	grid.arrange(myplotsB[[1]], myplotsB[[2]],myplotsB[[3]],myplotsB[[4]],myplotsB[[5]], myplotsB[[6]],myplotsB[[7]],myplotsB[[8]],myplotsB[[9]] nrow = 3)
+dev.off()
+
+
 
 
 
