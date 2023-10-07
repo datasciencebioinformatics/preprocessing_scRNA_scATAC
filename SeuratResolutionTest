@@ -92,7 +92,7 @@ pbmc <- NormalizeData(pbmc.merge.samples, normalization.method = "LogNormalize",
 pbmc.varialble <- FindVariableFeatures(object=pbmc , selection.method = "vst",nfeatures = 2000) # Consider the 2000 genes
 
 # Diet Seurat - keep only data on the seurat object
-pbmc.merge.samples<-DietSeurat(pbmc.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
+pbmc.merge.samples<-DietSeurat(pbmc,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
 
 # Scale data
 pbmc<- ScaleData(pbmc.merge.samples,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = pbmc.varialble))
