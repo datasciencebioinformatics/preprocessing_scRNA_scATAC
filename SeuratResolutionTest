@@ -117,6 +117,7 @@ myplots<-list()
 # For each value in the reslution vector
 for (index in 1:length(resolution)) 
 {	
+	Son=pbmc
 	Son <- FindClusters(Son, resolution = resolutions[index])
 	DimPlot(Son, label = T)
 	DefaultAssay(Son) <- "RNA"
