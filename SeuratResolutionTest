@@ -7,6 +7,7 @@ library(ggplot2)
 library(plyr)
 library(SeuratObject)
 library(Seurat)
+library("harmony")
 
 #####################################################################################
 # Save whole workspace to working directory
@@ -140,7 +141,7 @@ df2<- df2 %>% mutate(ID = ifelse(Tnr > 0.5 & Pdgfra > 0.5, "OPCs", df2$ID))
 #df2<- df2 %>% mutate(ID = ifelse(Snap25 > 2 & Caprin2 > 6, "MCNs", df2$ID))
 y<-dplyr::select(df2,cluster)
 Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.predefined), from = df2$cluster, to = df2$ID)
-Son$group<-Idents(pbmc.annotation.predefined)
+pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
 
 myplotsA[[index]]<-DimPlot(Son, label = F) + ggtitle ("Pre-defined markers = Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
 myplotsB[[index]]<-VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers = Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
