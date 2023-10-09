@@ -73,7 +73,7 @@ pbmc.merge.samples<-DietSeurat(pbmc,counts = FALSE,data = TRUE,scale.data = FALS
 pbmc<- ScaleData(pbmc.merge.samples,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = pbmc.varialble))
 
 # Run PCA
-pbmc <- RunPCA(pbmc,reduction = "harmony", features = VariableFeatures(object = pbmc.varialble))
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
 
 # Run UMAP
 pbmc <- RunUMAP(pbmc, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
