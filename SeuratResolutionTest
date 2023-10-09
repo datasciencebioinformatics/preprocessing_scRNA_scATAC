@@ -80,6 +80,37 @@ pbmc <- RunUMAP(pbmc, dims = 1:50,reduction = "harmony") # Optmize number of dim
 
 # Run FindNeighbors
 pbmc <- FindNeighbors(pbmc, dims = 1:50) # Optmize number of dimensions  ElbowPlot =10,15
+
+# Run FindClusters
+pbmc <- FindClusters(Son, resolution = resolutions[index])
+#############################################################################
+DimPlot(Son, label = T)
+DefaultAssay(Son) <- "RNA"
+clustavg<-AverageExpression(Son)
+clustdf<-as.data.frame(clustavg$RNA)
+clustdf<-t(clustdf)
+clustdf<-as_tibble(clustdf, rownames = "cluster")
+marks<-c("Mog","Mobp","Opalin","Agt","Gfap","Slc1a2","Elavl2","Syt9","Syt1","Snap25",
+	 "Slc6a13", "Gfap","Apoe","Aqp4","Pcdh15","Pdgfra","Tnr","Tagln","Cyyr1",
+	 "Cldn5","Adgrl4","Arhgap15", "Dock8", "Slc9a9","Srgap2","Cx3cr1","Tnr",
+	 "Slc47a1","Acta2","Tagln","Cyyr1","Mrc1","C1qa","Kcnj8","Caprin2","Myh11", 
+	 "Atp13a5","Abcc9","Ebf1","Rgs5")
+marks = data.frame(marks)
+colnames(marks)[1] = "Gene"
+df2<- clustdf %>% dplyr::select("cluster",marks$Gene) 
+df2$orig_cluster<-df2$cluster
+
+# Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 4, "Other Neurons", "NN"))
+df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Immune Cells", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Agt > 4, "Astrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Tnr > 0.5 & Pdgfra > 0.5, "OPCs", df2$ID))
+#df2<- df2 %>% mutate(ID = ifelse(Myh11 > 4, "SMCs", df2$ID))#Tagln
+#df2<- df2 %>% mutate(ID = ifelse(Slc6a13 > 4, "VLMCs", df2$ID))	
+#df2<- df2 %>% mutate(ID = ifelse(Abcc9 > 1 & Rgs5 > 1, "Pericytes", df2$ID))
+#df2<- df2 %>% mutate(ID = ifelse(Cldn5 > 3 , "Endothelial Cells", df2$ID))
+#df2<- df2 %>% mutate(ID = ifelse(Snap25 > 2 & Caprin2 > 6, "MCNs", df2$ID))
 #############################################################################
 # Create inside a loop
 resolutions=c(0.10,0.15,0.2,0.25,0.5,0.6,0.75,0.85,1)
