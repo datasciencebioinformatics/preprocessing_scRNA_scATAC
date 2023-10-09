@@ -7,7 +7,7 @@ library(ggplot2)
 library(plyr)
 library(SeuratObject)
 library(Seurat)
-
+library(Harminey)
 #####################################################################################
 # Save whole workspace to working directory
 #load("./all_data.RData")
