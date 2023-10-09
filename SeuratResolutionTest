@@ -98,7 +98,7 @@ pbmc<- ScaleData(pbmc.merge.samples,block.size = 1000,do.scale = TRUE,do.center 
 pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
 
 # Run Harmony
-pbmc <- RunHarmony(pbmc, group.by.vars = c("sex"),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
+pbmc <- RunHarmony(pbmc, group.by.vars = c("Sex"),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 
 # Run UMAP
 pbmc <- RunUMAP(pbmc, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
@@ -107,7 +107,7 @@ pbmc <- RunUMAP(pbmc, dims = 1:50,reduction = "harmony") # Optmize number of dim
 pbmc <- FindNeighbors(pbmc, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
 
 # Run FindClusters
-pbmc <- FindClusters(Son, resolution = 0.6)
+pbmc <- FindClusters(pbmc, resolution = 0.6)
 #############################################################################
 # Copy file to annotate with pre-defined parameters 
 pbmc.annotation.predefined<-pbmc
