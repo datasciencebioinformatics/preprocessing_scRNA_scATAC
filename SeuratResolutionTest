@@ -32,12 +32,12 @@ cDNAM5.Read10X<-Read10X(data.dir=cDNA_M5_dir, gene.column = 2, cell.column = 1, 
 cDNAM6.Read10X<-Read10X(data.dir=cDNA_M6_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
 # Load table for all sample - aggreagate cellranger for the six samples
-cDNAM1.pbmc <- CreateSeuratObject(counts = cDNAM1.Read10X, project = "hypotha")
-cDNAM2.pbmc <- CreateSeuratObject(counts = cDNAM2.Read10X, project = "hypotha")
-cDNAM3.pbmc <- CreateSeuratObject(counts = cDNAM3.Read10X, project = "hypotha")
-cDNAM4.pbmc <- CreateSeuratObject(counts = cDNAM4.Read10X, project = "hypotha")
-cDNAM5.pbmc <- CreateSeuratObject(counts = cDNAM5.Read10X, project = "hypotha")
-cDNAM6.pbmc <- CreateSeuratObject(counts = cDNAM6.Read10X, project = "hypotha")
+cDNAM1.pbmc <- CreateSeuratObject(counts = cDNAM1.Read10X, project = "cDNA-M1")
+cDNAM2.pbmc <- CreateSeuratObject(counts = cDNAM2.Read10X, project = "cDNA-M2")
+cDNAM3.pbmc <- CreateSeuratObject(counts = cDNAM3.Read10X, project = "cDNA-M3")
+cDNAM4.pbmc <- CreateSeuratObject(counts = cDNAM4.Read10X, project = "cDNA-M4")
+cDNAM5.pbmc <- CreateSeuratObject(counts = cDNAM5.Read10X, project = "cDNA-M5")
+cDNAM6.pbmc <- CreateSeuratObject(counts = cDNAM6.Read10X, project = "cDNA-M6")
 
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
 cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "mt")
@@ -50,6 +50,28 @@ cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
 # Merge samples
 pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
 pbmc.merge.samples = subset(pbmc.merge.samples, subset = percent.mt < 2)
+
+#####################################################################################
+# FindClusters_resolution
+png(filename=paste(output_dir,"Sex_mouse.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	VlnPlot(object = pbmc.merge.samples, features = c('Xist'),group.by = "orig.ident")
+dev.off()
+#####################################################################################
+# Add metadata seurat 
+# Get the name of the samples
+cluster_letters <- paste("cDNA-M",as.integer(Idents(object = pbmc.merge.samples)),sep="")
+names(cluster_letters) <- colnames(x = pbmc.merge.samples)
+
+# Replace identities by sex
+cluster_letters[which(cluster_letters==c("cDNA-M1"))]<-"Male"
+cluster_letters[which(cluster_letters==c("cDNA-M2"))]<-"Male"
+cluster_letters[which(cluster_letters==c("cDNA-M3"))]<-"Male"
+cluster_letters[which(cluster_letters==c("cDNA-M4"))]<-"Female"
+cluster_letters[which(cluster_letters==c("cDNA-M5"))]<-"Female"
+cluster_letters[which(cluster_letters==c("cDNA-M6"))]<-"Female"
+
+# Add metadata
+pbmc.merge.samples <- AddMetaData(object = pbmc.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
 #####################################################################################
 #library(celldex)
 #library(SingleR)
