@@ -158,6 +158,12 @@ VlnPlot3<-VlnPlot(pbmc.annotation.predefined,features = c("Mog", "Mobp"), pt.siz
 VlnPlot4<-VlnPlot(pbmc.annotation.predefined,features = c("Agt"), pt.size = 0) + NoLegend() + ggtitle ("Astrocytes")
 VlnPlot5<-VlnPlot(pbmc.annotation.predefined,features = c("Tnr","Pdgfra"), pt.size = 0) + NoLegend() + ggtitle ("OPCs")
 
+# FindClusters_resolution
+png(filename=paste(output_dir,"VlnPlot_Markers.png",sep=""), width = 18, height = 36, res=600, units = "cm")
+	grid.arrange(VlnPlot1, VlnPlot2,VlnPlot3,VlnPlot4,VlnPlot5, nrow = 5)
+dev.off()
+
+
 myplotsA[[index]]<-DimPlot(pbmc.annotation.predefined, label = F) + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
 myplotsB[[index]]<-VlnPlot(pbmc.annotation.predefined, features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
 
