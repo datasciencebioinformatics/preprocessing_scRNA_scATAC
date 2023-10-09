@@ -60,7 +60,7 @@ library(gridExtra)
 library(ggplot2)
 library(SeuratObject)
 library(Seurat)
-load("./pbmc.merge.samples.RData")
+#load("./pbmc.merge.samples.RData")
 #############################################################################
 # Calculate UMAP
 pbmc <- NormalizeData(pbmc.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
@@ -82,11 +82,13 @@ pbmc <- RunUMAP(pbmc, dims = 1:50,reduction = "harmony") # Optmize number of dim
 pbmc <- FindNeighbors(pbmc, dims = 1:50) # Optmize number of dimensions  ElbowPlot =10,15
 
 # Run FindClusters
-pbmc <- FindClusters(Son, resolution = resolutions[index])
+pbmc <- FindClusters(Son, resolution = 0.6)
 #############################################################################
-DimPlot(Son, label = T)
-DefaultAssay(Son) <- "RNA"
-clustavg<-AverageExpression(Son)
+# Copy file to annotate with pre-defined parameters 
+pbmc.annotation.predefined<-pbmc
+
+DefaultAssay(pbmc.annotation.predefined) <- "RNA"
+clustavg<-AverageExpression(pbmc.annotation.predefined)
 clustdf<-as.data.frame(clustavg$RNA)
 clustdf<-t(clustdf)
 clustdf<-as_tibble(clustdf, rownames = "cluster")
@@ -111,6 +113,12 @@ df2<- df2 %>% mutate(ID = ifelse(Tnr > 0.5 & Pdgfra > 0.5, "OPCs", df2$ID))
 #df2<- df2 %>% mutate(ID = ifelse(Abcc9 > 1 & Rgs5 > 1, "Pericytes", df2$ID))
 #df2<- df2 %>% mutate(ID = ifelse(Cldn5 > 3 , "Endothelial Cells", df2$ID))
 #df2<- df2 %>% mutate(ID = ifelse(Snap25 > 2 & Caprin2 > 6, "MCNs", df2$ID))
+y<-dplyr::select(df2,cluster)
+Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.predefined), from = df2$cluster, to = df2$ID)
+Son$group<-Idents(pbmc.annotation.predefined)
+
+myplotsA[[index]]<-DimPlot(Son, label = F) + ggtitle ("Pre-defined markers = Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
+myplotsB[[index]]<-VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers = Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
 #############################################################################
 # Create inside a loop
 resolutions=c(0.10,0.15,0.2,0.25,0.5,0.6,0.75,0.85,1)
