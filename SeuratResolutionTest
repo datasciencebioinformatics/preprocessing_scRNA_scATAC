@@ -151,7 +151,12 @@ dev.off()
 png(filename=paste(output_dir,paste(paste("FindClusters_paperParameters","",sep=""),".png",sep=""),sep=""), width = 24, height = 24, res=800, units = "cm")
 	 plot(VlnPlot(pbmc.annotation.predefined,features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra"))
 dev.off()
-
+ 
+VlnPlot1<-VlnPlot(pbmc.annotation.predefined,features = "Snap25", pt.size = 0) + NoLegend() + ggtitle ("Other Neurons")
+VlnPlot2<-VlnPlot(pbmc.annotation.predefined,features = c("Arhgap15", "Dock8"), pt.size = 0) + NoLegend() + ggtitle ("Immune Cells")
+VlnPlot3<-VlnPlot(pbmc.annotation.predefined,features = c("Mog", "Mobp"), pt.size = 0) + NoLegend() + ggtitle ("Oligodendrocytes")
+VlnPlot4<-VlnPlot(pbmc.annotation.predefined,features = c("Agt"), pt.size = 0) + NoLegend() + ggtitle ("Astrocytes")
+VlnPlot5<-VlnPlot(pbmc.annotation.predefined,features = c("Tnr","Pdgfra"), pt.size = 0) + NoLegend() + ggtitle ("OPCs")
 
 myplotsA[[index]]<-DimPlot(pbmc.annotation.predefined, label = F) + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
 myplotsB[[index]]<-VlnPlot(pbmc.annotation.predefined, features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
