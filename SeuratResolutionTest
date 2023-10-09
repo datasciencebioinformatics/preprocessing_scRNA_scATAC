@@ -75,10 +75,8 @@ pbmc<- ScaleData(pbmc.merge.samples,block.size = 1000,do.scale = TRUE,do.center 
 # Run PCA
 pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc.varialble))
 
-pbmc.merge.samples
-
 # Run Harmony
-pbmc <- RunHarmony(pbmc, group.by.vars = c("sex"),reduction = "pca", assay.use = "integrated", reduction.save = "harmony")
+pbmc <- RunHarmony(pbmc, group.by.vars = c("sex"),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 
 # Run UMAP
 pbmc <- RunUMAP(pbmc, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
