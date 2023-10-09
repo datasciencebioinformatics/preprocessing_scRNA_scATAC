@@ -129,7 +129,7 @@ df2<- clustdf %>% dplyr::select("cluster",marks$Gene)
 df2$orig_cluster<-df2$cluster
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2<- df2 %>% mutate(ID = ifelse(Snap25 > 4, "Other Neurons", "NN"))
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 4, "Neurons", "Neurons"))
 df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Immune Cells", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 4, "Astrocytes", df2$ID))
@@ -152,11 +152,11 @@ png(filename=paste(output_dir,paste(paste("FindClusters_paperParameters","",sep=
 	 plot(VlnPlot(pbmc.annotation.predefined,features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra"))
 dev.off()
  
-VlnPlot1<-VlnPlot(pbmc.annotation.predefined,features = "Snap25", pt.size = 0) + NoLegend() + ggtitle ("Other Neurons")
+VlnPlot1<-VlnPlot(pbmc.annotation.predefined,features = "Snap25", pt.size = 0) + NoLegend()
 VlnPlot2<-VlnPlot(pbmc.annotation.predefined,features = c("Arhgap15", "Dock8"), pt.size = 0) + NoLegend() + ggtitle ("Immune Cells")
-VlnPlot3<-VlnPlot(pbmc.annotation.predefined,features = c("Mog", "Mobp"), pt.size = 0) + NoLegend() + ggtitle ("Oligodendrocytes")
-VlnPlot4<-VlnPlot(pbmc.annotation.predefined,features = c("Agt"), pt.size = 0) + NoLegend() + ggtitle ("Astrocytes")
-VlnPlot5<-VlnPlot(pbmc.annotation.predefined,features = c("Tnr","Pdgfra"), pt.size = 0) + NoLegend() + ggtitle ("OPCs")
+VlnPlot3<-VlnPlot(pbmc.annotation.predefined,features = c("Mog", "Mobp"), pt.size = 0) + NoLegend()
+VlnPlot4<-VlnPlot(pbmc.annotation.predefined,features = c("Agt"), pt.size = 0) + NoLegend() 
+VlnPlot5<-VlnPlot(pbmc.annotation.predefined,features = c("Tnr","Pdgfra"), pt.size = 0) + NoLegend() 
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"VlnPlot_Markers.png",sep=""), width = 18, height = 36, res=600, units = "cm")
@@ -166,8 +166,11 @@ dev.off()
 
 myplotsA[[index]]<-DimPlot(pbmc.annotation.predefined, label = F) + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
 myplotsB[[index]]<-VlnPlot(pbmc.annotation.predefined, features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
-
-
+#############################################################################
+# Find cluster markers
+# p-values
+# Top values
+# Sorted by change
 #############################################################################
 # Create inside a loop
 resolutions=c(0.10,0.15,0.2,0.25,0.5,0.6,0.75,0.85,1)
