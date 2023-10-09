@@ -51,7 +51,7 @@ cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
 # Merge samples
 pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
 pbmc.merge.samples = subset(pbmc.merge.samples, subset = percent.mt < 2)
-
+#############################################################################
 #####################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"Sex_mouse.png",sep=""), width = 12, height = 12, res=600, units = "cm")
@@ -109,6 +109,13 @@ pbmc <- FindNeighbors(pbmc, dims = 1:50,reduction = "harmony") # Optmize number 
 
 # Run FindClusters
 pbmc <- FindClusters(pbmc, resolution = 0.6)
+
+#############################################################################
+# cDNAM1.DimHeatma
+png(filename=paste(output_dir,paste(paste("Markers_Immune Cells","",sep=""),".png",sep=""),sep=""), width = 32, height = 32, res=800, units = "cm")
+	 FeaturePlot(object = pbmc.merge.samples, features = c("Cga","Anxa1","Imm-TrBc1","F13a1","Ms4a4b","Se1p1g","P2ry12","W1dc17","Cc14","Top2a","Tyropp","Ch25h"))
+dev.off()
+
 #############################################################################
 # Copy file to annotate with pre-defined parameters 
 pbmc.annotation.predefined<-pbmc
