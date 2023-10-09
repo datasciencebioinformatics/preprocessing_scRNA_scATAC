@@ -144,12 +144,12 @@ Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.prede
 pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
 
 # cDNAM1.DimHeatmap
-png(filename=paste(output_dir,paste(paste("DimPlot_paperParameters","",sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
-	plot(DimPlot(Son, label = F) + ggtitle ("Pre-defined markers = Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra"))
+png(filename=paste(output_dir,paste(paste("DimPlot_paperParameters","",sep=""),".png",sep=""),sep=""), width = 24, height = 24, res=800, units = "cm")
+	plot(DimPlot(pbmc.annotation.predefined, label = F) + ggtitle ("Pre-defined markers = Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra"))
 dev.off()		
 # cDNAM1.DimHeatma
-png(filename=paste(output_dir,paste(paste("FindClusters_paperParameters","",sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
-	 plot(VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers = Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra"))
+png(filename=paste(output_dir,paste(paste("FindClusters_paperParameters","",sep=""),".png",sep=""),sep=""), width = 24, height = 24, res=800, units = "cm")
+	 plot(VlnPlot(pbmc.annotation.predefined, features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers = Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra"))
 dev.off()
 
 
