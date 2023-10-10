@@ -112,7 +112,7 @@ pbmc <- FindClusters(pbmc,reduction = "harmony", resolution = 0.6)
 all.markers <- FindAllMarkers(object = pbmc)
 
 # Select topmqrkers
-all.markers <- pbmc.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
+all.markers <- all.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
 #############################################################################
 # Copy file to annotate with pre-defined parameters 
 pbmc.annotation.predefined<-pbmc
