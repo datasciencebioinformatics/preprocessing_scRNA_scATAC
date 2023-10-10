@@ -108,6 +108,9 @@ pbmc <- FindClusters(pbmc,reduction = "harmony", resolution = 0.6)
 
 # Run find all markers
 all.markers <- FindAllMarkers(object = pbmc)
+
+# Select topmqrkers
+all.markers <- pbmc.markers %>% group_by(cluster) %>% top_n(n = 2, wt = avg_log2FC)
 #############################################################################
 # cDNAM1.DimHeatma
 png(filename=paste(output_dir,paste(paste("Markers_Immune Cells","",sep=""),".png",sep=""),sep=""), width = 32, height = 32, res=800, units = "cm")
