@@ -117,7 +117,7 @@ png(filename=paste(output_dir,paste(paste("Markers_Immune Cells","",sep=""),".pn
 	 FeaturePlot(object = pbmc, features = c("Cga","Anxa1","Imm-TrBc1","F13a1","Ms4a4b","Se1p1g","P2ry12","W1dc17","Cc14","Top2a","Tyropp","Ch25h"))
 dev.off()
 png(filename=paste(output_dir,paste(paste("DImPlot_Immune Cells","",sep=""),".png",sep=""),sep=""), width = 32, height = 32, res=800, units = "cm")
-	 DimPlot(object = pbmc, reduction = 'umap', label = TRUE)
+	 DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers"))
 dev.off()
 
 
