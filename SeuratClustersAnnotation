@@ -170,6 +170,10 @@ png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 36, height = 18, r
 	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers, nrow = 2)
 dev.off()
 
+#############################################################################
+# Re-adjust markers according to results
+
+#############################################################################
 VlnPlot1<-VlnPlot(pbmc.annotation.predefined,features = "Snap25", pt.size = 0) + NoLegend()
 VlnPlot2<-VlnPlot(pbmc.annotation.predefined,features = c("Arhgap15", "Dock8"), pt.size = 0) + NoLegend() + ggtitle ("Immune Cells")
 VlnPlot3<-VlnPlot(pbmc.annotation.predefined,features = c("Mog", "Mobp"), pt.size = 0) + NoLegend()
