@@ -119,11 +119,6 @@ dev.off()
 png(filename=paste(output_dir,paste(paste("DImPlot_Immune Cells","",sep=""),".png",sep=""),sep=""), width = 32, height = 32, res=800, units = "cm")
 	 DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers"))
 dev.off()
-
-
-
-
-
 #############################################################################
 # Copy file to annotate with pre-defined parameters 
 pbmc.annotation.predefined<-pbmc
@@ -166,7 +161,15 @@ dev.off()
 png(filename=paste(output_dir,paste(paste("FindClusters_paperParameters","",sep=""),".png",sep=""),sep=""), width = 24, height = 24, res=800, units = "cm")
 	 plot(VlnPlot(pbmc.annotation.predefined,features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra"))
 dev.off()
- 
+# Dimplots
+DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers"))
+DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, label = F) + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 36, height = 18, res=600, units = "cm")
+	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers, nrow = 2)
+dev.off()
+
 VlnPlot1<-VlnPlot(pbmc.annotation.predefined,features = "Snap25", pt.size = 0) + NoLegend()
 VlnPlot2<-VlnPlot(pbmc.annotation.predefined,features = c("Arhgap15", "Dock8"), pt.size = 0) + NoLegend() + ggtitle ("Immune Cells")
 VlnPlot3<-VlnPlot(pbmc.annotation.predefined,features = c("Mog", "Mobp"), pt.size = 0) + NoLegend()
