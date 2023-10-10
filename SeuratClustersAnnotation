@@ -47,6 +47,8 @@ cDNAM3.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM3.pbmc, pattern = "mt")
 cDNAM4.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM4.pbmc, pattern = "mt")
 cDNAM5.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM5.pbmc, pattern = "mt")
 cDNAM6.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM6.pbmc, pattern = "mt")
+
+# Subset percent.mt < 2
 #####################################################################################
 # Merge samples
 pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
@@ -158,7 +160,7 @@ DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + g
 DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, label = F) + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 36, height = 18, res=600, units = "cm")
+png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers, nrow = 2)
 dev.off()
 
