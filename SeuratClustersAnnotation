@@ -114,7 +114,11 @@ all.markers <- FindAllMarkers(object = pbmc)
 # Select topmqrkers
 all.markers <- all.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC) %>% arrange(avg_log2FC) 
 
+# Write csv
 write.csv(all.markers, file = paste(output_dir,paste(paste("all.markers","",sep=""),".csv",sep=""),sep=""))
+
+# Save pbmc file
+save(pbmc, file = "./my_pbmc.RData")
 #############################################################################
 # Copy file to annotate with pre-defined parameters 
 pbmc.annotation.predefined<-pbmc
