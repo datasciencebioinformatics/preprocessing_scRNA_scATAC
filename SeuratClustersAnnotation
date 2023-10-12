@@ -139,7 +139,7 @@ df2<- clustdf %>% dplyr::select("cluster",marks$Gene)
 df2$orig_cluster<-df2$cluster
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2<- df2 %>% mutate(ID = ifelse(Snap25 > 4, "Neurons", "Neurons"))
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 4 & Gad1 > 2, "Neurons", "Neurons"))
 df2<- df2 %>% mutate(ID = ifelse(Ctss > 1, "Microglia", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 3, "Astrocytes", df2$ID))
