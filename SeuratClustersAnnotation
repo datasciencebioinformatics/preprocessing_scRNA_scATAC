@@ -171,6 +171,7 @@ dev.off()
 DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
 DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, label = F) + ggtitle ("Pre-defined markers \n Snap25-Gaf1-Gal/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
 DimPlot_PredefinedMarkers_Neurons<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Neurons"), label = F) + ggtitle ("Pre-defined markers for Neurons\n Snap25 > 4 & Gad1 > 2 & Gal >2")
+DimPlot_PredefinedMarkers_Astrocytes<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Astrocytes"), label = F) + ggtitle ("Pre-defined markers for Astrocytes\n Agt > 3")
 
 # Now I will plot the umap always with two colours
 # one colour for the syudied cell-type
@@ -179,7 +180,7 @@ DimPlot_PredefinedMarkers_Neurons<-DimPlot(subset(pbmc.annotation.predefined, su
 # or changing labels
 # FindClusters_resolution
 png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 48, height = 24, res=600, units = "cm")
-	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers,DimPlot_PredefinedMarkers_Neurons, nrow = 2)
+	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers,DimPlot_PredefinedMarkers_Neurons,DimPlot_PredefinedMarkers_Astrocytes, nrow = 2)
 dev.off()
 
 
