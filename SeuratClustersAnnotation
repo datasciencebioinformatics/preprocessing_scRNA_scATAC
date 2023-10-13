@@ -243,10 +243,10 @@ for (index in 1:length(resolutions))
 	df2$orig_cluster<-df2$cluster
 
 	# Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-	df2<- df2 %>% mutate(ID = ifelse(Snap25 > 4, "Other Neurons", "NN"))
-	df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Immune Cells", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", "NN"))
 	df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
-	df2<- df2 %>% mutate(ID = ifelse(Agt > 4, "Astrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Agt > 1, "Astrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Immune Cells", df2$ID))
 	df2<- df2 %>% mutate(ID = ifelse(Tnr > 0.5 & Pdgfra > 0.5, "OPCs", df2$ID))
 	#df2<- df2 %>% mutate(ID = ifelse(Myh11 > 4, "SMCs", df2$ID))#Tagln
 	#df2<- df2 %>% mutate(ID = ifelse(Slc6a13 > 4, "VLMCs", df2$ID))	
