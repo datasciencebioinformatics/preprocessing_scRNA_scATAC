@@ -173,7 +173,7 @@ DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, label = F) + ggti
 DimPlot_PredefinedMarkers_Neurons<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Neurons"), label = F) + ggtitle ("Pre-defined markers for Neurons\n Snap25 > 4 & Gad1 > 2 & Gal >2")
 DimPlot_PredefinedMarkers_Astrocytes<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Astrocytes"), label = F) + ggtitle ("Pre-defined markers for Astrocytes\n Agt > 3")
 DimPlot_PredefinedMarkers_Microglia<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Microglia"), label = F) + ggtitle ("Pre-defined markers for Microglia\n Ctss > 1")
-DimPlot_PredefinedMarkers_Oligodentrocytes<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Oligodendrocytes"), label = F) + ggtitle ("Pre-defined markers for Oligodendrocytes\n Cdln11 > 1 & Mobp > 1 & Scrg1>1")
+DimPlot_PredefinedMarkers_Oligodentrocytes<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Oligodendrocytes"), label = F) + ggtitle ("Pre-defined markers for Oligodendrocytes\n Mobp > 1 & Scrg1>1")
 
 # Now I will plot the umap always with two colours
 # one colour for the syudied cell-type
@@ -183,6 +183,16 @@ DimPlot_PredefinedMarkers_Oligodentrocytes<-DimPlot(subset(pbmc.annotation.prede
 # FindClusters_resolution
 png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 48, height = 48, res=600, units = "cm")
 	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers,DimPlot_PredefinedMarkers_Neurons,DimPlot_PredefinedMarkers_Astrocytes,DimPlot_PredefinedMarkers_Microglia,DimPlot_PredefinedMarkers_Oligodentrocytes, nrow = 3)
+dev.off()
+
+# Now I will plot the umap always with two colours
+# one colour for the syudied cell-type
+# other colour for the Remaining of the celltypes
+# how to do it : try subsetting or
+# or changing labels
+# FindClusters_resolution
+png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers, nrow = 2)
 dev.off()
 
 
