@@ -192,7 +192,7 @@ df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", "Other cells"))
 
 # Plot pheatmap
 df_data2 = as.data.frame(sapply(df_data, as.numeric)) 
-png(filename=paste(output_dir,"pheatmap.png",sep=""), width = 48, height = 24, res=600, units = "cm")
+png(filename=paste(output_dir,"pheatmap.png",sep=""), width = 54, height = 24, res=600, units = "cm")
 	pheatmap(df_data2,scale="column",cluster_rows = FALSE)
 dev.off()
 
