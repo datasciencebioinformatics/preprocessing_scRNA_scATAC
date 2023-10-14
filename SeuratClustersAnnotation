@@ -143,9 +143,17 @@ dev.off()
 # Calculare feature plot per celltype
 marker=c("Trem2","Selplg","Cst3","Csf1r","Pld4","Hexb","Ctss","C1qb","C1qa", "C1qc")
 # FindClusters_resolution
-png(filename=paste(output_dir,"FeaturePlotsMicroglia.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+png(filename=paste(output_dir,"FeaturePlotsMicroglia.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	FeaturePlot(pbmc, features = marker)
 dev.off()
+######################################
+# Calculare feature plot per celltype
+marker=c("Matn4","Ptprz1","Tmem100","Olig1","Ptn","Cd9","C1ql1","Scrg1","Cspg4","Pdgfra")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsOPCs.png",sep=""), width = 36, height = 36, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
+
 ############################################################################
 # Copy file to annotate with pre-defined parameters 
 pbmc.annotation.predefined<-pbmc
