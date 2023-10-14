@@ -126,6 +126,14 @@ write.csv(all.markers, file = paste(output_dir,paste(paste("all.markers","",sep=
 # Save pbmc file
 save(pbmc, file = "./my_pbmc.RData")
 #############################################################################
+# Calculare feature plot per celltype
+marker=c("Cldn10","Cst3","Slc6a11","Sparc","Gja1","Agt","Ntsr2","Atp1a2","Itih3","Apoe","Cldn10","Gja1","Pla2g7","Ptgds","Slc6a11","Ntsr2","Agt","Itih3","Atp1a2","Apoe","Serpine2","Cd9","Gpr37l1","Gja1","C1ql1","Atp1a2","Scrg1","Apoe","Cspg4","Pdgfra")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsAstrocytes.png",sep=""), width = 36, height = 36, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
+#############################################################################
+
 # Copy file to annotate with pre-defined parameters 
 pbmc.annotation.predefined<-pbmc
 
@@ -147,7 +155,7 @@ df2$orig_cluster<-df2$cluster
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micrógliadf2<- df2 %>% mutate(ID = ifelse(Snap25 > 2, "Neurons", "NN"))
 df2<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", "NN"))
 df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Agt > 1, "Astrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Agt > 1 & Apoe > 1 , "Astrocytes", df2$ID))
 #df2<- df2 %>% mutate(ID = ifelse(Cldn10 > 1, "", df2$ID))
 #df2<- df2 %>% mutate(ID = ifelse(Slc6a11 > 1, "Slc6a11", "Slc6a11"))
 #df2<- df2 %>% mutate(ID = ifelse(Sparc > 1, "Sparc", "Sparc"))
