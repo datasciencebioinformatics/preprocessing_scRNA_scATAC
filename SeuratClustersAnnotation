@@ -187,12 +187,10 @@ df2_1<- df2 %>% mutate(ID = ifelse(Apoe > 10, "Astrocytes", "Other cells"))
 df2_2<- df2 %>% mutate(ID = ifelse(Plp1 > 10 & Cd9 > 10, "Oligodendrocytes", "Other cells"))
 df2_3<- df2 %>% mutate(ID = ifelse(C1qa > 10 & C1qb > 10, "Microglia", "Other cells"))
 df2_4<- df2 %>% mutate(ID = ifelse(Ptprz1 > 5 & Cspg4 > 5, "OPCs", "Other cells"))
-df2_5<- df2 %>% mutate(ID = ifelse(Ptprz1 > 5 & Cspg4 > 5, "Neurons", "Other cells"))
-
-
+df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", "Other cells"))
 
 # Table to investigate clusters
-data.frame("Astrocytes"=df2_1$ID,"Oligodendrocytes"=df2_2$ID,"Microglia"=df2_3$ID,"OPCs"=df2_4$ID)
+data.frame("Astrocytes"=df2_1$ID,"Oligodendrocytes"=df2_2$ID,"Microglia"=df2_3$ID,"OPCs"=df2_4$ID,"Neurons"=df2_5$ID)
 
 y<-dplyr::select(df2,cluster)
 Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.predefined), from = df2$cluster, to = df2$ID)
