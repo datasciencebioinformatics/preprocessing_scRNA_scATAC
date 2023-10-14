@@ -152,9 +152,9 @@ df2<- clustdf %>% dplyr::select("cluster",marks$Gene)
 df2$orig_cluster<-df2$cluster
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micrógliadf2<- df2 %>% mutate(ID = ifelse(Snap25 > 2, "Neurons", "NN"))
-df2<- df2 %>% mutate(ID = ifelse(Agt > 5, "Astrocytes Agt > 5", "Other cells"))
-df2<- df2 %>% mutate(ID = ifelse(Cst3 > 5, "Astrocytes Cst3 > 5", "Other cells"))
-df2<- df2 %>% mutate(ID = ifelse(Apoe > 5, "Astrocytes Apoe > 5", "Other cells"))
+#df2<- df2 %>% mutate(ID = ifelse(Agt > 5, "Astrocytes Agt > 5", "Other cells"))
+#df2<- df2 %>% mutate(ID = ifelse(Cst3 > 5, "Astrocytes Cst3 > 5", "Other cells"))
+df2<- df2 %>% mutate(ID = ifelse(Apoe > 5, "Astrocytes", "Other cells"))
 #df2<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", "NN"))
 #df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
 #df2<- df2 %>% mutate(ID = ifelse(Cldn10 > 1, "", df2$ID))
@@ -179,7 +179,7 @@ pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
 
 # Dimplots
 DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
-DimPlot_PredefinedMarkers_Astrocytyes1<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers Astrocytes\nCst3> 5")
+DimPlot_PredefinedMarkers_Astrocytyes1<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers Astrocytes\nApoe > 5")
 
 # Now I will plot the umap always with two colours
 # one colour for the syudied cell-type
