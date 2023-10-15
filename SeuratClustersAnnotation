@@ -242,31 +242,49 @@ dev.off()
 #############################################################################
 # pheatmaps
 # Plot pheatmap
+annot=data.frame(orig_cluster=df_data2[,"orig_cluster"])
+rownames(annot)<-df_data2[,"orig_cluster"]
 df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(5,24,29),], as.numeric)) 
-png(filename=paste(output_dir,"pheatmap1.png",sep=""), width = 24, height = 12, res=600, units = "cm")
-	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Astrocytes")
-dev.off()
-# Plot pheatmap
-df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(6,7),], as.numeric)) 
-png(filename=paste(output_dir,"pheatmap2.png",sep=""), width = 24, height = 12, res=600, units = "cm")
-	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Oligodentrocytes")
-dev.off()
-# Plot pheatmap
-df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(20,0),], as.numeric)) 
-png(filename=paste(output_dir,"pheatmap3.png",sep=""), width = 12, height = 12, res=600, units = "cm")
-	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Microglia")
-dev.off()
-# Plot pheatmap
-df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(11,14),], as.numeric)) 
-png(filename=paste(output_dir,"pheatmap4.png",sep=""), width = 12, height = 12, res=600, units = "cm")
-	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="OCPs")
-dev.off()
-# Plot pheatmap
-df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(0,1,2,3,4,8,9,10,67,5,24,29),], as.numeric)) 
-png(filename=paste(output_dir,"pheatmap0.png",sep=""), width = 12, height = 12, res=600, units = "cm")
-	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Neurons")
+rownames(df_data2)<-df_data2[,"orig_cluster"]
+png(filename=paste(output_dir,"pheatmap1.png",sep=""), width = 30, height = 12, res=600, units = "cm")
+	pheatmap(df_data2[,-which(colnames(df_data2)=="orig_cluster")],scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Astrocytes",row_annotation=annot)
 dev.off()
 
+# Plot pheatmap
+annot=data.frame(orig_cluster=df_data2[,"orig_cluster"])
+rownames(annot)<-df_data2[,"orig_cluster"]
+df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(6,7,14,15),], as.numeric)) 
+rownames(df_data2)<-df_data2[,"orig_cluster"]
+png(filename=paste(output_dir,"pheatmap2.png",sep=""), width = 30, height = 12, res=600, units = "cm")
+	pheatmap(df_data2[,-which(colnames(df_data2)=="orig_cluster")],scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Oligodentrocytes",row_annotation=annot)
+dev.off()
+
+# Plot pheatmap
+annot=data.frame(orig_cluster=df_data2[,"orig_cluster"])
+rownames(annot)<-df_data2[,"orig_cluster"]
+df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(20,0),], as.numeric)) 
+rownames(df_data2)<-df_data2[,"orig_cluster"]
+png(filename=paste(output_dir,"pheatmap3.png",sep=""), width = 36, height = 12, res=600, units = "cm")
+	pheatmap(df_data2[,-which(colnames(df_data2)=="orig_cluster")],scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Microglia",row_annotation=annot)
+dev.off()
+
+# Plot pheatmap
+annot=data.frame(orig_cluster=df_data2[,"orig_cluster"])
+rownames(annot)<-df_data2[,"orig_cluster"]
+df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(11,14),], as.numeric)) 
+rownames(df_data2)<-df_data2[,"orig_cluster"]
+png(filename=paste(output_dir,"pheatmap4.png",sep=""), width = 36, height = 12, res=600, units = "cm")
+	pheatmap(df_data2[,-which(colnames(df_data2)=="orig_cluster")],scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="OCPs",row_annotation=annot)
+dev.off()
+
+# Plot pheatmap
+annot=data.frame(orig_cluster=df_data2[,"orig_cluster"])
+rownames(annot)<-df_data2[,"orig_cluster"]
+df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(0,1,2,3,4,8,9,10,67,5,24,29),], as.numeric)) 
+rownames(df_data2)<-df_data2[,"orig_cluster"]
+png(filename=paste(output_dir,"pheatmap5.png",sep=""), width = 36, height = 12, res=600, units = "cm")
+	pheatmap(df_data2[,-which(colnames(df_data2)=="orig_cluster")],scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Neurons",row_annotation=annot)
+dev.off()
 #############################################################################
 VlnPlot1<-VlnPlot(pbmc.annotation.predefined,features = "Snap25", pt.size = 0) + NoLegend()
 VlnPlot2<-VlnPlot(pbmc.annotation.predefined,features = c("Arhgap15", "Dock8"), pt.size = 0) + NoLegend() + ggtitle ("Immune Cells")
