@@ -123,6 +123,15 @@ all.markers <- all.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2
 # Write csv
 write.csv(all.markers, file = paste(output_dir,paste(paste("all.markers","",sep=""),".csv",sep=""),sep=""))
 
+# Write csv
+table<-read.csv(file = paste(output_dir,paste(paste("all.markers","",sep=""),".csv",sep=""),sep=""))
+
+# Take only the top 5
+table <- table %>% group_by(cluster) %>% top_n(n = 5, wt = avg_log2FC) %>% arrange(avg_log2FC) 
+
+# Filter table
+table<-table[,-which(colnames(table)=="gene")]
+
 # Save pbmc file
 save(pbmc, file = "./my_pbmc.RData")
 #############################################################################
@@ -191,8 +200,8 @@ df2_4<- df2 %>% mutate(ID = ifelse(Ptprz1 > 5 & Cspg4 > 5, "OPCs", "Other cells"
 df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", "Other cells"))
 
 # Plot pheatmap
-df_data2 = as.data.frame(sapply(df_data, as.numeric)) 
-png(filename=paste(output_dir,"pheatmap.png",sep=""), width = 54, height = 24, res=600, units = "cm")
+df_data2 = as.data.frame(sapply(data.frame(table), as.numeric)) 
+png(filename=paste(output_dir,"pheatmap.png",sep=""), width = 36, height = 24, res=600, units = "cm")
 	pheatmap(df_data2,scale="column",cluster_rows = FALSE)
 dev.off()
 
