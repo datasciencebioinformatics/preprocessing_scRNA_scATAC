@@ -192,18 +192,18 @@ df2<- clustdf %>% dplyr::select("cluster",marks$Gene)
 df2$orig_cluster<-df2$cluster
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2<- df2 %>% mutate(ID = ifelse(Snap25 > 10, "Neurons", "NN"))
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 3 & Caly > 3, "Neurons", NA))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 10 & Apoe > 10, "Astrocytes", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(C1qa > 10 & C1qb > 10, "Microglia", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Cd9 > 10 & Plp1 > 10, "OPCs", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Mog > 10 & Mobp > 10, "Oligodendrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Mog > 3 & Mobp > 3, "Oligodendrocytes", df2$ID))
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
 df2_1<- df2 %>% mutate(ID = ifelse(Agt > 10 & Apoe > 10, "Astrocytes", "Other cells"))
 df2_2<- df2 %>% mutate(ID = ifelse(Mog > 10 & Mobp > 10, "Oligodendrocytes", "Other cells"))
 df2_3<- df2 %>% mutate(ID = ifelse(C1qa > 10 & C1qb > 10, "Microglia", "Other cells"))
 df2_4<- df2 %>% mutate(ID = ifelse(Cd9 > 10 & Plp1 > 10, "OPCs", "Other cells"))
-df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 10, "Neurons", "Other cells"))
+df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 10 & Caly > 10, "Neurons", "Other cells"))
 
 # Table to investigate clusters
 data.frame("Astrocytes"=df2_1$ID,"Oligodendrocytes"=df2_2$ID,"Microglia"=df2_3$ID,"OPCs"=df2_4$ID,"Neurons"=df2_5$ID)
@@ -287,7 +287,7 @@ annot=data.frame(orig_cluster=df_data2[,"orig_cluster"])
 rownames(annot)<-df_data2[,"orig_cluster"]
 df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(0,1,2,3,4,8,9,10,67,5,24,29),], as.numeric)) 
 rownames(df_data2)<-df_data2[,"orig_cluster"]
-png(filename=paste(output_dir,"pheatmap5.png",sep=""), width = 36, height = 12, res=600, units = "cm")
+png(filename=paste(output_dir,"pheatmap5.png",sep=""), width = 36, height = 24, res=600, units = "cm")
 	pheatmap(df_data2[,-which(colnames(df_data2)=="orig_cluster")],scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Neurons",row_annotation=annot)
 dev.off()
 #############################################################################
