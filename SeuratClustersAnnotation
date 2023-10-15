@@ -198,11 +198,6 @@ df2_3<- df2 %>% mutate(ID = ifelse(C1qa > 10 & C1qb > 10, "Microglia", "Other ce
 df2_4<- df2 %>% mutate(ID = ifelse(Ptprz1 > 5 & Cspg4 > 5, "OPCs", "Other cells"))
 df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", "Other cells"))
 
-# Plot pheatmap
-df_data2 = as.data.frame(sapply(data.frame(df2), as.numeric)) 
-png(filename=paste(output_dir,"pheatmap.png",sep=""), width = 36, height = 24, res=600, units = "cm")
-	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE)
-dev.off()
 
 # Table to investigate clusters
 data.frame("Astrocytes"=df2_1$ID,"Oligodendrocytes"=df2_2$ID,"Microglia"=df2_3$ID,"OPCs"=df2_4$ID,"Neurons"=df2_5$ID)
@@ -245,7 +240,32 @@ png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 48, height = 48, r
 	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers,DimPlot_PredefinedMarkers_Neurons,DimPlot_PredefinedMarkers_Astrocytes,DimPlot_PredefinedMarkers_Microglia,DimPlot_PredefinedMarkers_Oligodentrocytes, nrow = 3)
 dev.off()
 #############################################################################
-# Re-adjust markers according to results
+# pheatmaps
+# Plot pheatmap
+df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(5,24,29),], as.numeric)) 
+png(filename=paste(output_dir,"pheatmap1.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Astrocytes")
+dev.off()
+# Plot pheatmap
+df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(6,7),], as.numeric)) 
+png(filename=paste(output_dir,"pheatmap2.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Oligodentrocytes")
+dev.off()
+# Plot pheatmap
+df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(20,0),], as.numeric)) 
+png(filename=paste(output_dir,"pheatmap3.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Microglia")
+dev.off()
+# Plot pheatmap
+df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(11,14),], as.numeric)) 
+png(filename=paste(output_dir,"pheatmap4.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="OCPs")
+dev.off()
+# Plot pheatmap
+df_data2 = as.data.frame(sapply(data.frame(df2)[data.frame(df2)$cluster %in% c(0,1,2,3,4,8,9,10,67,5,24,29),], as.numeric)) 
+png(filename=paste(output_dir,"pheatmap0.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	pheatmap(df_data2,scale="column",cluster_rows = TRUE,cluster_cols = TRUE,main="Neurons")
+dev.off()
 
 #############################################################################
 VlnPlot1<-VlnPlot(pbmc.annotation.predefined,features = "Snap25", pt.size = 0) + NoLegend()
