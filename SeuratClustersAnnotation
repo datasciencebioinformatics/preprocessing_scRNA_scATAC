@@ -206,6 +206,7 @@ df2_4<- df2 %>% mutate(ID = ifelse(Cd9 > 3 & Plp1 > 3, "OPCs", "Other cells"))
 df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", "Other cells"))
 
 # Table to investigate clusters
+data.frame("Astrocytes"=df2_1$ID,"Oligodendrocytes"=df2_2$ID,"Microglia"=df2_3$ID,"OPCs"=df2_4$ID,"Neurons"=df2_5$ID)
 data.frame("Astrocytes"=df2$ID,"Oligodendrocytes"=df2$ID,"Microglia"=df2$ID,"OPCs"=df2$ID,"Neurons"=df2$ID)
 
 y<-dplyr::select(df2,cluster)
