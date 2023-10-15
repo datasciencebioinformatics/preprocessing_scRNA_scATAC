@@ -192,6 +192,13 @@ df2<- clustdf %>% dplyr::select("cluster",marks$Gene)
 df2$orig_cluster<-df2$cluster
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", "Neurons"))
+df2<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Slc35d3 > 5, "Oligodendrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(C1qa > 5 & C1qb > 5, "Microglia", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Cd9 > 10 & Plp1 > 10, "OPCs", df2$ID))
+
+# Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
 df2_1<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", "Other cells"))
 df2_2<- df2 %>% mutate(ID = ifelse(Slc35d3 > 5, "Oligodendrocytes", "Other cells"))
 df2_3<- df2 %>% mutate(ID = ifelse(C1qa > 5 & C1qb > 5, "Microglia", "Other cells"))
@@ -208,9 +215,7 @@ pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
 
 # Dimplots
 DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
-DimPlot_PredefinedMarkers_Astrocytyes1<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers Astrocytes\nApoe > 5")
-DimPlot_PredefinedMarkers_Oligodendrocytes1<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers Astrocytes\nPlp1 > 3")
-
+DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers")
 
 # Now I will plot the umap always with two colours
 # one colour for the syudied cell-type
@@ -219,7 +224,7 @@ DimPlot_PredefinedMarkers_Oligodendrocytes1<-DimPlot(pbmc.annotation.predefined,
 # or changing labels
 # FindClusters_resolution
 png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 24, height = 36, res=600, units = "cm")
-	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers_Astrocytyes1,DimPlot_PredefinedMarkers_Oligodendrocytes1, nrow = 3)
+	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers, nrow = 3)
 dev.off()
 
 
