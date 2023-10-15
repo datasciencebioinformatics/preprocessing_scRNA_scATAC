@@ -184,30 +184,29 @@ marks<-c("Mog","Mobp","Opalin","Agt","Gfap","Slc1a2","Elavl2","Syt9","Syt1","Sna
 	 "Slc47a1","Acta2","Tagln","Cyyr1","Mrc1","C1qa","Kcnj8","Caprin2","Myh11", 
 	 "Atp13a5","Abcc9","Ebf1","Rgs5","Ctss","Gad1", "Gal","Scrg1","Caly","Cst3","Plp1","Cd9","Cst3","C1qb",
 	 "Ptprz1","Cspg4")
-marks<-c("Snap25","1700016P03Rik","1700047M11Rik","4930447C04Rik","6330403K07Rik","9630013A20Rik","Adam23","Adcyap1","Agrp","Agt","Apod","Apoe","Arhgap36","Arpp21","Atp1a2","Auts2","Avp","B230216N24Rik","Baiap2","Bcas1","C130073E24Rik","C1qa","C1qb","C1qc","C1ql1","C1ql3","Caly","Camkv","Caprin2","Cartpt","Cbln1","Ccdc136","Cck","Ccn3","Cd9","Cdh23","Celf2","Chrm3","Cit","Cited1","Cldn10","Cldn11","Cntnap5a","Col11a1","Col11a2","Col18a1","Col24a1","Col25a1","Coro6","Cpne7","Cpne9","Crhbp","Cryab","Csf1r","Csf2rb2","Cspg4","Cst3","Ctss","Cyp11a1","Dclk1","Ddc","Dgkb","Dlk1","Ebf1","Ecel1","Egr1","Elavl2","En1","Epha10","Esyt3","Fars2","Fign","Fos","Fxyd6","Gabra1","Gad1","Gad2","Gal","Ghrh","Gja1","Gjc3","Gm20515","Gm20751","Gm26771","Gm26871","Gm49359","Gpr17","Gpr37l1","Grip1","Grip2","Grp","Hbb-bs","Hcrt","Hcrtr2","Hdc","Hexb","Hmcn1","Htr2c","Icam5","Igfbp2","Igfbp5","Isl1","Itih3","Itm2a","Junb","Kcnc1","Kcnc2","Kcnk2","Kctd16","Lhx9","Lmnb2","Mag","Magel2","Mal","Matn4","Mbp","Meis2","Mgp","Mia","Mir99ahg","Mobp","Mrpl9","Msrb2","Neat1","Nefm","Nfasc","Nkx2-1","Nme7","Nms","Nnat","Npy","Npy1r","Nrgn","Nrn1","Nrxn3","Ntm","Ntng1","Nts","Ntsr2","Nxph4","Olig1","Otp","Oxt","Parpbp","Pbx1","Pcsk2","Pde10a","Pdgfra","Penk","Pitx2","Pla2g7","Plagl1","Pld4","Plp1","Pmch","Pnoc","Pomc","Pou3f2","Prkcd","Prxl2c","Ptbp3","Ptgds","Pthlh","Ptn","Ptpn3","Ptprn","Ptprz1","Pvalb","Qk","Rasal1","Rasgef1c","Rasgrf2","Rbms1","Resp18","Rinl","Rmst","Rorb","Rprm","Rprml","Rrad","Rreb1","S100a6","Scg2","Scrg1","Selplg","Serpine2","Sfrp2","Sgk1","Sim1","Sirt2","Six3","Slc10a4","Slc18a2","Slc32a1","Slc35d3","Slc6a11","Slc6a3","Sncg","Sparc","Sphkap","Sst","Syt7","Tac1","Tbx3os1","Tcf4","Tcf7l2","Tent5a","Th","Tiam2","Tmcc3","Tmem100","Tmem130","Tnxb","Traip","Trem2","Trf","Trh","Tspan7","Ubash3b","Unc13c","Vgf","Vip","Vipr2","Vstm2l","Vtn","Wfs1","Zbtb20")
-marks<-c("Snap25",table$gene)
+marks<-c("Mog","Snap25","1700016P03Rik","1700047M11Rik","4930447C04Rik","6330403K07Rik","9630013A20Rik","Adam23","Adcyap1","Agrp","Agt","Apod","Apoe","Arhgap36","Arpp21","Atp1a2","Auts2","Avp","B230216N24Rik","Baiap2","Bcas1","C130073E24Rik","C1qa","C1qb","C1qc","C1ql1","C1ql3","Caly","Camkv","Caprin2","Cartpt","Cbln1","Ccdc136","Cck","Ccn3","Cd9","Cdh23","Celf2","Chrm3","Cit","Cited1","Cldn10","Cldn11","Cntnap5a","Col11a1","Col11a2","Col18a1","Col24a1","Col25a1","Coro6","Cpne7","Cpne9","Crhbp","Cryab","Csf1r","Csf2rb2","Cspg4","Cst3","Ctss","Cyp11a1","Dclk1","Ddc","Dgkb","Dlk1","Ebf1","Ecel1","Egr1","Elavl2","En1","Epha10","Esyt3","Fars2","Fign","Fos","Fxyd6","Gabra1","Gad1","Gad2","Gal","Ghrh","Gja1","Gjc3","Gm20515","Gm20751","Gm26771","Gm26871","Gm49359","Gpr17","Gpr37l1","Grip1","Grip2","Grp","Hbb-bs","Hcrt","Hcrtr2","Hdc","Hexb","Hmcn1","Htr2c","Icam5","Igfbp2","Igfbp5","Isl1","Itih3","Itm2a","Junb","Kcnc1","Kcnc2","Kcnk2","Kctd16","Lhx9","Lmnb2","Mag","Magel2","Mal","Matn4","Mbp","Meis2","Mgp","Mia","Mir99ahg","Mobp","Mrpl9","Msrb2","Neat1","Nefm","Nfasc","Nkx2-1","Nme7","Nms","Nnat","Npy","Npy1r","Nrgn","Nrn1","Nrxn3","Ntm","Ntng1","Nts","Ntsr2","Nxph4","Olig1","Otp","Oxt","Parpbp","Pbx1","Pcsk2","Pde10a","Pdgfra","Penk","Pitx2","Pla2g7","Plagl1","Pld4","Plp1","Pmch","Pnoc","Pomc","Pou3f2","Prkcd","Prxl2c","Ptbp3","Ptgds","Pthlh","Ptn","Ptpn3","Ptprn","Ptprz1","Pvalb","Qk","Rasal1","Rasgef1c","Rasgrf2","Rbms1","Resp18","Rinl","Rmst","Rorb","Rprm","Rprml","Rrad","Rreb1","S100a6","Scg2","Scrg1","Selplg","Serpine2","Sfrp2","Sgk1","Sim1","Sirt2","Six3","Slc10a4","Slc18a2","Slc32a1","Slc35d3","Slc6a11","Slc6a3","Sncg","Sparc","Sphkap","Sst","Syt7","Tac1","Tbx3os1","Tcf4","Tcf7l2","Tent5a","Th","Tiam2","Tmcc3","Tmem100","Tmem130","Tnxb","Traip","Trem2","Trf","Trh","Tspan7","Ubash3b","Unc13c","Vgf","Vip","Vipr2","Vstm2l","Vtn","Wfs1","Zbtb20")
+#marks<-c("Snap25",table$gene)
 marks = data.frame(marks)
 colnames(marks)[1] = "Gene"
 df2<- clustdf %>% dplyr::select("cluster",marks$Gene) 
 df2$orig_cluster<-df2$cluster
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2<- df2 %>% mutate(ID = ifelse(Snap25 > 10, "Neurons", "Neurons"))
-df2<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(C1qa > 5 & C1qb > 5, "Microglia", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Cd9 > 10 & Plp1 > 10, "OPCs", df2$ID))
+#df2<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", "Neurons"))
+#df2<- df2 %>% mutate(ID = ifelse(Agt > 3 & Apoe > 3, "Astrocytes", df2$ID))
+#df2<- df2 %>% mutate(ID = ifelse(Mog > 3 & Mobp > 3, "Oligodendrocytes", df2$ID))
+#df2<- df2 %>% mutate(ID = ifelse(C1qa > 3 & C1qb > 3, "Microglia", df2$ID))
+#df2<- df2 %>% mutate(ID = ifelse(Cd9 > 3 & Plp1 > 3, "OPCs", df2$ID))
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2_1<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", "Other cells"))
-df2_2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", "Other cells"))
-df2_3<- df2 %>% mutate(ID = ifelse(C1qa > 5 & C1qb > 5, "Microglia", "Other cells"))
-df2_4<- df2 %>% mutate(ID = ifelse(Cd9 > 10 & Plp1 > 10, "OPCs", "Other cells"))
-df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", "Other cells"))
-
+df2_1<- df2 %>% mutate(ID = ifelse(Agt > 3 & Apoe > 3, "Astrocytes", "Other cells"))
+df2_2<- df2 %>% mutate(ID = ifelse(Mog > 3 & Mobp > 3, "Oligodendrocytes", "Other cells"))
+df2_3<- df2 %>% mutate(ID = ifelse(C1qa > 3 & C1qb > 3, "Microglia", "Other cells"))
+df2_4<- df2 %>% mutate(ID = ifelse(Cd9 > 3 & Plp1 > 3, "OPCs", "Other cells"))
+df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", "Other cells"))
 
 # Table to investigate clusters
-data.frame("Astrocytes"=df2_1$ID,"Oligodendrocytes"=df2_2$ID,"Microglia"=df2_3$ID,"OPCs"=df2_4$ID,"Neurons"=df2_5$ID)
+data.frame("Astrocytes"=df2$ID,"Oligodendrocytes"=df2$ID,"Microglia"=df2$ID,"OPCs"=df2$ID,"Neurons"=df2$ID)
 
 y<-dplyr::select(df2,cluster)
 Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.predefined), from = df2$cluster, to = df2$ID)
