@@ -192,15 +192,15 @@ df2<- clustdf %>% dplyr::select("cluster",marks$Gene)
 df2$orig_cluster<-df2$cluster
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", "Neurons"))
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 10, "Neurons", "Neurons"))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Slc35d3 > 5, "Oligodendrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(C1qa > 5 & C1qb > 5, "Microglia", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Cd9 > 10 & Plp1 > 10, "OPCs", df2$ID))
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
 df2_1<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", "Other cells"))
-df2_2<- df2 %>% mutate(ID = ifelse(Slc35d3 > 5, "Oligodendrocytes", "Other cells"))
+df2_2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", "Other cells"))
 df2_3<- df2 %>% mutate(ID = ifelse(C1qa > 5 & C1qb > 5, "Microglia", "Other cells"))
 df2_4<- df2 %>% mutate(ID = ifelse(Cd9 > 10 & Plp1 > 10, "OPCs", "Other cells"))
 df2_5<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", "Other cells"))
