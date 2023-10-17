@@ -230,10 +230,32 @@ DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap
 png(filename=paste(output_dir,"DimPlots.png",sep=""), width = 24, height = 36, res=600, units = "cm")
 	grid.arrange(DimPlot_AllMarkers, DimPlot_PredefinedMarkers, nrow = 3)
 dev.off()
+#############################################################################
+To DO sc-RNA:
 
+# Work on the resolutions to fine-tune number of clusters
+# optimal number of clusters
 
+# Use canonical markers of paper for each cell types
+# Use genes of Victor
+# Use genes of mousebrain.org
 
+# Limit of makers
 
+# Deliverables :
+# Map with clusters/celltypes/markers
+# Description os criterias
+#############################################################################
+To DO sc-ATAC:
+
+# Study Seurat 5.0
+# Study integration of sc-ATAC with sc-RNA
+# Implementation dataset : Multi-omics data from Seurat V.5.0
+
+# Test integration sample ATAC-M1 and cDNA-M1
+# Deliverables : integration sample ATAC-M1 and cDNA-M1
+
+#############################################################################
 DimPlot_PredefinedMarkers_Neurons<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Neurons"), label = F) + ggtitle ("Pre-defined markers for Neurons\n Snap25 > 4 & Gad1 > 2 & Gal >2")
 DimPlot_PredefinedMarkers_Astrocytes<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Astrocytes"), label = F) + ggtitle ("Pre-defined markers for Astrocytes\n Agt > 3")
 DimPlot_PredefinedMarkers_Microglia<-DimPlot(subset(pbmc.annotation.predefined, subset = group == "Microglia"), label = F) + ggtitle ("Pre-defined markers for Microglia\n Ctss > 1")
