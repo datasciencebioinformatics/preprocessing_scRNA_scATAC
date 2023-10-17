@@ -346,7 +346,8 @@ for (index in 1:length(resolutions))
 	df2<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID))
 	df2<- df2 %>% mutate(ID = ifelse(Prr5l > 2, "OPCs", df2$ID))
 	df2<- df2 %>% mutate(ID = ifelse(St18 > 3, "Oligodendrocytes", df2$ID))
-	
+	#df2<- df2 %>% mutate(ID = ifelse(Mbp > 2 & Mobp > 2, "Oligodendrocytes", df2$ID))
+
 	y<-dplyr::select(df2,cluster)
 	Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.predefined), from = df2$cluster, to = df2$ID)
 	pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
@@ -356,9 +357,8 @@ for (index in 1:length(resolutions))
 	myplotsA[[index]]<-DimPlot_PredefinedMarkers
 } 
 
-Markers="Neurons : Caly > 5 & Snap25 > 5 - Astrocytes : Agt > 3 - Microglia : Ctss > 2 - OPCs : Prr5l > 2 - Oligodendrocytes : St18 > 3"
 # FindClusters_resolution
-png(filename=paste(output_dir,"FindClusters_resolutions1.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
+png(filename=paste(output_dir,"FindClusters_resolutions2.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
 	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]],myplotsA[[10]],myplotsA[[11]],myplotsA[[12]], nrow = 3, top = Markers)
 dev.off()
 
