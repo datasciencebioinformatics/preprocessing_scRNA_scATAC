@@ -307,8 +307,11 @@ myplotsB<-list()
 # For each value in the reslution vector
 for (index in 1:length(resolutions)) 
 {	
+	# Run FindClusters # Find clusters for only RNA
+	pbmc <- FindClusters(pbmc,reduction = "harmony", resolution = resolutions[index])
+
 	# Copy file to annotate with pre-defined parameters 
-	pbmc.annotation.predefined<-pbmc
+	pbmc.annotation.predefined<-pbmc	
 	
 	DefaultAssay(pbmc.annotation.predefined) <- "RNA"
 	clustavg<-AverageExpression(pbmc.annotation.predefined)
@@ -341,15 +344,18 @@ for (index in 1:length(resolutions))
 	pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
 	
 	# Dimplots
-	DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
-	DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers")
+	#DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
+	DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle (paste("Pre-defined markers resolution : ",resolutions[index],sep=""))
+	myplotsA[[index]]<-DimPlot_PredefinedMarkers
 } 
 
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"FindClusters_resolution.png",sep=""), width = 36, height = 36, res=600, units = "cm")
-	grid.arrange(myplotsA[[1]], myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]], myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]], nrow = 3)
+png(filename=paste(output_dir,"FindClusters_resolutions.png",sep=""), width = 48, height = 48, res=600, units = "cm")
+	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]], nrow = 3)
 dev.off()
+
+
 # FindClusters_VlnPlot
 png(filename=paste(output_dir,"FindClusters_VlnPlot.png",sep=""), width = 36, height = 36, res=600, units = "cm")
 	grid.arrange(myplotsB[[1]], myplotsB[[2]],myplotsB[[3]],myplotsB[[4]],myplotsB[[5]], myplotsB[[6]],myplotsB[[7]],myplotsB[[8]],myplotsB[[9]], nrow = 3)
