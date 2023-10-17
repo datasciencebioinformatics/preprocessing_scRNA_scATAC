@@ -134,7 +134,7 @@ load("./pbmc.RData")
 load("./my_pbmc.RData")
 
 # Run FindClusters # Find clusters for only RNA
-pbmc.annotation.predefined <- FindClusters(pbmc,reduction = "harmony", resolution = 0.2)
+pbmc.annotation.predefined <- FindClusters(pbmc,reduction = "harmony", resolution = 0.4)
 ############################################################################
 DefaultAssay(pbmc.annotation.predefined) <- "RNA"
 clustavg<-AverageExpression(pbmc.annotation.predefined)
@@ -160,13 +160,13 @@ df2<- df2 %>% mutate(ID = ifelse(Caly > 5 & Snap25 > 5, "Neurons", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 3, "Astrocytes", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Prr5l > 2, "OPCs", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(St18 > 2, "Oligodendrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(St18 > 3, "Oligodendrocytes", df2$ID))
 
 df2_1<- df2 %>% mutate(ID = ifelse(Caly > 5 & Snap25 > 5, "Neurons", df2$ID))
 df2_2<- df2 %>% mutate(ID = ifelse(Agt > 5, "Astrocytes", df2$ID))
 df2_3<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID))
 df2_4<- df2 %>% mutate(ID = ifelse(Prr5l > 1, "OPCs", df2$ID))
-df2_5<- df2 %>% mutate(ID = ifelse(St18 > 1, "Oligodendrocytes", df2$ID))
+df2_5<- df2 %>% mutate(ID = ifelse(St18 > 3, "Oligodendrocytes", df2$ID))
 
 data.frame("Astr"=df2_1$ID,"Oligo"=df2_2$ID,"Micro"=df2_3$ID,"OPCs"=df2_4$ID,"Neur"=df2_5$ID)
 
@@ -341,11 +341,11 @@ for (index in 1:length(resolutions))
 	df2$ID<-NA
 	
 	# Syt1, Snap25, Elavl2	
-	df2<- df2 %>% mutate(ID = ifelse(Caly > 3 & Snap25 > 2, "Neurons", df2$ID))
-	df2<- df2 %>% mutate(ID = ifelse(Agt > 5, "Astrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Caly > 5 & Snap25 > 5, "Neurons", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Agt > 3, "Astrocytes", df2$ID))
 	df2<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID))
-	df2<- df2 %>% mutate(ID = ifelse(Prr5l > 1, "OPCs", df2$ID))
-	df2<- df2 %>% mutate(ID = ifelse(St18 > 1, "Oligodendrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Prr5l > 2, "OPCs", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(St18 > 3, "Oligodendrocytes", df2$ID))
 	
 	y<-dplyr::select(df2,cluster)
 	Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.predefined), from = df2$cluster, to = df2$ID)
@@ -356,10 +356,10 @@ for (index in 1:length(resolutions))
 	myplotsA[[index]]<-DimPlot_PredefinedMarkers
 } 
 
-
+Markers="Neurons : Caly > 5 & Snap25 > 5 - Astrocytes : Agt > 3 - Microglia : Ctss > 2 - OPCs : Prr5l > 2 - Oligodendrocytes : St18 > 3"
 # FindClusters_resolution
-png(filename=paste(output_dir,"FindClusters_resolutions.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
-	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]],myplotsA[[10]],myplotsA[[11]],myplotsA[[12]], nrow = 3)
+png(filename=paste(output_dir,"FindClusters_resolutions1.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
+	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]],myplotsA[[10]],myplotsA[[11]],myplotsA[[12]], nrow = 3, top = Markers)
 dev.off()
 
 
