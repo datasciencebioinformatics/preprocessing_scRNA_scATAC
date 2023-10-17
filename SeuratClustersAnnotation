@@ -194,18 +194,11 @@ df2$ID<-NA
 
 # Syt1, Snap25, Elavl2
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2<- df2 %>% mutate(ID = ifelse(Syt1 > 2 & Snap25 > 3, "Neurons", "Neurons"))
+df2<- df2 %>% mutate(ID = ifelse(Syt1 > 3 & Snap25 > 2, "Neurons", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(C1qa > 10 & C1qb > 10, "Microglia", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 10, "OPCs", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
-#df2<- df2 %>% mutate(ID = ifelse(Cldn11 > 10 & Plp1 > 10, "Oligodendrocytes2", df2$ID))
-
-df2_1<- df2 %>% mutate(ID = ifelse(Syt1 > 5 & Snap25, "Neurons", df2$ID))
-df2_2<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", df2$ID))
-df2_3<- df2 %>% mutate(ID = ifelse(C1qa > 10 & C1qb > 10, "Microglia", df2$ID))
-df2_4<- df2 %>% mutate(ID = ifelse(Pdgfra > 10, "OPCs", df2$ID))
-df2_5<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(C1qb > 2 & Pld4 > 2, "Microglia", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 5 & Matn4 > 5, "OPCs", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Rinl > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
 
 # Table to investigate clusters
 data.frame("Astrocytes"=df2$ID,"Oligodendrocytes"=df2$ID,"Microglia"=df2$ID,"OPCs"=df2$ID,"Neurons"=df2$ID)
@@ -220,7 +213,7 @@ pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
 
 # Dimplots
 DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
-DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers\n Neurons : Syt1 > 2 & Snap25 > 3 \n Astrocytes : Agt > 5 & Apoe > 5 \n Microglia : C1qa > 10 & C1qb > 10 \n OPCs : Pdgfra > 10 \n Oligodendrocytes : Mog > 2 & Mobp > 3")
+DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers\nNeurons : Syt1 > 3 & Snap25 > 2 \nAstrocytes : Agt > 5 & Apoe > 5 \nMicroglia : C1qb > 2 & Pld4 > 2 \nOPCs : Pdgfra > 5 & Matn4 > 5 \nOligodendrocytes : Rinl > 2 & Mobp > 1")
 
 # Now I will plot the umap always with two colours
 # one colour for the syudied cell-type
