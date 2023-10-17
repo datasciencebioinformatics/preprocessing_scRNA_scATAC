@@ -397,3 +397,29 @@ marker=c("Syt1","Snap25")
 png(filename=paste(output_dir,"FeaturePlotsNeurons.png",sep=""), width = 16, height = 16, res=600, units = "cm")
 	FeaturePlot(pbmc, features = marker)
 dev.off()
+
+
+# Calculare feature plot per celltype
+marker=c("Mag","Cryab","Sgk1","Cldn11","Mal","Neat1","Apod","Trf","Plp1","Ptgds","Gjc3","Qk","Mbp","Sirt2","Nfasc","Rinl","9630013A20Rik","Bcas1","Mobp","Mag","Mbp","Gpr17","Apod","Cd9","Ptgds","1700047M11Rik","Trf","Cldn11","Mal","Plp1")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsOligodentrocitos.png",sep=""), width = 32, height = 32, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
+
+# Calculare feature plot per celltype
+marker=c("Matn4","Ptprz1","Tmem100","Olig1","Ptn","Cd9","C1ql1","Scrg1","Cspg4","Pdgfra")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsOPCS.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
+
+marker=c("Trem2","Selplg","Cst3","Csf1r","Pld4","Hexb","Ctss","C1qb","C1qa","C1qc")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsMicroglia.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
+marker=c("Snap25","Agt","Ctss","Prr5l","St18")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsAll.png",sep=""), width = 36, height = 36, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
