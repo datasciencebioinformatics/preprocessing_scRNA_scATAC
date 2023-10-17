@@ -344,7 +344,7 @@ for (index in 1:length(resolutions))
 	df2<- df2 %>% mutate(ID = ifelse(Caly > 5 & Snap25 > 5, "Neurons", df2$ID))
 	df2<- df2 %>% mutate(ID = ifelse(Agt > 3, "Astrocytes", df2$ID))
 	#df2<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID))
-	df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Microglia", df2$ID)) # Code from Victor
+	df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 1 & Dock8 > 1, "Microglia", df2$ID)) # Code from Victor
 
 	#df2<- df2 %>% mutate(ID = ifelse(Prr5l > 2, "OPCs", df2$ID))
 	df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 2, "OPCs", df2$ID))
