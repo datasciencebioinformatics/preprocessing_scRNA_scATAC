@@ -85,6 +85,7 @@ library(gridExtra)
 library(ggplot2)
 library(SeuratObject)
 library(Seurat)
+load("./pbmc.RData")
 #load("./pbmc.merge.samples.RData")
 #############################################################################
 # Calculate NormalizeData
