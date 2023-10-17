@@ -194,7 +194,7 @@ df2$ID<-NA
 
 # Syt1, Snap25, Elavl2
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2<- df2 %>% mutate(ID = ifelse(Syt1 > 3 & Snap25 > 2, "Neurons", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Caly > 3 & Snap25 > 3, "Neurons", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(C1qb > 2 & Pld4 > 2, "Microglia", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 5 & Matn4 > 5, "OPCs", df2$ID))
@@ -213,7 +213,7 @@ pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
 
 # Dimplots
 DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
-DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers\nNeurons : Syt1 > 3 & Snap25 > 2 \nAstrocytes : Agt > 5 & Apoe > 5 \nMicroglia : C1qb > 2 & Pld4 > 2 \nOPCs : Pdgfra > 5 & Matn4 > 5 \nOligodendrocytes : Rinl > 2 & Mobp > 1")
+DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers\nNeurons : Caly > 3 & Snap25 > 3 \nAstrocytes : Agt > 5 & Apoe > 5 \nMicroglia : C1qb > 2 & Pld4 > 2 \nOPCs : Pdgfra > 5 & Matn4 > 5 \nOligodendrocytes : Rinl > 2 & Mobp > 1")
 
 # Now I will plot the umap always with two colours
 # one colour for the syudied cell-type
