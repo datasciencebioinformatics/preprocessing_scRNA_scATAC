@@ -351,7 +351,7 @@ for (index in 1:length(resolutions))
 
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"FindClusters_resolutions.png",sep=""), width = 48, height = 30, res=600, units = "cm")
+png(filename=paste(output_dir,"FindClusters_resolutions.png",sep=""), width = 80, height = 80, res=600, units = "cm")
 	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]],myplotsA[[10]],myplotsA[[11]],myplotsA[[12]],myplotsA[[13]],myplotsA[[14]],myplotsA[[15]], nrow = 3)
 dev.off()
 #############################################################################
