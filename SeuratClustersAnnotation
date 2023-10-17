@@ -128,47 +128,6 @@ table<-read.csv(file = paste(output_dir,paste(paste("all.markers","",sep=""),".c
 
 # Take only the top 5
 table <- table %>% group_by(cluster) %>% top_n(n = 5, wt = avg_log2FC) %>% arrange(avg_log2FC) 
-
-
-# Save pbmc file
-save(pbmc, file = "./my_pbmc.RData")
-#############################################################################
-# Calculare feature plot per celltype
-marker=c("Cldn10","Cst3","Slc6a11","Sparc","Gja1","Agt","Ntsr2","Atp1a2","Itih3","Apoe","Cldn10","Gja1","Pla2g7","Ptgds","Slc6a11","Ntsr2","Agt","Itih3","Atp1a2","Apoe","Serpine2","Cd9","Gpr37l1","Gja1","C1ql1","Atp1a2","Scrg1","Apoe","Cspg4","Pdgfra")
-# FindClusters_resolution
-png(filename=paste(output_dir,"FeaturePlotsAstrocytes.png",sep=""), width = 36, height = 36, res=600, units = "cm")
-	FeaturePlot(pbmc, features = marker)
-dev.off()
-#############################################################################
-# Calculare feature plot per celltype
-marker=c("Mag","Cryab","Sgk1","Cldn11","Mal","Neat1","Apod","Trf","Plp1","Ptgds","Mobp","Mag","Mbp","Apod","Ptgds","1700047M11Rik","Trf","Cldn11","Mal","Plp1","Gjc3","Qk","Mbp","Sirt2","Nfasc","Rinl","9630013A20Rik","Bcas1","Gpr17","Cd9")
-# FindClusters_resolution
-png(filename=paste(output_dir,"FeaturePlotsOligodentrocytes.png",sep=""), width = 36, height = 36, res=600, units = "cm")
-	FeaturePlot(pbmc, features = marker)
-dev.off()
-######################################
-# Calculare feature plot per celltype
-marker=c("Trem2","Selplg","Cst3","Csf1r","Pld4","Hexb","Ctss","C1qb","C1qa", "C1qc")
-# FindClusters_resolution
-png(filename=paste(output_dir,"FeaturePlotsMicroglia.png",sep=""), width = 24, height = 24, res=600, units = "cm")
-	FeaturePlot(pbmc, features = marker)
-dev.off()
-######################################
-# Calculare feature plot per celltype
-marker=c("Matn4","Ptprz1","Tmem100","Olig1","Ptn","Cd9","C1ql1","Scrg1","Cspg4","Pdgfra")
-# FindClusters_resolution
-png(filename=paste(output_dir,"FeaturePlotsOPCs.png",sep=""), width = 36, height = 36, res=600, units = "cm")
-	FeaturePlot(pbmc, features = marker)
-dev.off()
-
-######################################
-# Calculare feature plot per celltype
-marker=c("Syt1","Snap25")
-# FindClusters_resolution
-png(filename=paste(output_dir,"FeaturePlotsNeurons.png",sep=""), width = 16, height = 16, res=600, units = "cm")
-	FeaturePlot(pbmc, features = marker)
-dev.off()
-
 ############################################################################
 # Copy file to annotate with pre-defined parameters 
 pbmc.annotation.predefined<-pbmc
@@ -219,7 +178,7 @@ pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
 
 # Dimplots
 DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
-DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers\nNeurons : Caly > 3 & Snap25 > 3 \nAstrocytes : Agt > 5 & Apoe > 5 \nMicroglia : C1qb > 2 & Pld4 > 2 \nOPCs : Pdgfra > 5 & Matn4 > 5 \nOligodendrocytes : Rinl > 2 & Mobp > 1")
+DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers")
 
 # Now I will plot the umap always with two colours
 # one colour for the syudied cell-type
@@ -331,14 +290,14 @@ dev.off()
 
 myplotsA[[index]]<-DimPlot(pbmc.annotation.predefined, label = F) + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
 myplotsB[[index]]<-VlnPlot(pbmc.annotation.predefined, features = "Agt", pt.size = 0) + NoLegend() + ggtitle ("Pre-defined markers \n Snap25/Arhgap15-Dock8/Mog-Mobp/Agt/Tnr-Pdgfra")
-#############################################################################
-# Find cluster markers
-# p-values
-# Top values
-# Sorted by change
+
+
+
+
+
 #############################################################################
 # Create inside a loop
-resolutions=c(0.10,0.15,0.2,0.25,0.5,0.6,0.75,0.85,1)
+resolutions=c(0.01,0.02,0.03,0.04,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0)
 
 # List of plots
 myplotsA<-list()
@@ -347,11 +306,11 @@ myplotsB<-list()
 # For each value in the reslution vector
 for (index in 1:length(resolutions)) 
 {	
-	Son=pbmc
-	Son <- FindClusters(Son, resolution = resolutions[index])
-	DimPlot(Son, label = T)
-	DefaultAssay(Son) <- "RNA"
-	clustavg<-AverageExpression(Son)
+	# Copy file to annotate with pre-defined parameters 
+	pbmc.annotation.predefined<-pbmc
+	
+	DefaultAssay(pbmc.annotation.predefined) <- "RNA"
+	clustavg<-AverageExpression(pbmc.annotation.predefined)
 	clustdf<-as.data.frame(clustavg$RNA)
 	clustdf<-t(clustdf)
 	clustdf<-as_tibble(clustdf, rownames = "cluster")
@@ -359,39 +318,33 @@ for (index in 1:length(resolutions))
 		 "Slc6a13", "Gfap","Apoe","Aqp4","Pcdh15","Pdgfra","Tnr","Tagln","Cyyr1",
 		 "Cldn5","Adgrl4","Arhgap15", "Dock8", "Slc9a9","Srgap2","Cx3cr1","Tnr",
 		 "Slc47a1","Acta2","Tagln","Cyyr1","Mrc1","C1qa","Kcnj8","Caprin2","Myh11", 
-		 "Atp13a5","Abcc9","Ebf1","Rgs5")
+		 "Atp13a5","Abcc9","Ebf1","Rgs5","Ctss","Gad1", "Gal","Scrg1","Caly","Cst3","Plp1","Cd9","Cst3","C1qb",
+		 "Ptprz1","Cspg4")
+	marks<-c("Prr5l","Prr5l","Ctss","Agt","Snap25","St18","Syt1","Mog","Snap25","1700016P03Rik","1700047M11Rik","4930447C04Rik","6330403K07Rik","9630013A20Rik","Adam23","Adcyap1","Agrp","Agt","Apod","Apoe","Arhgap36","Arpp21","Atp1a2","Auts2","Avp","B230216N24Rik","Baiap2","Bcas1","C130073E24Rik","C1qa","C1qb","C1qc","C1ql1","C1ql3","Caly","Camkv","Caprin2","Cartpt","Cbln1","Ccdc136","Cck","Ccn3","Cd9","Cdh23","Celf2","Chrm3","Cit","Cited1","Cldn10","Cldn11","Cntnap5a","Col11a1","Col11a2","Col18a1","Col24a1","Col25a1","Coro6","Cpne7","Cpne9","Crhbp","Cryab","Csf1r","Csf2rb2","Cspg4","Cst3","Ctss","Cyp11a1","Dclk1","Ddc","Dgkb","Dlk1","Ebf1","Ecel1","Egr1","Elavl2","En1","Epha10","Esyt3","Fars2","Fign","Fos","Fxyd6","Gabra1","Gad1","Gad2","Gal","Ghrh","Gja1","Gjc3","Gm20515","Gm20751","Gm26771","Gm26871","Gm49359","Gpr17","Gpr37l1","Grip1","Grip2","Grp","Hbb-bs","Hcrt","Hcrtr2","Hdc","Hexb","Hmcn1","Htr2c","Icam5","Igfbp2","Igfbp5","Isl1","Itih3","Itm2a","Junb","Kcnc1","Kcnc2","Kcnk2","Kctd16","Lhx9","Lmnb2","Mag","Magel2","Mal","Matn4","Mbp","Meis2","Mgp","Mia","Mir99ahg","Mobp","Mrpl9","Msrb2","Neat1","Nefm","Nfasc","Nkx2-1","Nme7","Nms","Nnat","Npy","Npy1r","Nrgn","Nrn1","Nrxn3","Ntm","Ntng1","Nts","Ntsr2","Nxph4","Olig1","Otp","Oxt","Parpbp","Pbx1","Pcsk2","Pde10a","Pdgfra","Penk","Pitx2","Pla2g7","Plagl1","Pld4","Plp1","Pmch","Pnoc","Pomc","Pou3f2","Prkcd","Prxl2c","Ptbp3","Ptgds","Pthlh","Ptn","Ptpn3","Ptprn","Ptprz1","Pvalb","Qk","Rasal1","Rasgef1c","Rasgrf2","Rbms1","Resp18","Rinl","Rmst","Rorb","Rprm","Rprml","Rrad","Rreb1","S100a6","Scg2","Scrg1","Selplg","Serpine2","Sfrp2","Sgk1","Sim1","Sirt2","Six3","Slc10a4","Slc18a2","Slc32a1","Slc35d3","Slc6a11","Slc6a3","Sncg","Sparc","Sphkap","Sst","Syt7","Tac1","Tbx3os1","Tcf4","Tcf7l2","Tent5a","Th","Tiam2","Tmcc3","Tmem100","Tmem130","Tnxb","Traip","Trem2","Trf","Trh","Tspan7","Ubash3b","Unc13c","Vgf","Vip","Vipr2","Vstm2l","Vtn","Wfs1","Zbtb20")
+	#marks<-c("Snap25",table$gene)
 	marks = data.frame(marks)
 	colnames(marks)[1] = "Gene"
 	df2<- clustdf %>% dplyr::select("cluster",marks$Gene) 
 	df2$orig_cluster<-df2$cluster
-
-	# Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-	df2<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", "NN"))
-	df2<- df2 %>% mutate(ID = ifelse(Mog > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
-	df2<- df2 %>% mutate(ID = ifelse(Agt > 1, "Astrocytes", df2$ID))
-	df2<- df2 %>% mutate(ID = ifelse(Arhgap15 > 3 & Dock8 > 3, "Immune Cells", df2$ID))
-	df2<- df2 %>% mutate(ID = ifelse(Tnr > 0.5 & Pdgfra > 0.5, "OPCs", df2$ID))
-	#df2<- df2 %>% mutate(ID = ifelse(Myh11 > 4, "SMCs", df2$ID))#Tagln
-	#df2<- df2 %>% mutate(ID = ifelse(Slc6a13 > 4, "VLMCs", df2$ID))	
-	#df2<- df2 %>% mutate(ID = ifelse(Abcc9 > 1 & Rgs5 > 1, "Pericytes", df2$ID))
-	#df2<- df2 %>% mutate(ID = ifelse(Cldn5 > 3 , "Endothelial Cells", df2$ID))
-	#df2<- df2 %>% mutate(ID = ifelse(Snap25 > 2 & Caprin2 > 6, "MCNs", df2$ID))
+	df2$ID<-NA
+	
+	# Syt1, Snap25, Elavl2	
+	df2<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Agt > 3, "Astrocytes", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Ctss > 3, "Microglia", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Prr5l > 3, "OPCs", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(St18 > 1, "Oligodendrocytes", df2$ID))
+	
 	y<-dplyr::select(df2,cluster)
-	Idents(Son)<-plyr::mapvalues(Idents(Son), from = df2$cluster, to = df2$ID)
-	Son$group<-Idents(Son)
-	table(Son$group)
-			
-	# cDNAM1.DimHeatmap
-	png(filename=paste(output_dir,paste(paste("FindClusters_resolution_",index,sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
-		plot(DimPlot(Son, label = F) + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep="")))
-	dev.off()		
-	# cDNAM1.DimHeatma
-	png(filename=paste(output_dir,paste(paste("FindClusters_VlnPlot_",index,sep=""),".png",sep=""),sep=""), width = 16, height = 16, res=800, units = "cm")
-		 plot(VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep="")))
-	dev.off()
-	myplotsA[[index]]<-DimPlot(Son, label = F) + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep=""))
-	myplotsB[[index]]<-VlnPlot(Son, features = "Agt", pt.size = 0) + NoLegend() + ggtitle (paste("FindClusters resolution = ",resolutions[index],sep=""))
+	Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.predefined), from = df2$cluster, to = df2$ID)
+	pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
+	
+	# Dimplots
+	DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
+	DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers")
 } 
+
+
 # FindClusters_resolution
 png(filename=paste(output_dir,"FindClusters_resolution.png",sep=""), width = 36, height = 36, res=600, units = "cm")
 	grid.arrange(myplotsA[[1]], myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]], myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]], nrow = 3)
@@ -399,4 +352,47 @@ dev.off()
 # FindClusters_VlnPlot
 png(filename=paste(output_dir,"FindClusters_VlnPlot.png",sep=""), width = 36, height = 36, res=600, units = "cm")
 	grid.arrange(myplotsB[[1]], myplotsB[[2]],myplotsB[[3]],myplotsB[[4]],myplotsB[[5]], myplotsB[[6]],myplotsB[[7]],myplotsB[[8]],myplotsB[[9]], nrow = 3)
+dev.off()
+#############################################################################
+# Find cluster markers
+# p-values
+# Top values
+# Sorted by change
+# Save pbmc file
+save(pbmc, file = "./my_pbmc.RData")
+#############################################################################
+# Calculare feature plot per celltype
+marker=c("Cldn10","Cst3","Slc6a11","Sparc","Gja1","Agt","Ntsr2","Atp1a2","Itih3","Apoe","Cldn10","Gja1","Pla2g7","Ptgds","Slc6a11","Ntsr2","Agt","Itih3","Atp1a2","Apoe","Serpine2","Cd9","Gpr37l1","Gja1","C1ql1","Atp1a2","Scrg1","Apoe","Cspg4","Pdgfra")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsAstrocytes.png",sep=""), width = 36, height = 36, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
+#############################################################################
+# Calculare feature plot per celltype
+marker=c("Mag","Cryab","Sgk1","Cldn11","Mal","Neat1","Apod","Trf","Plp1","Ptgds","Mobp","Mag","Mbp","Apod","Ptgds","1700047M11Rik","Trf","Cldn11","Mal","Plp1","Gjc3","Qk","Mbp","Sirt2","Nfasc","Rinl","9630013A20Rik","Bcas1","Gpr17","Cd9")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsOligodentrocytes.png",sep=""), width = 36, height = 36, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
+######################################
+# Calculare feature plot per celltype
+marker=c("Trem2","Selplg","Cst3","Csf1r","Pld4","Hexb","Ctss","C1qb","C1qa", "C1qc")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsMicroglia.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
+######################################
+# Calculare feature plot per celltype
+marker=c("Matn4","Ptprz1","Tmem100","Olig1","Ptn","Cd9","C1ql1","Scrg1","Cspg4","Pdgfra")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsOPCs.png",sep=""), width = 36, height = 36, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
+dev.off()
+
+######################################
+# Calculare feature plot per celltype
+marker=c("Syt1","Snap25")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsNeurons.png",sep=""), width = 16, height = 16, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
 dev.off()
