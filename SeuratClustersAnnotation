@@ -86,7 +86,7 @@ library(ggplot2)
 library(SeuratObject)
 library(Seurat)
 load("./pbmc.RData")
-#load("./pbmc.merge.samples.RData")
+load("./my_pbmc.RData")
 #############################################################################
 # Calculate NormalizeData
 pbmc <- NormalizeData(pbmc.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
