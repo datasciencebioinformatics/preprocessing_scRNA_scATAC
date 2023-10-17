@@ -130,9 +130,12 @@ table<-read.csv(file = paste(output_dir,paste(paste("all.markers","",sep=""),".c
 # Take only the top 5
 table <- table %>% group_by(cluster) %>% top_n(n = 5, wt = avg_log2FC) %>% arrange(avg_log2FC) 
 ############################################################################
-# Copy file to annotate with pre-defined parameters 
-pbmc.annotation.predefined<-pbmc
+load("./pbmc.RData")
+load("./my_pbmc.RData")
 
+# Run FindClusters # Find clusters for only RNA
+pbmc.annotation.predefined <- FindClusters(pbmc,reduction = "harmony", resolution = 0.2)
+############################################################################
 DefaultAssay(pbmc.annotation.predefined) <- "RNA"
 clustavg<-AverageExpression(pbmc.annotation.predefined)
 clustdf<-as.data.frame(clustavg$RNA)
@@ -152,22 +155,23 @@ df2<- clustdf %>% dplyr::select("cluster",marks$Gene)
 df2$orig_cluster<-df2$cluster
 df2$ID<-NA
 
-# Syt1, Snap25, Elavl2
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-#df2<- df2 %>% mutate(ID = ifelse(Caly > 3 & Snap25 > 2, "Neurons", df2$ID))
-#df2<- df2 %>% mutate(ID = ifelse(Agt > 5 & Apoe > 5, "Astrocytes", df2$ID))
-#df2<- df2 %>% mutate(ID = ifelse(C1qb > 2 & Pld4 > 2, "Microglia", df2$ID))
-#df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 5 & Matn4 > 5, "OPCs", df2$ID))
-#df2<- df2 %>% mutate(ID = ifelse(Rinl > 2 & Mobp > 1, "Oligodendrocytes", df2$ID))
-
-df2<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Caly > 5 & Snap25 > 5, "Neurons", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 3, "Astrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Ctss > 3, "Microglia", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Prr5l > 3, "OPCs", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(St18 > 3, "Oligodendrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Prr5l > 2, "OPCs", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(St18 > 2, "Oligodendrocytes", df2$ID))
+
+df2_1<- df2 %>% mutate(ID = ifelse(Caly > 5 & Snap25 > 5, "Neurons", df2$ID))
+df2_2<- df2 %>% mutate(ID = ifelse(Agt > 5, "Astrocytes", df2$ID))
+df2_3<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID))
+df2_4<- df2 %>% mutate(ID = ifelse(Prr5l > 1, "OPCs", df2$ID))
+df2_5<- df2 %>% mutate(ID = ifelse(St18 > 1, "Oligodendrocytes", df2$ID))
+
+data.frame("Astr"=df2_1$ID,"Oligo"=df2_2$ID,"Micro"=df2_3$ID,"OPCs"=df2_4$ID,"Neur"=df2_5$ID)
 
 # Table to investigate clusters
-data.frame("Astrocytes"=df2$ID,"Oligodendrocytes"=df2$ID,"Microglia"=df2$ID,"OPCs"=df2$ID,"Neurons"=df2$ID)
+#data.frame("Astrocytes"=df2$ID,"Oligodendrocytes"=df2$ID,"Microglia"=df2$ID,"OPCs"=df2$ID,"Neurons"=df2$ID)
 
 # Write csv
 #write.csv(data.frame("Astr"=df2_1$ID,"Oligo"=df2_2$ID,"Micro"=df2_3$ID,"OPCs"=df2_4$ID,"Neur"=df2_5$ID), file = paste(output_dir,paste(paste("clusters","",sep=""),".csv",sep=""),sep=""))
@@ -205,6 +209,10 @@ To DO sc-RNA:
 # Deliverables :
 # Map with clusters/celltypes/markers
 # Description os criterias
+#############################################################################
+# For each celltype, test a combination of paramters that can descriminte the cells preciselly
+
+
 #############################################################################
 To DO sc-ATAC:
 
