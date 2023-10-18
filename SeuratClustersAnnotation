@@ -216,7 +216,7 @@ write.csv(all.markers.celltypes, file = paste(output_dir,paste(paste("all.marker
 Idents(object = pbmc.annotation.predefined) <- pbmc.annotation.predefined@meta.data$Sex
 
 # Run find all markers for sex
-all.markers.sex <- FindMarkers(pbmc.annotation.predefined, ident.1 = "Male", ident.2 = "Female", test.use = "MAST")
+all.markers.sex <- FindMarkers(pbmc.annotation.predefined, ident.1 = "Male", ident.2 = "Female")
 
 
 
