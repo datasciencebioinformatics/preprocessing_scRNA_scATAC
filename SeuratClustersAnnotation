@@ -132,10 +132,10 @@ table <- table %>% group_by(cluster) %>% top_n(n = 5, wt = avg_log2FC) %>% arran
 ############################################################################
 load("./pbmc.RData")
 load("./my_pbmc.RData")
-
-# Run FindClusters # Find clusters for only RNA
-pbmc.annotation.predefined <- FindClusters(pbmc,reduction = "harmony", resolution = 0.4)
 ############################################################################
+# Run FindClusters # Find clusters for only RNA
+pbmc.annotation.predefined <- FindClusters(pbmc,reduction = "harmony", resolution = 0.04)
+
 DefaultAssay(pbmc.annotation.predefined) <- "RNA"
 clustavg<-AverageExpression(pbmc.annotation.predefined)
 clustdf<-as.data.frame(clustavg$RNA)
@@ -156,19 +156,11 @@ df2$orig_cluster<-df2$cluster
 df2$ID<-NA
 
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2<- df2 %>% mutate(ID = ifelse(Caly > 5 & Snap25 > 5, "Neurons", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Agt > 3, "Astrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Prr5l > 2, "OPCs", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(St18 > 3, "Oligodendrocytes", df2$ID))
-
-df2_1<- df2 %>% mutate(ID = ifelse(Caly > 5 & Snap25 > 5, "Neurons", df2$ID))
-df2_2<- df2 %>% mutate(ID = ifelse(Agt > 5, "Astrocytes", df2$ID))
-df2_3<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID))
-df2_4<- df2 %>% mutate(ID = ifelse(Prr5l > 1, "OPCs", df2$ID))
-df2_5<- df2 %>% mutate(ID = ifelse(St18 > 3, "Oligodendrocytes", df2$ID))
-
-data.frame("Astr"=df2_1$ID,"Oligo"=df2_2$ID,"Micro"=df2_3$ID,"OPCs"=df2_4$ID,"Neur"=df2_5$ID)
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 1, "Neurons", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Agt > 2, "Astrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Ctss > 1, "Microglia", df2$ID)) # Ok
+df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 0.5, "OPCs", df2$ID))    # Ok
+df2<- df2 %>% mutate(ID = ifelse(Mbp >6 & Mobp >6, "Oligodendrocytes", df2$ID))
 
 # Table to investigate clusters
 #data.frame("Astrocytes"=df2$ID,"Oligodendrocytes"=df2$ID,"Microglia"=df2$ID,"OPCs"=df2$ID,"Neurons"=df2$ID)
@@ -180,11 +172,13 @@ data.frame("Astr"=df2_1$ID,"Oligo"=df2_2$ID,"Micro"=df2_3$ID,"OPCs"=df2_4$ID,"Ne
 y<-dplyr::select(df2,cluster)
 Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.predefined), from = df2$cluster, to = df2$ID)
 pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
+marker="Neurons : Snap25 > 1 - Astrocytes : Agt > 2 - Microglia : Ctss > 1 - OPCs : Pdgfra > 0.5 - Oligodendrocytes : Mbp > 6 & Mobp > 6"
 
 # Dimplots
 DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
-DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle ("Pre-defined markers")
+DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle (paste("Pre-defined markers resolution : ",0.04,sep=""))
 
+	
 # Now I will plot the umap always with two colours
 # one colour for the syudied cell-type
 # other colour for the Remaining of the celltypes
@@ -210,8 +204,11 @@ To DO sc-RNA:
 # Map with clusters/celltypes/markers
 # Description os criterias
 #############################################################################
-# For each celltype, test a combination of paramters that can descriminte the cells preciselly
+# Run find all markers
+all.markers <- FindAllMarkers(object = pbmc.annotation.predefined)
 
+# Select topmqrkers
+all.markers.celltypes <- all.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC) %>% arrange(avg_log2FC) 
 
 #############################################################################
 To DO sc-ATAC:
@@ -341,16 +338,16 @@ for (index in 1:length(resolutions))
 	df2$ID<-NA
 	
 	# Working
-	#df2<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", df2$ID))
+	#df2<- df2 %>% mutate(ID = ifelse(Snap25 > 3, "Neurons", df2$ID))
 	#df2<- df2 %>% mutate(ID = ifelse(Agt > 3, "Astrocytes", df2$ID))
 	#df2<- df2 %>% mutate(ID = ifelse(Ctss > 2, "Microglia", df2$ID)) # Ok
 	#df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 2, "OPCs", df2$ID))    # Ok
 	#df2<- df2 %>% mutate(ID = ifelse(Mbp >2 & Mobp >2, "Oligodendrocytes", df2$ID))
 	
-	df2<- df2 %>% mutate(ID = ifelse(Snap25 > 5, "Neurons", df2$ID))
+	df2<- df2 %>% mutate(ID = ifelse(Snap25 > 1, "Neurons", df2$ID))
 	df2<- df2 %>% mutate(ID = ifelse(Agt > 2, "Astrocytes", df2$ID))
 	df2<- df2 %>% mutate(ID = ifelse(Ctss > 1, "Microglia", df2$ID)) # Ok
-	df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 2, "OPCs", df2$ID))    # Ok
+	df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 0.5, "OPCs", df2$ID))    # Ok
 	df2<- df2 %>% mutate(ID = ifelse(Mbp >6 & Mobp >6, "Oligodendrocytes", df2$ID))
 
 	y<-dplyr::select(df2,cluster)
@@ -358,14 +355,21 @@ for (index in 1:length(resolutions))
 	pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
 	
 	# Dimplots
-	marker="Neurons : Snap25 > 5 - Astrocytes : Agt > 2 - Microglia : Ctss > 1 - OPCs : Pdgfra > 2 - Oligodendrocytes : Mbp > 6 & Mobp > 6"
+	marker="Neurons : Snap25 > 1 - Astrocytes : Agt > 2 - Microglia : Ctss > 1 - OPCs : Pdgfra > 0.5 - Oligodendrocytes : Mbp > 6 & Mobp > 6"
 	DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle (paste("Resolution",resolutions[index],sep=""))
 	myplotsA[[index]]<-DimPlot_PredefinedMarkers
 } 
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"FindClusters_resolutions6.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
+png(filename=paste(output_dir,"FindClusters_resolutions7.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
 	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]],myplotsA[[10]],myplotsA[[11]],myplotsA[[12]], nrow = 3, top = marker)
+dev.off()
+#############################################################################
+# Calculare feature plot per celltype
+marker=c("Agt","Apoe","Arhgap15","Atp1a2","C1qa", "C1qb","C1qb","C1qc","Caly", "CD45","Cd9","Cst3","Ctss","Ctss","Dock8","Gad1","Gja1","Mbp","Mob","Olig1","Pdgfra","Pld4","Prr5l","Ptgds","Rinl","Rorb","Scg2","Snap25","Sparc","St18","Tnr","Trem2")
+# FindClusters_resolution
+png(filename=paste(output_dir,"FeaturePlotsAll.png",sep=""), width = 36, height = 36, res=600, units = "cm")
+	FeaturePlot(pbmc, features = marker)
 dev.off()
 
 #############################################################################
