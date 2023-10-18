@@ -210,6 +210,9 @@ all.markers <- FindAllMarkers(object = pbmc.annotation.predefined)
 # Select topmqrkers
 all.markers.celltypes <- all.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC) %>% arrange(avg_log2FC) 
 
+# Write csv
+write.csv(all.markers.celltypes, file = paste(output_dir,paste(paste("all.markers.celltypes","",sep=""),".csv",sep=""),sep=""))
+
 #############################################################################
 To DO sc-ATAC:
 
