@@ -218,7 +218,8 @@ Idents(object = pbmc.annotation.predefined) <- pbmc.annotation.predefined@meta.d
 # Run find all markers for sex
 all.markers.sex <- FindMarkers(pbmc.annotation.predefined, ident.1 = "Male", ident.2 = "Female")
 
-
+# Write csv
+write.csv(all.markers.sex, file = paste(output_dir,paste(paste("all.markers.sex","",sep=""),".csv",sep=""),sep=""))
 
 #############################################################################
 To DO sc-ATAC:
