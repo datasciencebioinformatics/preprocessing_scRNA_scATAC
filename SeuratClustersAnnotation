@@ -177,7 +177,6 @@ marker="Neurons : Snap25 > 1 - Astrocytes : Agt > 2 - Microglia : Ctss > 1 - OPC
 # Dimplots
 DimPlot_AllMarkers<-DimPlot(object = pbmc, reduction = 'umap', label = TRUE) + ggtitle ("FindAllMarkers")
 DimPlot_PredefinedMarkers<-DimPlot(pbmc.annotation.predefined, reduction = 'umap', label = F) + ggtitle (paste("Pre-defined markers resolution : ",0.04,sep=""))
-
 	
 # Now I will plot the umap always with two colours
 # one colour for the syudied cell-type
@@ -212,6 +211,14 @@ all.markers.celltypes <- all.markers %>% group_by(cluster) %>% top_n(n = 10, wt 
 
 # Write csv
 write.csv(all.markers.celltypes, file = paste(output_dir,paste(paste("all.markers.celltypes","",sep=""),".csv",sep=""),sep=""))
+
+# Set indetity
+Idents(object = pbmc.annotation.predefined) <- pbmc.annotation.predefined@meta.data$Sex
+
+# Run find all markers for sex
+all.markers.sex <- FindMarkers(pbmc.annotation.predefined, ident.1 = "Male", ident.2 = "Female", test.use = "MAST")
+
+
 
 #############################################################################
 To DO sc-ATAC:
