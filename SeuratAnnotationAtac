@@ -29,3 +29,18 @@ ATAC_M1.counts <- Read10X_h5(filename = ATAC_M1_file)
 
 # Create CreateSeuratObject
 pbmc.ATAC_M1 <- CreateSeuratObject(counts = ATAC_M1.counts,assay = "peaks")
+
+#####################################################################################
+# Merge samples
+pbmc.merge.samples <- pbmc.ATAC_M1 # merge(pbmc.ATAC_M1, y = c(pbmc.ATAC_M2, pbmc.ATAC_M3,pbmc.ATAC_M4, pbmc.ATAC_M5,pbmc.ATAC_M6), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
+#####################################################################################
+# Add metadata seurat 
+# Get the name of the samples
+cluster_letters <- paste("ATAC-M",as.integer(Idents(object = pbmc.merge.samples)),sep="")
+names(cluster_letters) <- colnames(x = pbmc.merge.samples)
+
+# Replace identities by sex
+cluster_letters[which(cluster_letters==c("ATAC-M1"))]<-"Male"
+
+# Add metadata
+pbmc.merge.samples <- AddMetaData(object = pbmc.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
