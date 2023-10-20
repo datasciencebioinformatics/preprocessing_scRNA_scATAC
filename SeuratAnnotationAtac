@@ -14,24 +14,18 @@ library("harmony")
 #load("./all_data.RData")
 
 # Set intput dir
-ATAC_M1_dir="/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix/"
+ATAC_M1_file="/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5"
 
 # Set output dir
 output_dir="/home/felipe/snATACSeq_output/results/"
 
 # First, load the tables 
 # Load table for all sample - aggreagate cellranger for the six samples
-ATAC_M1.Read10X<-Read10X(data.dir=ATAC_M1_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+ATAC_M1.Read10X<-Read10X(data.dir=ATAC_M1_file, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
 
-# Load table for all sample - aggreagate cellranger for the six samples
-ATAC_M1.pbmc <- CreateSeuratObject(counts = ATAC_M1.Read10X, project = "cDNA-M1")
 
-# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
-ATAC_M1.pbmc[["percent.mt"]] <- PercentageFeatureSet(ATAC_M1.pbmc, pattern = "mt")
-
-# Subset percent.mt < 2
-ATAC_M1.pbmc = subset(ATAC_M1.pbmc, subset = percent.mt < 2)
-#####################################################################################
+# Peaks that fall within gene bodies, or 2kb upstream of a gene, are considered
+activity.matrix <- CreateGeneActivityMatrix(peak.matrix = peaks, annotation.file = "../data/Homo_sapiens.GRCh37.82.gtf", seq.levels = c(1:22, "X", "Y"), upstream = 2000, verbose = TRUE)#####################################################################################
 # Merge samples
 #pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
 #pbmc.merge.samples = subset(pbmc.merge.samples, subset = percent.mt < 2)
