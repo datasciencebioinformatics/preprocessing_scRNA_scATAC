@@ -26,3 +26,6 @@ output_dir="/home/felipe/snATACSeq_output/results/"
 
 # Peaks that fall within gene bodies, or 2kb upstream of a gene, are considered
 ATAC_M1.counts <- Read10X_h5(filename = ATAC_M1_file)
+
+# Create CreateSeuratObject
+pbmc.ATAC_M1 <- CreateSeuratObject(counts = ATAC_M1.counts,assay = "peaks")
