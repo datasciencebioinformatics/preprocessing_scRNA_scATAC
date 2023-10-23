@@ -1,1 +1,13 @@
-./pbmc.merge.atac.samples.RData
+#####################################################################################
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(gridExtra)
+library(ggplot2)
+library(plyr)
+library(SeuratObject)
+library(Seurat)
+library("harmony")
+#####################################################################################
+load("./pbmc.merge.atac.samples.RData")
+load("./pbmc.merge.rna.samples.RData")
