@@ -28,18 +28,6 @@ pbmc.rna.merge.samples <- RunHarmony(pbmc.rna.merge.samples, group.by.vars = c('
 pbmc.rna.merge.samples <- RunUMAP(pbmc.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
 # Run FindNeighbors
 #####################################################################################
-# We exclude the first dimension as this is typically correlated with sequencing depth
-pbmc.atac.merge.samples <- RunTFIDF(pbmc.atac.merge.samples)
-pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff = "q0")
-pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
-pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap.atac", reduction.key = "atacUMAP_")
-#####################################################################################
-# get some data to use in the following examples
-p1 <- DimPlot(pbmc.atac.merge.samples, group.by = "seurat_annotations", label = TRUE) + NoLegend() + ggtitle("RNA")
-p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("scATAC-seq")
-p1 + p2
-
-
 library(Seurat)
 library(SeuratData)
 library(SeuratWrappers)
@@ -50,7 +38,17 @@ options(future.globals.maxSize = 1e9)
 options(Seurat.object.assay.version = "v5")
 library(EnsDb.Mmusculus.v79)
 library("Signac")
-
+#####################################################################################
+# We exclude the first dimension as this is typically correlated with sequencing depth
+pbmc.atac.merge.samples <- RunTFIDF(pbmc.atac.merge.samples)
+pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff = "q0")
+pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
+pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap.atac", reduction.key = "atacUMAP_")
+#####################################################################################
+# get some data to use in the following examples
+p1 <- DimPlot(pbmc.atac.merge.samples, group.by = "seurat_annotations", label = TRUE) + NoLegend() + ggtitle("RNA")
+p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("scATAC-seq")
+p1 + p2
 
 pbmc <- CreateSeuratObject(
 counts = chrom_assay,
