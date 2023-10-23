@@ -18,27 +18,33 @@ library(EnsDb.Mmusculus.v79)
 library(ggplot2)
 library(cowplot)
 #####################################################################################
+# ATAC analysis add gene annotation information
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
+seqlevelsStyle(annotations) <- "UCSC"
+genome(annotations) <- "mm10"
+Annotation(chrom_assay) <- annotations
+#####################################################################################
 # Save whole workspace to working directory
 #load("./all_data.RData")
 
 # Set mouse gft
 mosuse_gft="/home/felipe/database/Mus_musculus.GRCm39.110.gtf"
 
-# Set intput dir
-ATAC_M1_file="/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5"
-
 # Set output dir
 output_dir="/home/felipe/snATACSeq_output/results/"
-
-# Peaks that fall within gene bodies, or 2kb upstream of a gene, are considered
-ATAC_M1.counts <- Read10X_h5(filename = ATAC_M1_file)
-
-# Create CreateSeuratObject
-pbmc.ATAC_M1 <- CreateSeuratObject(counts = ATAC_M1.counts,assay = "peaks")
-
 #####################################################################################
-# Merge samples, quality control qnd filtering
-pbmc.merge.samples <- pbmc.ATAC_M1 # merge(pbmc.ATAC_M1, y = c(pbmc.ATAC_M2, pbmc.ATAC_M3,pbmc.ATAC_M4, pbmc.ATAC_M5,pbmc.ATAC_M6), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
+# Set intput dir ATAC-M1
+ATAC_M1_h5          <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5")
+ATAC_M1_singlecell  <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M1/singlecell.csv",header = TRUE,row.names = 1)
+ATAC_M1_chrom_assay <-  CreateChromatinAssay(counts = counts,sep = c(":", "-"), genome = 'mm10')
+
+# Create seurat objects
+ATAC_M1_pbmc<- CreateSeuratObject(counts = chrom_assay,assay = "peaks", meta.data = metadata)
+ATAC_M1_chrom_assay_pbmc <- CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"),  genome = 'mm10')
+#####################################################################################
+# Merge  pbmc. samples, quality control qnd filtering
+pbmc.atac.merge.samples <- ATAC_M1_pbmc # merge(ATAC_M1_pbmc, y = c(ATAC_M2_pbmc, ATAC_M3_pbmc,ATAC_M4_pbmc, ATAC_M5_pbmc,ATAC_M6_pbmc), add.cell.ids = c("ATAC-M1","ATAC-M2", "ATAC-M3","ATAC-M4","ATAC-M5", "ATAC-M6"), project = "hypothalamus")
+pbmc.atac.chrom.samples <- ATAC_M1_chrom_assay_pbmc # merge(ATAC_M1_chrom_assay_pbmc, y = c(ATAC_M2_chrom_assay_pbmc, ATAC_M3_chrom_assay_pbmc,ATAC_M4_chrom_assay_pbmc, ATAC_M5_chrom_assay_pbmc,ATAC_M6_chrom_assay_pbmc), add.cell.ids = c("ATAC_M1_chrom_assay_pbmc","ATAC_M2_chrom_assay_pbmc", "ATAC_M3_chrom_assay_pbmc","ATAC_M4_chrom_assay_pbmc","ATAC_M5_chrom_assay_pbmc", "ATAC_M6_chrom_assay_pbmc"), project = "hypothalamus")
 #####################################################################################
 # Add metadata seurat 
 # Get the name of the samples
