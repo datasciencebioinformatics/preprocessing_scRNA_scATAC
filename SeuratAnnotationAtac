@@ -50,26 +50,11 @@ cluster_letters[which(cluster_letters==c("ATAC-M1"))]<-"Male"
 
 # Add metadata
 pbmc.atac.merge.samples <- AddMetaData(object = pbmc.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
-#####################################################################################
-# ATAC analysis add gene annotation information
-annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
-genome(annotations) <- "mm39"
-Annotation(pbmc.atac.merge.samples) <- annotations
+
+# Save pbmc file
+save(pbmc.atac.merge.samples, file = "./pbmc.merge.atac.samples.RData")
 
 #####################################################################################
-# normalize multiome RNA
-# Perform standard analysis of each modality independently RNA analysis
-pbmc.rna <- NormalizeData(pbmc.rna)
-pbmc.rna <- FindVariableFeatures(pbmc.rna)
-pbmc.rna <- ScaleData(pbmc.rna)
-pbmc.rna <- RunPCA(pbmc.rna)
-pbmc.rna <- RunUMAP(pbmc.rna, dims = 1:30)
-
-# We exclude the first dimension as this is typically correlated with sequencing depth
-pbmc.atac <- RunTFIDF(pbmc.atac)
-pbmc.atac <- FindTopFeatures(pbmc.atac, min.cutoff = "q0")
-pbmc.atac <- RunSVD(pbmc.atac)
-pbmc.atac <- RunUMAP(pbmc.atac, reduction = "lsi", dims = 2:30, reduction.name = "umap.atac", reduction.key = "atacUMAP_")
 
 
 
