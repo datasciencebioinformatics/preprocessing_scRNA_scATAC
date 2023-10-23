@@ -43,12 +43,13 @@ library(patchwork)
 options(future.globals.maxSize = 1e9)
 options(Seurat.object.assay.version = "v5")
 library(EnsDb.Mmusculus.v79)
+library("Signac")
 #####################################################################################
 # ATAC analysis add gene annotation information
 annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
 seqlevelsStyle(annotations) <- "NCBI"
 genome(annotations) <- "mm39"
-Annotation(pbmc.atac) <- annotations
+Annotation(pbmc.atac.merge.samples) <- annotations
 #####################################################################################
 p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "seurat_annotations", label = TRUE) + NoLegend() + ggtitle("cDNA-M1")
 p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("ATAC-M1")
