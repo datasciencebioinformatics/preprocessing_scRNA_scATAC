@@ -22,7 +22,6 @@ library(cowplot)
 annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
 seqlevelsStyle(annotations) <- "UCSC"
 genome(annotations) <- "mm10"
-Annotation(chrom_assay) <- annotations
 #####################################################################################
 # Save whole workspace to working directory
 #load("./all_data.RData")
@@ -56,6 +55,10 @@ cluster_letters[which(cluster_letters==c("ATAC-M1"))]<-"Male"
 
 # Add metadata
 pbmc.atac.merge.samples <- AddMetaData(object = pbmc.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
+#####################################################################################
+# Create annotation
+Annotation(ATAC_M1_chrom_assay) <- annotations
+#####################################################################################
 
 # Save pbmc file
 pbmc.atac.merge.samples=pbmc.merge.samples
