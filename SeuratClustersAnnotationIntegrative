@@ -33,3 +33,4 @@ pbmc.atac.merge.samples <- RunTFIDF(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff = "q0")
 pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap.atac", reduction.key = "atacUMAP_")
+#####################################################################################
