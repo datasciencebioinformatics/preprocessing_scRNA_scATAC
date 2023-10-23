@@ -8,6 +8,16 @@ library(plyr)
 library(SeuratObject)
 library(Seurat)
 library("harmony")
+library(Seurat)
+library(SeuratData)
+library(SeuratWrappers)
+library(Azimuth)
+library(ggplot2)
+library(patchwork)
+options(future.globals.maxSize = 1e9)
+options(Seurat.object.assay.version = "v5")
+library(EnsDb.Mmusculus.v79)
+library("Signac")
 #####################################################################################
 # Save pbmc file
 load("./pbmc.atac.merge.samples.RData")
@@ -56,20 +66,6 @@ df2<- df2 %>% mutate(ID = ifelse(Mbp > 6 & Mobp > 6, "Oligodendrocytes", df2$ID)
 y<-dplyr::select(df2,cluster)
 Idents(pbmc.annotation.predefined)<-plyr::mapvalues(Idents(pbmc.annotation.predefined), from = df2$cluster, to = df2$ID)
 pbmc.annotation.predefined$group<-Idents(pbmc.annotation.predefined)
-
-#####################################################################################
-library(Seurat)
-library(SeuratData)
-library(SeuratWrappers)
-library(Azimuth)
-library(ggplot2)
-library(patchwork)
-options(future.globals.maxSize = 1e9)
-options(Seurat.object.assay.version = "v5")
-library(EnsDb.Mmusculus.v79)
-library("Signac")
-
-####################
 
 #####################################################################################
 # We exclude the first dimension as this is typically correlated with sequencing depth
