@@ -43,20 +43,15 @@ library("Signac")
 pbmc.atac.merge.samples <- RunTFIDF(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff = "q0")
 pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
-pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap.atac", reduction.key = "atacUMAP_")
+pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "atacUMAP_")
 #####################################################################################
 # get some data to use in the following examples
-p1 <- DimPlot(pbmc.atac.merge.samples, group.by = "seurat_annotations", label = TRUE) + NoLegend() + ggtitle("RNA")
-p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("scATAC-seq")
-p1 + p2
+p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "ident", label = TRUE) + NoLegend() + ggtitle("sc-RNA cDNA-M1")
+p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("sc-ATAC ATAC-M1")
+plot_rna_atac<-p1 + p2
 
-pbmc <- CreateSeuratObject(
-counts = chrom_assay,
-assay = "peaks",
-meta.data = metadata
-)
+# FindClusters_resolution
+png(filename=paste(output_dir,"plot_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	plot_rna_atac
+dev.off()
 #####################################################################################
-p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "seurat_annotations", label = TRUE) + NoLegend() + ggtitle("cDNA-M1")
-p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("ATAC-M1")
-p1 + p2
-
