@@ -34,6 +34,12 @@ pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff =
 pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap.atac", reduction.key = "atacUMAP_")
 #####################################################################################
+# get some data to use in the following examples
+p1 <- DimPlot(pbmc.atac.merge.samples, group.by = "seurat_annotations", label = TRUE) + NoLegend() + ggtitle("RNA")
+p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("scATAC-seq")
+p1 + p2
+
+
 library(Seurat)
 library(SeuratData)
 library(SeuratWrappers)
@@ -44,12 +50,13 @@ options(future.globals.maxSize = 1e9)
 options(Seurat.object.assay.version = "v5")
 library(EnsDb.Mmusculus.v79)
 library("Signac")
-#####################################################################################
-# ATAC analysis add gene annotation information
-annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
-seqlevelsStyle(annotations) <- "NCBI"
-genome(annotations) <- "mm39"
-Annotation(pbmc.atac.merge.samples) <- annotations
+
+
+pbmc <- CreateSeuratObject(
+counts = chrom_assay,
+assay = "peaks",
+meta.data = metadata
+)
 #####################################################################################
 p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "seurat_annotations", label = TRUE) + NoLegend() + ggtitle("cDNA-M1")
 p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("ATAC-M1")
