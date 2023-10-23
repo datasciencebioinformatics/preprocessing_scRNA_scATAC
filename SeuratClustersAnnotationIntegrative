@@ -55,3 +55,8 @@ png(filename=paste(output_dir,"plot_rna_atac.png",sep=""), width = 24, height = 
 	plot_rna_atac
 dev.off()
 #####################################################################################
+# ATAC analysis add gene annotation information
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
+seqlevelsStyle(annotations) <- "UCSC"
+genome(annotations) <- "hg38"
+Annotation(pbmc.atac) <- annotations
