@@ -77,7 +77,8 @@ cluster_letters[which(cluster_letters==c("cDNA-M6"))]<-"Female"
 pbmc.merge.samples <- AddMetaData(object = pbmc.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
 
 # Save pbmc file
-save(pbmc.merge.samples, file = "./pbmc.merge.rna.samples.RData")
+pbmc.rna.merge.samples=pbmc.merge.samples
+save(pbmc.rna.merge.samples, file = "./pbmc.merge.rna.samples.RData")
 #####################################################################################
 #library(celldex)
 #library(SingleR)
