@@ -59,6 +59,9 @@ cDNAM6.pbmc = subset(cDNAM6.pbmc, subset = percent.mt < 2)
 # Merge samples
 pbmc.merge.samples <- merge(cDNAM1.pbmc, y = c(cDNAM2.pbmc, cDNAM3.pbmc,cDNAM4.pbmc, cDNAM5.pbmc,cDNAM6.pbmc), add.cell.ids = c("cDNAM1","cDNAM2", "cDNAM3","cDNAM4","cDNAM5", "cDNAM6"), project = "hypothalamus")
 pbmc.merge.samples = subset(pbmc.merge.samples, subset = percent.mt < 2)
+
+# Save pbmc file
+save(pbmc.merge.samples, file = "./pbmc.merge.rna.samples.RData")
 #####################################################################################
 # Add metadata seurat 
 # Get the name of the samples
