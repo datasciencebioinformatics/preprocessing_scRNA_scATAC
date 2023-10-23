@@ -52,7 +52,8 @@ cluster_letters[which(cluster_letters==c("ATAC-M1"))]<-"Male"
 pbmc.atac.merge.samples <- AddMetaData(object = pbmc.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
 
 # Save pbmc file
-save(pbmc.merge.samples, file = "./pbmc.merge.atac.samples.RData")
+pbmc.atac.merge.samples=pbmc.merge.samples
+save(pbmc.atac.merge.samples, file = "./pbmc.merge.atac.samples.RData")
 
 #####################################################################################
 
