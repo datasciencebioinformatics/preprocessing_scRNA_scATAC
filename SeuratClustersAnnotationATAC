@@ -38,7 +38,7 @@ ATAC_M1_singlecell  <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M1/s
 ATAC_M1_chrom_assay <-  CreateChromatinAssay(counts = counts,sep = c(":", "-"), genome = 'mm10')
 
 # Create seurat objects
-ATAC_M1_pbmc<- CreateSeuratObject(counts = chrom_assay,assay = "peaks", meta.data = metadata)
+ATAC_M1_pbmc<- CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks", meta.data = metadata)
 ATAC_M1_chrom_assay_pbmc <- CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"),  genome = 'mm10')
 #####################################################################################
 # Merge  pbmc. samples, quality control qnd filtering
@@ -47,22 +47,22 @@ pbmc.atac.chrom.samples <- ATAC_M1_chrom_assay_pbmc # merge(ATAC_M1_chrom_assay_
 #####################################################################################
 # Add metadata seurat 
 # Get the name of the samples
-cluster_letters <- paste("ATAC-M",as.integer(Idents(object = pbmc.merge.samples)),sep="")
-names(cluster_letters) <- colnames(x = pbmc.merge.samples)
+cluster_letters <- paste("ATAC-M",as.integer(Idents(object = pbmc.atac.merge.samples)),sep="")
+names(cluster_letters) <- colnames(x = pbmc.atac.merge.samples)
 
 # Replace identities by sex
 cluster_letters[which(cluster_letters==c("ATAC-M1"))]<-"Male"
 
 # Add metadata
-pbmc.atac.merge.samples <- AddMetaData(object = pbmc.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
+pbmc.atac.merge.samples <- AddMetaData(object = pbmc.atac.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
 #####################################################################################
 # Create annotation
 Annotation(ATAC_M1_chrom_assay) <- annotations
 #####################################################################################
 
 # Save pbmc file
-pbmc.atac.merge.samples=pbmc.merge.samples
-save(pbmc.atac.merge.samples, file = "./pbmc.merge.atac.samples.RData")
+save(pbmc.atac.merge.samples, file = "./pbmc.atac.merge.samples.RData")
+save(pbmc.atac.chrom.samples, file = "./pbmc.atac.chrom.samples.RData")
 
 #####################################################################################
 
