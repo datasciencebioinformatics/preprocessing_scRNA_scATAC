@@ -38,7 +38,7 @@ pbmc.rna.merge.samples <- RunPCA(pbmc.rna.merge.samples, features = VariableFeat
 #pbmc.rna.merge.samples <- RunHarmony(pbmc.rna.merge.samples, group.by.vars = c('Sex'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 # Run UMAP
 #pbmc.rna.merge.samples <- RunUMAP(pbmc.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
-pbmc.rna.merge.samples <- RunUMAP(pbmc.rna.merge.samples, dims = 1:50") # Optmize number of dimensions  ElbowPlot =10,15
+pbmc.rna.merge.samples <- RunUMAP(pbmc.rna.merge.samples, dims = 1:50) # Optmize number of dimensions  ElbowPlot =10,15
 #####################################################################################
 # Run FindNeighbors
 # Run FindClusters # Find clusters for only RNA
