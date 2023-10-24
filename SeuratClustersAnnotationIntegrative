@@ -92,3 +92,7 @@ annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
 seqlevelsStyle(annotations) <- "UCSC"
 genome(annotations) <- "hg38"
 Annotation(pbmc.atac) <- annotations
+#####################################################################################
+# Identifying anchors between scRNA-seq and scATAC-seq dataset
+# quantify gene activity
+gene.activities <- GeneActivity(pbmc.atac, features = VariableFeatures(pbmc.rna))
