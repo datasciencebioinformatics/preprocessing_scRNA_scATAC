@@ -93,30 +93,33 @@ png(filename=paste(output_dir,"plot_rna_atac.png",sep=""), width = 24, height = 
 	plot_rna_atac
 dev.off()
 #####################################################################################
+# Make a copy of the seurat objectp
+pbmc.atac.chrom.samples.predicted=pbmc.atac.chrom.samples
+
 # Identifying anchors between scRNA-seq and scATAC-seq dataset
 # quantify gene activity
-gene.activities <- GeneActivity(pbmc.atac.chrom.samples, features = VariableFeatures(object = pbmc.varialble.rna))
+gene.activities <- GeneActivity(pbmc.atac.chrom.samples.predicted, features = VariableFeatures(object = pbmc.varialble.rna))
 
 # add gene activities as a new assay
-pbmc.atac.chrom.samples[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
+pbmc.atac.chrom.samples.predicted[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
 
 # normalize gene activities
-DefaultAssay(pbmc.atac.chrom.samples) <- "ACTIVITY"
-pbmc.atac.chrom.samples <- NormalizeData(pbmc.atac.chrom.samples)
-pbmc.atac.chrom.samples <- ScaleData(pbmc.atac.chrom.samples, features = rownames(pbmc.atac.chrom.samples))
+DefaultAssay(pbmc.atac.chrom.samples.predicted) <- "ACTIVITY"
+pbmc.atac.chrom.samples.predicted <- NormalizeData(pbmc.atac.chrom.samples)
+pbmc.atac.chrom.samples.predicted <- ScaleData(pbmc.atac.chrom.samples.predicted, features = rownames(pbmc.atac.chrom.samples.predicted))
 
 # Identify anchors
-transfer.anchors <- FindTransferAnchors(reference = pbmc.rna.merge.samples, query = pbmc.atac.chrom.samples, features = VariableFeatures(object = pbmc.varialble.rna),
+transfer.anchors <- FindTransferAnchors(reference = pbmc.rna.merge.samples, query = pbmc.atac.chrom.samples.predicted, features = VariableFeatures(object = pbmc.varialble.rna),
     reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
 #####################################################################################
 # Annotate scATAC-seq cells via label transfer
-celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = Idents(pbmc.rna.merge.samples), weight.reduction = pbmc.atac.chrom.samples[["lsi"]], dims = 2:30)
+celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = Idents(pbmc.rna.merge.samples), weight.reduction = pbmc.atac.chrom.samples.predicted[["lsi"]], dims = 2:30)
 
 # Add celltype predictions
-pbmc.atac.chrom.samples <- AddMetaData(pbmc.atac.chrom.samples, metadata = celltype.predictions)
+pbmc.atac.chrom.samples.predicted <- AddMetaData(pbmc.atac.chrom.samples.predicted, metadata = celltype.predictions)
 #####################################################################################
 p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour) + NoLegend() + ggtitle("RNA cDNA-M1")
-p2 <- DimPlot(pbmc.atac.chrom.samples, group.by = "predicted.id", label = TRUE,cols=colour)+ NoLegend() + ggtitle("ATAC ATAC-M1 predicted")
+p2 <- DimPlot(pbmc.atac.chrom.samples.predicted, group.by = "predicted.id", label = TRUE,cols=colour)+ NoLegend() + ggtitle("ATAC ATAC-M1 predicted")
 plot_rna_atac_predicted<-p1 + p2
 
 # FindClusters_resolution
@@ -127,7 +130,7 @@ dev.off()
 #####################################################################################
 # Number of cells 
 number_cells_rna=data.frame(table(Idents(pbmc.rna.merge.samples)))
-number_cells_atac=data.frame(table(pbmc.atac.chrom.samples$predicted.id))
+number_cells_atac=data.frame(table(pbmc.atac.chrom.samples.predicted$predicted.id))
 
 # Set rownames
 rownames(number_cells_rna)<-number_cells_rna$Var1
@@ -153,17 +156,18 @@ dev.off()
 #####################################################################################
 # Save all seurat object
 #save(pbmc.varialble.rna, file = "./bmc.varialble.rna.RData")
-save(pbmc.atac.chrom.samples, file = "./pbmc.atac.chrom.samples.RData")
-save(pbmc.rna.merge.samples, file = "./pbmc.atac.merge.samples.RData")
-save(pbmc.rna.merge.samples, file = "./pbmc.rna.merge.samples.RData")
+#save(pbmc.atac.chrom.samples, file = "./pbmc.atac.chrom.samples.RData")
+#save(pbmc.atac.chrom.samples, file = "./pbmc.atac.merge.samples.RData")
+#save(pbmc.atac.chrom.samples.predicted, file = "./pbmc.atac.chrom.samples.predicted.RData")
+#save(pbmc.rna.merge.samples, file = "./pbmc.rna.merge.samples.RData")
 
 #load("./bmc.varialble.rna.RData")
 #load("./pbmc.atac.chrom.samples.RData")
-#load("./pbmc.rna.merge.samples.RData"),
+#load("./pbmc.rna.merge.samples.RData")
 
 # Diet Seurat - keep only data on the seurat object
-pbmc.atac.chrom.samples<-DietSeurat(pbmc.atac.chrom.samples,counts = FALSE,data = TRUE,scale.data = FALSE, dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
-pbmc.rna.merge.samples<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE,  dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
+#pbmc.atac.chrom.samples<-DietSeurat(pbmc.atac.chrom.samples,counts = FALSE,data = TRUE,scale.data = FALSE, dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
+#pbmc.rna.merge.samples<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE,  dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
 #####################################################################################
 #Co-embedding scRNA-seq and scATAC-seq datasets
 # note that we restrict the imputation to variable genes from scRNA-seq, but could impute the
