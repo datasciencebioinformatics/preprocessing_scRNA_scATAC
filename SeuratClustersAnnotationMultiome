@@ -7,13 +7,14 @@ ATAC_M1_pbmc<- CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
 #####################################################################################
 # Save whole workspace to working directory
 #load("./all_data.RData")
-# Set intput dir
-cDNA_M1_dir="/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix/"
-cDNAM1.Read10X<-Read10X(data.dir=cDNA_M1_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
-# Load table for all sample - aggreagate cellranger for the six samples
-cDNAM1.pbmc <- CreateSeuratObject(counts = cDNAM1.Read10X, project = "cDNA-M1")
-# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
-cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "mt")
-# Subset percent.mt < 2
-cDNAM1.pbmc = subset(cDNAM1.pbmc, subset = percent.mt < 2)
+cDNA_M1_h5    <-Read10X_h5("/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix.h5")
+cDNA_M1_h5_pbmc                 <- CreateSeuratObject(counts = cDNAM1.Read10X, project = "cDNA-M1")
+cDNA_M1_h5_pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1_h5_pbmc, pattern = "mt")
+cDNA_M1_h5_pbmc                 <- subset(cDNA_M1_h5_pbmc, subset = percent.mt < 2)
 #####################################################################################
+obj.multi <- CreateSeuratObject(counts = cDNA_M1_h5)
+
+# add the ATAC-seq assay
+grange.counts <- StringToGRanges(rownames(atac_counts), sep = c(":", "-"))
+grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
+atac_counts <- atac_counts[as.vector(grange.use), ]
