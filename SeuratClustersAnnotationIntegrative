@@ -71,11 +71,16 @@ Idents(pbmc.rna.merge.samples)<-plyr::mapvalues(Idents(pbmc.rna.merge.samples), 
 pbmc.rna.merge.samples$group<-Idents(pbmc.rna.merge.samples)
 
 #####################################################################################
-# We exclude the first dimension as this is typically correlated with sequencing depth
+# Process seurat on pbmc.atac.merge.samples
 pbmc.atac.merge.samples <- RunTFIDF(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff = "q0")
 pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
+# Also on pbmc.atac.chrom.samples
+pbmc.atac.chrom.samples <- RunTFIDF(pbmc.atac.chrom.samples)
+pbmc.atac.chrom.samples <- FindTopFeatures(pbmc.atac.chrom.samples, min.cutoff = "q0")
+pbmc.atac.chrom.samples <- RunSVD(pbmc.atac.chrom.samples)
+pbmc.atac.chrom.samples <- RunUMAP(pbmc.atac.chrom.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
 # get some data to use in the following examples
 p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "ident", label = TRUE) + NoLegend() + ggtitle("RNA cDNA-M1")
@@ -87,12 +92,18 @@ png(filename=paste(output_dir,"plot_rna_atac.png",sep=""), width = 24, height = 
 	plot_rna_atac
 dev.off()
 #####################################################################################
-# ATAC analysis add gene annotation information
-annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
-seqlevelsStyle(annotations) <- "UCSC"
-genome(annotations) <- "hg38"
-Annotation(pbmc.atac) <- annotations
-#####################################################################################
 # Identifying anchors between scRNA-seq and scATAC-seq dataset
 # quantify gene activity
-gene.activities <- GeneActivity(pbmc.atac, features = VariableFeatures(pbmc.rna))
+gene.activities <- GeneActivity(pbmc.atac.chrom.samples, features = VariableFeatures(object = pbmc.varialble.rna))
+
+# add gene activities as a new assay
+pbmc.atac.chrom.samples[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
+
+# normalize gene activities
+DefaultAssay(pbmc.atac.chrom.samples) <- "ACTIVITY"
+pbmc.atac.chrom.samples <- NormalizeData(pbmc.atac.chrom.samples)
+pbmc.atac.chrom.samples <- ScaleData(pbmc.atac.chrom.samples, features = rownames(pbmc.atac.chrom.samples))
+
+# Identify anchors
+transfer.anchors <- FindTransferAnchors(reference = pbmc.rna.merge.samples, query = pbmc.atac.chrom.samples, features = VariableFeatures(object = pbmc.varialble.rna),
+    reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
