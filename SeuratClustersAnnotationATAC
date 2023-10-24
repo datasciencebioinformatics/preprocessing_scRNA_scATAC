@@ -32,18 +32,15 @@ mosuse_gft="/home/felipe/database/Mus_musculus.GRCm39.110.gtf"
 # Set output dir
 output_dir="/home/felipe/snATACSeq_output/results/"
 #####################################################################################
-# Set intput dir ATAC-M1
+# Set intput dir ATAC-M1 and seurat objects
 ATAC_M1_h5          <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5")
 ATAC_M1_singlecell  <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M1/singlecell.csv",header = TRUE,row.names = 1)
-ATAC_M1_chrom_assay <-  CreateChromatinAssay(counts = counts,sep = c(":", "-"), genome = 'mm10')
-
-# Create seurat objects
-ATAC_M1_pbmc<- CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks", meta.data = metadata)
-ATAC_M1_chrom_assay_pbmc <- CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"),  genome = 'mm10')
+ATAC_M1_chrom_assay <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"), genome = 'mm10')
+ATAC_M1_pbmc<- CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
 #####################################################################################
 # Merge  pbmc. samples, quality control qnd filtering
-pbmc.atac.merge.samples <- ATAC_M1_pbmc # merge(ATAC_M1_pbmc, y = c(ATAC_M2_pbmc, ATAC_M3_pbmc,ATAC_M4_pbmc, ATAC_M5_pbmc,ATAC_M6_pbmc), add.cell.ids = c("ATAC-M1","ATAC-M2", "ATAC-M3","ATAC-M4","ATAC-M5", "ATAC-M6"), project = "hypothalamus")
-pbmc.atac.chrom.samples <- ATAC_M1_chrom_assay_pbmc # merge(ATAC_M1_chrom_assay_pbmc, y = c(ATAC_M2_chrom_assay_pbmc, ATAC_M3_chrom_assay_pbmc,ATAC_M4_chrom_assay_pbmc, ATAC_M5_chrom_assay_pbmc,ATAC_M6_chrom_assay_pbmc), add.cell.ids = c("ATAC_M1_chrom_assay_pbmc","ATAC_M2_chrom_assay_pbmc", "ATAC_M3_chrom_assay_pbmc","ATAC_M4_chrom_assay_pbmc","ATAC_M5_chrom_assay_pbmc", "ATAC_M6_chrom_assay_pbmc"), project = "hypothalamus")
+pbmc.atac.merge.samples <- ATAC_M1_pbmc # merge(ATAC_M1_pbmc, y = c(ATAC_M2_pbmc, ATAC_M3_pbmc,ATAC_M4_pbmc, ATAC_M5_pbmc,ATAC_M6_pbmc), add.cell.ids = c("ATAC-M1","ATAC-M2", "ATAC-M3","ATAC-M4","ATAC-M5", "ATAC-M6"), project = "ATAC")
+pbmc.atac.chrom.samples <- ATAC_M1_chrom_assay # merge(ATAC_M1_chrom_assay_pbmc, y = c(ATAC_M2_chrom_assay_pbmc, ATAC_M3_chrom_assay_pbmc,ATAC_M4_chrom_assay_pbmc, ATAC_M5_chrom_assay_pbmc,ATAC_M6_chrom_assay_pbmc), add.cell.ids = c("ATAC_M1_chrom_assay_pbmc","ATAC_M2_chrom_assay_pbmc", "ATAC_M3_chrom_assay_pbmc","ATAC_M4_chrom_assay_pbmc","ATAC_M5_chrom_assay_pbmc", "ATAC_M6_chrom_assay_pbmc"), project = "hypothalamus")
 #####################################################################################
 # Add metadata seurat 
 # Get the name of the samples
@@ -55,9 +52,10 @@ cluster_letters[which(cluster_letters==c("ATAC-M1"))]<-"Male"
 
 # Add metadata
 pbmc.atac.merge.samples <- AddMetaData(object = pbmc.atac.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
+pbmc.atac.chrom.samples <- AddMetaData(object = pbmc.atac.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
 #####################################################################################
 # Create annotation
-Annotation(ATAC_M1_chrom_assay) <- annotations
+Annotation(pbmc.atac.chrom.samples) <- annotations
 #####################################################################################
 
 # Save pbmc file
