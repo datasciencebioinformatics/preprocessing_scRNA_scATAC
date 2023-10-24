@@ -118,7 +118,7 @@ png(filename=paste(output_dir,"plot_rna_atac.png",sep=""), width = 24, height = 
 dev.off()
 #####################################################################################
 # Make a copy of the seurat objectp
-pbmc.atac.chrom.samples.predicted=pbmc.atac.chrom.samples
+pbmc.atac.chrom.samples.predicted=pbmc.atac.merge.samples
 
 # Identifying anchors between scRNA-seq and scATAC-seq dataset
 # quantify gene activity
