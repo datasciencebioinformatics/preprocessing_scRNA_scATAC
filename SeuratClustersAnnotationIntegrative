@@ -27,25 +27,25 @@ load("./pbmc.atac.merge.samples.RData")
 load("./pbmc.atac.chrom.samples.RData")
 load("./pbmc.merge.rna.samples.RData")
 #####################################################################################
-n.cells <- length(Cells(pbmc.rna.merge.samples))
+#n.cells <- length(Cells(pbmc.rna.merge.samples))
 
 # Define number of cells for the first object (subset 1)
 # 'ceiling' is used to get integer values if n.cells is odd  
-n.cells.subset.1 <- ceiling(length(Cells(pbmc.rna.merge.samples))*0.5)
-n.cells.subset.2 <- ceiling(length(Cells(pbmc.atac.merge.samples))*0.5)
+#n.cells.subset.1 <- ceiling(length(Cells(pbmc.rna.merge.samples))*0.5)
+#n.cells.subset.2 <- ceiling(length(Cells(pbmc.atac.merge.samples))*0.5)
 
 # Set a seed for reproducible subsampling of cells
-set.seed(seed = 1)
+#set.seed(seed = 1)
 
 # Sample randomly half (or half + 1 if n.cells is odd) of the cells 
 # for the first object (subset 1)
-cells.subset.1 <- base::sample(x = Cells(pbmc.rna.merge.samples), size = n.cells.subset, replace = F)
-cells.subset.2 <- base::sample(x = Cells(pbmc.atac.merge.samples), size = n.cells.subset, replace = F)
+#cells.subset.1 <- base::sample(x = Cells(pbmc.rna.merge.samples), size = n.cells.subset, replace = F)
+#cells.subset.2 <- base::sample(x = Cells(pbmc.atac.merge.samples), size = n.cells.subset, replace = F)
 
 # Create 2 subsetted objects, each formed by the corresponding cells
 # Set 'do.clean = T' if you want to keep only the 'data' and 'raw.data' slots
-pbmc.rna.merge.samples <- subset(pbmc.rna.merge.samples, cells = cells.subset.1)
-pbmc.atac.merge.samples <- subset(pbmc.atac.merge.samples, cells = cells.subset.2)
+#pbmc.rna.merge.samples <- subset(pbmc.rna.merge.samples, cells = cells.subset.1)
+#pbmc.atac.merge.samples <- subset(pbmc.atac.merge.samples, cells = cells.subset.2)
 #####################################################################################
 
 # Calculate NormalizeData
