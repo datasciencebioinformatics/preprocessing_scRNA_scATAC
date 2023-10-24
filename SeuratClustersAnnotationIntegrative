@@ -39,8 +39,8 @@ load("./pbmc.merge.rna.samples.RData")
 
 # Sample randomly half (or half + 1 if n.cells is odd) of the cells 
 # for the first object (subset 1)
-#cells.subset.1 <- base::sample(x = Cells(pbmc.rna.merge.samples), size = n.cells.subset, replace = F)
-#cells.subset.2 <- base::sample(x = Cells(pbmc.atac.merge.samples), size = n.cells.subset, replace = F)
+#cells.subset.1 <- base::sample(x = Cells(pbmc.rna.merge.samples), size = n.cells.subset.1, replace = F)
+#cells.subset.2 <- base::sample(x = Cells(pbmc.atac.merge.samples), size = n.cells.subset.2, replace = F)
 
 # Create 2 subsetted objects, each formed by the corresponding cells
 # Set 'do.clean = T' if you want to keep only the 'data' and 'raw.data' slots
