@@ -82,9 +82,10 @@ pbmc.atac.chrom.samples <- FindTopFeatures(pbmc.atac.chrom.samples, min.cutoff =
 pbmc.atac.chrom.samples <- RunSVD(pbmc.atac.chrom.samples)
 pbmc.atac.chrom.samples <- RunUMAP(pbmc.atac.chrom.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
+colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 # get some data to use in the following examples
-p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "ident", label = TRUE) + NoLegend() + ggtitle("RNA cDNA-M1")
-p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("ATAC ATAC-M1")
+p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour) + NoLegend() + ggtitle("RNA cDNA-M1")
+p2 <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = FALSE,cols="#3b528b") + NoLegend() + ggtitle("ATAC ATAC-M1")
 plot_rna_atac<-p1 + p2
 
 # FindClusters_resolution
@@ -107,3 +108,82 @@ pbmc.atac.chrom.samples <- ScaleData(pbmc.atac.chrom.samples, features = rowname
 # Identify anchors
 transfer.anchors <- FindTransferAnchors(reference = pbmc.rna.merge.samples, query = pbmc.atac.chrom.samples, features = VariableFeatures(object = pbmc.varialble.rna),
     reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
+#####################################################################################
+# Annotate scATAC-seq cells via label transfer
+celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = Idents(pbmc.rna.merge.samples), weight.reduction = pbmc.atac.chrom.samples[["lsi"]], dims = 2:30)
+
+# Add celltype predictions
+pbmc.atac.chrom.samples <- AddMetaData(pbmc.atac.chrom.samples, metadata = celltype.predictions)
+#####################################################################################
+p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour) + NoLegend() + ggtitle("RNA cDNA-M1")
+p2 <- DimPlot(pbmc.atac.chrom.samples, group.by = "predicted.id", label = TRUE,cols=colour)+ NoLegend() + ggtitle("ATAC ATAC-M1 predicted")
+plot_rna_atac_predicted<-p1 + p2
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"plot_rna_atac_predicted.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	plot_rna_atac_predicted
+dev.off()
+
+#####################################################################################
+# Number of cells 
+number_cells_rna=data.frame(table(Idents(pbmc.rna.merge.samples)))
+number_cells_atac=data.frame(table(pbmc.atac.chrom.samples$predicted.id))
+
+# Set rownames
+rownames(number_cells_rna)<-number_cells_rna$Var1
+rownames(number_cells_atac)<-number_cells_atac$Var1
+
+# Define cells count
+df_cells_count=data.frame(rna=number_cells_rna[c("Neurons","Oligodendrocytes","Astrocytes","OPCs","Microglia"),"Freq"],
+atac=number_cells_atac[c("Neurons","Oligodendrocytes","Astrocytes","OPCs","Microglia"),"Freq"])
+
+# Rownames
+rownames(df_cells_count)<-c("Neurons","Oligodendrocytes","Astrocytes","OPCs","Microglia")
+
+# Set collumn label
+df_cells_count$Label=rownames(df_cells_count)
+
+p <- ggplot(df_cells_count, aes(rna, atac,label = Label))
+p1<-p + geom_point()+ theme_bw() + ggtitle("Number of cells per type")+  geom_text()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"/Number_of_cells_per_type.png",sep=""), width = 10, height = 10, res=600, units = "cm")
+	p1
+dev.off()
+#####################################################################################
+# Save all seurat object
+#save(pbmc.varialble.rna, file = "./bmc.varialble.rna.RData")
+#save(pbmc.atac.chrom.samples, file = "./pbmc.atac.chrom.samples.RData")
+#save(pbmc.rna.merge.samples, file = "./pbmc.rna.merge.samples.RData")
+
+#load("./bmc.varialble.rna.RData")
+#load("./pbmc.atac.chrom.samples.RData")
+#load("./pbmc.rna.merge.samples.RData"),
+
+# Diet Seurat - keep only data on the seurat object
+pbmc.atac.chrom.samples<-DietSeurat(pbmc.atac.chrom.samples,counts = FALSE,data = TRUE,scale.data = FALSE, dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
+pbmc.rna.merge.samples<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE,  dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
+#####################################################################################
+#Co-embedding scRNA-seq and scATAC-seq datasets
+# note that we restrict the imputation to variable genes from scRNA-seq, but could impute the
+# full transcriptome if we wanted to
+genes.use <- VariableFeatures(object = pbmc.varialble.rna)
+refdata <- GetAssayData(pbmc.varialble.rna, assay = "RNA", slot = "data")[genes.use, ]
+
+# refdata (input) contains a scRNA-seq expression matrix for the scRNA-seq cells.  imputation
+# (output) will contain an imputed scRNA-seq matrix for each of the ATAC cells
+imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weight.reduction = pbmc.atac.chrom.samples[["lsi"]],dims = 2:30)
+
+# Set atact tranfered data
+pbmc.atac.chrom.samples[["RNA"]] <- imputation
+
+# Merged data
+pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.merge.samples)
+
+# Finally, we run PCA and UMAP on this combined object, to visualize the co-embedding of both
+# datasets
+pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, features = genes.use, do.scale = FALSE)
+pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed, features = genes.use, verbose = FALSE)
+pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
+
+DimPlot(pbmc.rna.atac.samples.coembed, group.by = c("ident", "predicted.id""))
