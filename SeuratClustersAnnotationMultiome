@@ -1,0 +1,19 @@
+#####################################################################################
+# Set intput dir ATAC-M1 and seurat objects
+ATAC_M1_h5          <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5")
+ATAC_M1_singlecell  <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M1/singlecell.csv",header = TRUE,row.names = 1)
+ATAC_M1_chrom_assay <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"), genome = 'mm10',fragments ='/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz')
+ATAC_M1_pbmc<- CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
+#####################################################################################
+# Save whole workspace to working directory
+#load("./all_data.RData")
+# Set intput dir
+cDNA_M1_dir="/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix/"
+cDNAM1.Read10X<-Read10X(data.dir=cDNA_M1_dir, gene.column = 2, cell.column = 1, unique.features = TRUE, strip.suffix = FALSE)
+# Load table for all sample - aggreagate cellranger for the six samples
+cDNAM1.pbmc <- CreateSeuratObject(counts = cDNAM1.Read10X, project = "cDNA-M1")
+# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+cDNAM1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNAM1.pbmc, pattern = "mt")
+# Subset percent.mt < 2
+cDNAM1.pbmc = subset(cDNAM1.pbmc, subset = percent.mt < 2)
+#####################################################################################
