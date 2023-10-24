@@ -153,8 +153,9 @@ dev.off()
 #####################################################################################
 # Save all seurat object
 #save(pbmc.varialble.rna, file = "./bmc.varialble.rna.RData")
-#save(pbmc.atac.chrom.samples, file = "./pbmc.atac.chrom.samples.RData")
-#save(pbmc.rna.merge.samples, file = "./pbmc.rna.merge.samples.RData")
+save(pbmc.atac.chrom.samples, file = "./pbmc.atac.chrom.samples.RData")
+save(pbmc.rna.merge.samples, file = "./pbmc.atac.merge.samples.RData")
+save(pbmc.rna.merge.samples, file = "./pbmc.rna.merge.samples.RData")
 
 #load("./bmc.varialble.rna.RData")
 #load("./pbmc.atac.chrom.samples.RData")
