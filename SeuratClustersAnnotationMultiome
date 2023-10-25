@@ -10,6 +10,17 @@ library("harmony")
 library(rhdf5)
 library("hdf5r")
 library("Signac")
+library(Seurat)
+options(Seurat.object.assay.version = "v5")
+library(Signac)
+library(EnsDb.Mmusculus.v79)
+library(dplyr)
+library(ggplot2)
+#####################################################################################
+# ATAC analysis add gene annotation information
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
+seqlevelsStyle(annotations) <- "UCSC"
+genome(annotations) <- "mm10"
 #####################################################################################
 # Set intput dir ATAC-M1 and seurat objects
 ATAC_M1_h5          <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5")
@@ -26,5 +37,12 @@ cDNA_M1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.pbmc, pattern = "mt
 # Subset percent.mt < 2
 cDNA_M1.pbmc = subset(cDNA_M1.pbmc, subset = percent.mt < 2)
 #####################################################################################
-obj.multi <- CreateSeuratObject(counts = cDNAM1.Read10X)
+# Create multiome object
+obj.multi <- CreateSeuratObject(counts = cDNA_M1_h5)
+
+# add the ATAC-seq assay
+grange.counts <- StringToGRanges(rownames(ATAC_M1_h5), sep = c(":", "-"))
+
+# Use grange
+grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
 
