@@ -209,15 +209,20 @@ pbmc.atac.chrom.samples[["RNA"]] <- imputation
 
 # Merged data
 pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.merge.samples)
-#pbmc.rna.atac.samples.coembed <- readRDS("/media/felipe/UBUNTU 20_0/snATAC_RNA_merge/CombinedFile.rds")
+
+#pbmc.rna.atac.samples.coembed <- readRDS("/home/felipe/CombinedFile.rds")
 
 # Finally, we run PCA and UMAP on this combined object, to visualize the co-embedding of both
 # datasets
+pbmc.rna.atac.samples.coembed <- NormalizeData(pbmc.rna.atac.samples.coembed, normalization.method = "LogNormalize", scale.factor = 10000)
 pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, features = genes.use, do.scale = FALSE)
 pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed, features = genes.use, verbose = FALSE)
 pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
 
+# Create plot
+dimplot<-DimPlot(pbmc.rna.atac.samples.coembed, group.by = c("ident", "predicted.id"))
+
 # FindClusters_resolution
 png(filename=paste(output_dir,"/coembed_results.png",sep=""), width = 10, height = 10, res=600, units = "cm")
-	DimPlot(pbmc.rna.atac.samples.coembed, group.by = c("ident", "predicted.id"))
+	dimplot
 dev.off()
