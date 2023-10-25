@@ -203,11 +203,13 @@ refdata <- GetAssayData(pbmc.varialble.rna, assay = "RNA", slot = "data")[genes.
 # (output) will contain an imputed scRNA-seq matrix for each of the ATAC cells
 imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weight.reduction = pbmc.atac.chrom.samples[["lsi"]],dims = 2:30)
 
+
 # Set atact tranfered data
 pbmc.atac.chrom.samples[["RNA"]] <- imputation
 
 # Merged data
 pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.merge.samples)
+#pbmc.rna.atac.samples.coembed <- readRDS("/media/felipe/UBUNTU 20_0/snATAC_RNA_merge/CombinedFile.rds")
 
 # Finally, we run PCA and UMAP on this combined object, to visualize the co-embedding of both
 # datasets
