@@ -1,3 +1,15 @@
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(gridExtra)
+library(ggplot2)
+library(plyr)
+library(SeuratObject)
+library(Seurat)
+library("harmony")
+library(rhdf5)
+library("hdf5r")
+library("Signac")
 #####################################################################################
 # Set intput dir ATAC-M1 and seurat objects
 ATAC_M1_h5          <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5")
@@ -6,15 +18,13 @@ ATAC_M1_chrom_assay <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-
 ATAC_M1_pbmc<- CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
 #####################################################################################
 # Save whole workspace to working directory
-#load("./all_data.RData")
-cDNA_M1_h5    <-Read10X_h5("/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix.h5")
-cDNA_M1_h5_pbmc                 <- CreateSeuratObject(counts = cDNAM1.Read10X, project = "cDNA-M1")
-cDNA_M1_h5_pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1_h5_pbmc, pattern = "mt")
-cDNA_M1_h5_pbmc                 <- subset(cDNA_M1_h5_pbmc, subset = percent.mt < 2)
+cDNA_M1_h5          <- Read10X_h5("/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix.h5")
+# Load table for all sample - aggreagate cellranger for the six samples
+cDNA_M1.pbmc <- CreateSeuratObject(counts = cDNA_M1_h5, project = "cDNA-M1")
+# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+cDNA_M1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.pbmc, pattern = "mt")
+# Subset percent.mt < 2
+cDNA_M1.pbmc = subset(cDNA_M1.pbmc, subset = percent.mt < 2)
 #####################################################################################
-obj.multi <- CreateSeuratObject(counts = cDNA_M1_h5)
+obj.multi <- CreateSeuratObject(counts = cDNAM1.Read10X)
 
-# add the ATAC-seq assay
-grange.counts <- StringToGRanges(rownames(atac_counts), sep = c(":", "-"))
-grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
-atac_counts <- atac_counts[as.vector(grange.use), ]
