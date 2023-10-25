@@ -25,7 +25,7 @@ genome(annotations) <- "mm10"
 # Set intput dir ATAC-M1 and seurat objects
 ATAC_M1_h5          <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5")
 ATAC_M1_singlecell  <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M1/singlecell.csv",header = TRUE,row.names = 1)
-ATAC_M1_chrom_assay <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"), genome = 'mm10',fragments ='/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz')
+ATAC_M1_chrom_assay <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"), annotation = annotations,fragments ='/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz')
 ATAC_M1_pbmc<- CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
 #####################################################################################
 # Save whole workspace to working directory
@@ -45,4 +45,7 @@ grange.counts <- StringToGRanges(rownames(ATAC_M1_h5), sep = c(":", "-"))
 
 # Use grange
 grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
+#####################################################################################
+# Add the ATAC assay to the multiome object
+obj.multi[["ATAC"]] <- ATAC_M1_h5
 
