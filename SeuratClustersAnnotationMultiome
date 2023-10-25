@@ -23,10 +23,13 @@ seqlevelsStyle(annotations) <- "UCSC"
 genome(annotations) <- "mm10"
 #####################################################################################
 # Set intput dir ATAC-M1 and seurat objects
-ATAC_M1_h5          <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5")
-ATAC_M1_singlecell  <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M1/singlecell.csv",header = TRUE,row.names = 1)
-ATAC_M1_chrom_assay <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"), annotation = annotations,fragments ='/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz')
-ATAC_M1_pbmc<- CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
+ATAC_M1_h5             <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5")
+ATAC_M1_singlecell     <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M1/singlecell.csv",header = TRUE,row.names = 1)
+ATAC_M1_fragment_file  <-  "/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz"
+ATAC_M1_fragment       <-  CreateFragmentObject(ATAC_M1_fragment_file)
+ATAC_M1_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"), annotation = annotations,fragments ='/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz')
+ATAC_M1_pbmc           <-  CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
+ATAC_M1_counts         <-  FeatureMatrix(fragments = ATAC_M1_fragment,features = granges(ATAC_M1_pbmc))
 #####################################################################################
 # Save whole workspace to working directory
 cDNA_M1_h5          <- Read10X_h5("/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix.h5")
