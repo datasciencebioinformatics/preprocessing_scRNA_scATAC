@@ -49,6 +49,18 @@ grange.counts <- StringToGRanges(rownames(ATAC_M1_h5), sep = c(":", "-"))
 # Use grange
 grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
 #####################################################################################
+# Read CSV into DataFrame
+Barcode_arc_RNA_ATAC = read.csv('/home/felipe/cellranger/cellranger-arc-2.0.2/Barcode_arc_RNA_ATAC',sep="\t")
+#####################################################################################
+df_ATAC<-data.frame(Names=Cells(ATAC_M1_pbmc),IDs=substring(Cells(ATAC_M1_pbmc),1,16))
+df_RNA<-data.frame(Names=Cells(cDNA_M1.pbmc),IDs=substring(Cells(cDNA_M1.pbmc),1,16))
+
+# Create ATAC-RNA
+df_ATAC$RNA<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$ATAC %in% df_ATAC$IDs,"RNA"],substring(df_ATAC$Names,17,18),sep="")
+
+# S3 method for DimReduc
+ATAC_M1_pbmc<-RenameCells(ATAC_M1_pbmc, new.names = df_ATAC[which(df_ATAC$Names %in% Cells(ATAC_M1_pbmc)),"RNA"])
+
 # Add the ATAC assay to the multiome object
-obj.multi[["ATAC"]] <- ATAC_M1_h5
+obj.multi[["ATAC"]] <- ATAC_M1_pbmc
 
