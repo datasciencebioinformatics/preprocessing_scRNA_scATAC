@@ -157,7 +157,7 @@ pbmc.rna.merge.samples$seurat_annotations<-Idents(pbmc.rna.merge.samples)
 predictions <- table(pbmc.atac.chrom.samples.predicted$predicted.id, pbmc.rna.merge.samples$seurat_annotations)
 predictions <- predictions/rowSums(predictions)  # normalize for number of cells in each cell type
 predictions <- as.data.frame(predictions)
-pbmc.atac.chrom.samples.predicted$annotation_correct <- pbmc.atac.chrom.samples.predicted$predicted.id == pbmc.atac.chrom.samples.predicted$seurat_annotations
+pbmc.atac.chrom.samples.predicted$annotation_correct <- pbmc.atac.chrom.samples.predicted$predicted.id == pbmc.rna.merge.samples$seurat_annotations
 p1 <- ggplot(predictions, aes(Var1, Var2, fill = Freq)) + geom_tile() + scale_fill_gradient(name = "Fraction of cells",
     low = "#ffffc8", high = "#7d0025") + xlab("Cell type annotation (RNA)") + ylab("Predicted cell type label (ATAC)") + theme_bw()+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
     
@@ -216,6 +216,35 @@ dev.off()
 # Diet Seurat - keep only data on the seurat object
 #pbmc.atac.chrom.samples<-DietSeurat(pbmc.atac.chrom.samples,counts = FALSE,data = TRUE,scale.data = FALSE, dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
 #pbmc.rna.merge.samples<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE,  dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
+# merge
+pbmc.rna.atac.samples.coembed <- merge(pbmc.rna.merge.samples, pbmc.atac.chrom.samples.predicted)
+
+# Process seurat on pbmc.atac.merge.samples
+pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
+pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
+pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
+######################################################
+# Integration
+# find integration anchors
+integration.anchors <- FindIntegrationAnchors(
+  object.list = list(pbmc.rna.merge.samples, pbmc.atac.chrom.samples.predicted),
+  anchor.features = genes.use,
+#  reduction = "rlsi",
+  dims = 2:30
+)
+
+# integrate LSI embeddings
+integrated <- IntegrateEmbeddings(
+  anchorset = integration.anchors,
+  reductions = pbmc.combined[["lsi"]],
+  #new.reduction.name = "integrated_lsi",
+  dims.to.integrate = 1:30
+)
+
+# create a new UMAP using the integrated embeddings
+integrated <- RunUMAP(integrated, reduction = "integrated_lsi", dims = 2:30)
+p2 <- DimPlot(integrated, group.by = "dataset")
+######################################################
 #####################################################################################
 #Co-embedding scRNA-seq and scATAC-seq datasets
 # note that we restrict the imputation to variable genes from scRNA-seq, but could impute the
