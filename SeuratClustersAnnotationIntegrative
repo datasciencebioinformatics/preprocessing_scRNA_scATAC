@@ -152,7 +152,7 @@ pbmc.atac.chrom.samples.predicted[["ACTIVITY"]] <- CreateAssayObject(counts = ge
 DefaultAssay(pbmc.atac.chrom.samples.predicted) <- "ACTIVITY"
 pbmc.atac.chrom.samples.predicted <- NormalizeData(pbmc.atac.chrom.samples.predicted)
 pbmc.atac.chrom.samples.predicted <- ScaleData(pbmc.atac.chrom.samples.predicted, features = rownames(pbmc.atac.chrom.samples.predicted))
-
+	
 # Identify anchors
 transfer.anchors <- FindTransferAnchors(reference = pbmc.rna.merge.samples, query = pbmc.atac.chrom.samples.predicted, features = VariableFeatures(object = pbmc.varialble.rna),
     reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
