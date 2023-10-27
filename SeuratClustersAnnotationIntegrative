@@ -231,38 +231,27 @@ dev.off()
 # Noteworhy that oligodentrocytes are less correlated than other celltypes
 #####################################################################################
 # Save all seurat object
-#save(pbmc.varialble.rna, file = "./bmc.varialble.rna.RData")
-#save(pbmc.atac.chrom.samples, file = "./pbmc.atac.chrom.samples.RData")
-#save(pbmc.atac.chrom.samples, file = "./pbmc.atac.merge.samples.RData")
-#save(pbmc.atac.chrom.samples.predicted, file = "./pbmc.atac.chrom.samples.predicted.RData")
-#save(pbmc.rna.merge.samples, file = "./pbmc.rna.merge.samples.RData")
+save(pbmc.varialble.rna, file = "./bmc.varialble.rna.RData")
+save(pbmc.atac.merge.samples, file = "./pbmc.atac.merge.samples.RData")
+save(pbmc.atac.chrom.samples.predicted, file = "./pbmc.atac.chrom.samples.predicted.RData")
+save(pbmc.rna.merge.samples, file = "./pbmc.rna.merge.samples.RData")
 
-#load("./bmc.varialble.rna.RData")
-#load("./pbmc.atac.chrom.samples.RData")
-#load("./pbmc.rna.merge.samples.RData")
+load("./bmc.varialble.rna.RData")
+load("./pbmc.atac.merge.samples.RData")
+load("./pbmc.atac.chrom.samples.predicted.RData")
+load("./pbmc.rna.merge.samples.RData")
+######################################################
+# full transcriptome if we wanted to
+genes.use <- VariableFeatures(object = pbmc.varialble.rna)
 
-# Diet Seurat - keep only data on the seurat object
-#pbmc.atac.chrom.samples<-DietSeurat(pbmc.atac.chrom.samples,counts = FALSE,data = TRUE,scale.data = FALSE, dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
-#pbmc.rna.merge.samples<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE,  dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
-# merge
-#pbmc.rna.atac.samples.coembed <- merge(pbmc.rna.merge.samples, pbmc.atac.chrom.samples.predicted)
+# Merge rna and atac
+pbmc.rna.atac.samples.coembed <- merge(pbmc.rna.merge.samples, pbmc.atac.merge.samples)
 
 # Process seurat on pbmc.atac.merge.samples
 pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
 pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
 pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
 ######################################################
-# merge
-pbmc.rna.atac.samples.coembed <- merge(pbmc.rna.merge.samples, pbmc.atac.merge.samples)
-
-# Process seurat on pbmc.atac.merge.samples
-genes.use <- VariableFeatures(object = pbmc.varialble.rna)
-pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
-pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
-pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
-
-pbmc.rna.merge.samples.comb<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = TRUE,   graphs = FALSE, misc = FALSE)
-pbmc.atac.merge.samples.comb<-DietSeurat(pbmc.atac.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "peaks", dimreducs = TRUE,   graphs = FALSE, misc = FALSE)
 
 # Integration
 # find integration anchors
