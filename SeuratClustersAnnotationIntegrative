@@ -306,3 +306,54 @@ dimplot<-DimPlot(pbmc.rna.atac.samples.coembed, group.by = c("ident", "predicted
 png(filename=paste(output_dir,"/coembed_results.png",sep=""), width = 10, height = 10, res=600, units = "cm")
 	dimplot
 dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#####################################################################################
+# Calculate NormalizeData
+cDNA_M1.pbmc <- NormalizeData(cDNA_M1.pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+# Calculate FindVariableFeatures
+pbmc.varialble.rna <- FindVariableFeatures(object=cDNA_M1.pbmc, selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+
+######################################################
+# full transcriptome if we wanted to
+genes.use <- VariableFeatures(object = pbmc.varialble.rna)
+
+# Finally, we run PCA and UMAP on this combined object, to visualize the co-embedding of both
+# datasets
+ATAC_M1_pbmc <- NormalizeData(ATAC_M1_pbmc, normalization.method = "LogNormalize", scale.factor = 10000,features = genes.use)
+ATAC_M1_pbmc <- ScaleData(ATAC_M1_pbmc, do.scale = FALSE)
+ATAC_M1_pbmc <- RunPCA(ATAC_M1_pbmc,verbose = FALSE,features = genes.use)
+ATAC_M1_pbmc <- RunUMAP(ATAC_M1_pbmc, dims = 1:30)
+
+# Integration
+# find integration anchors
+integration.anchors <- FindIntegrationAnchors(
+  object.list = list(cDNA_M1.pbmc, ATAC_M1_pbmc ),
+  anchor.features = genes.use,
+  reduction = "rlsi",
+  dims = 2:30
+)
+
+# integrate LSI embeddings
+integrated <- IntegrateEmbeddings(
+  anchorset = integration.anchors,
+  reductions = pbmc.combined[["lsi"]],
+  #new.reduction.name = "integrated_lsi",
+  dims.to.integrate = 1:30
+)
