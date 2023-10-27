@@ -153,6 +153,29 @@ png(filename=paste(output_dir,"plot_rna_atac_predicted.png",sep=""), width = 24,
 dev.off()
 
 #####################################################################################
+pbmc.rna.merge.samples$seurat_annotations<-Idents(pbmc.rna.merge.samples)
+predictions <- table(pbmc.atac.chrom.samples.predicted$predicted.id, pbmc.rna.merge.samples$seurat_annotations)
+predictions <- predictions/rowSums(predictions)  # normalize for number of cells in each cell type
+predictions <- as.data.frame(predictions)
+pbmc.atac.chrom.samples.predicted$annotation_correct <- pbmc.atac.chrom.samples.predicted$predicted.id == pbmc.atac.chrom.samples.predicted$seurat_annotations
+p1 <- ggplot(predictions, aes(Var1, Var2, fill = Freq)) + geom_tile() + scale_fill_gradient(name = "Fraction of cells",
+    low = "#ffffc8", high = "#7d0025") + xlab("Cell type annotation (RNA)") + ylab("Predicted cell type label (ATAC)") + theme_bw()+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    
+correct <- length(which(pbmc.atac.chrom.samples.predicted$predicted.id == pbmc.rna.merge.samples$seurat_annotations))
+incorrect <- length(which(pbmc.atac.chrom.samples.predicted$predicted.id != pbmc.rna.merge.samples$seurat_annotations))
+data <- FetchData(pbmc.atac.chrom.samples.predicted, vars = c("prediction.score.max", "annotation_correct"))
+p2 <- ggplot(data, aes(prediction.score.max, fill = annotation_correct, colour = annotation_correct)) +
+    geom_density(alpha = 0.5) + theme_bw() + scale_fill_discrete(name = "Annotation Correct",
+    labels = c(paste0("FALSE (n = ", incorrect, ")"), paste0("TRUE (n = ", correct, ")"))) + scale_color_discrete(name = "Annotation Correct",
+    labels = c(paste0("FALSE (n = ", incorrect, ")"), paste0("TRUE (n = ", correct, ")"))) + xlab("Prediction Score")+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+plot_rna_atac_predicted_table<-p1 + p2
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"plot_rna_atac_predicted.png",sep=""), width = 20, height = 14, res=600, units = "cm")
+	plot_rna_atac_predicted_table
+dev.off()
+
+#####################################################################################
 # Number of cells 
 number_cells_rna=data.frame(table(Idents(pbmc.rna.merge.samples)))
 number_cells_atac=data.frame(table(pbmc.atac.chrom.samples.predicted$predicted.id))
@@ -202,13 +225,13 @@ refdata <- GetAssayData(pbmc.varialble.rna, assay = "RNA", slot = "data")[genes.
 
 # refdata (input) contains a scRNA-seq expression matrix for the scRNA-seq cells.  imputation
 # (output) will contain an imputed scRNA-seq matrix for each of the ATAC cells
-imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weight.reduction = pbmc.atac.merge.samples[["lsi"]],dims = 2:30)
+imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weight.reduction = pbmc.atac.chrom.samples.predicted[["lsi"]],dims = 2:30)
 
 # Set atact tranfered data
 pbmc.atac.merge.samples[["RNA"]] <- imputation
 
 # Merged data
-pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.merge.samples)
+pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.chrom.samples.predicted)
 
 #pbmc.rna.atac.samples.coembed <- readRDS("/home/felipe/CombinedFile.rds")
 
@@ -217,7 +240,7 @@ pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac
 pbmc.rna.atac.samples.coembed <- NormalizeData(pbmc.rna.atac.samples.coembed, normalization.method = "LogNormalize", scale.factor = 10000,features = genes.use)
 pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
 pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
-pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30,features = genes.use)
+pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
 
 # Create plot
 dimplot<-DimPlot(pbmc.rna.atac.samples.coembed, group.by = c("ident", "predicted.id"))
