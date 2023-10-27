@@ -23,9 +23,16 @@ library("Signac")
 output_dir="./"
 #####################################################################################
 # Save pbmc file
-load("./pbmc.atac.merge.samples.RData")
-load("./pbmc.atac.chrom.samples.RData")
-load("./pbmc.merge.rna.samples.RData")
+#load("./pbmc.atac.merge.samples.RData")
+#load("./pbmc.atac.chrom.samples.RData")
+#load("./pbmc.merge.rna.samples.RData")
+
+load("./ATAC_M1_pbmc.combined.RData")
+load("./cDNA_M1.pbmc.combined.RData")
+
+pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
+pbmc.atac.merge.samples=ATAC_M1_pbmc.combined
+
 #####################################################################################
 n.cells <- length(Cells(pbmc.rna.merge.samples))
 
@@ -41,13 +48,11 @@ set.seed(seed = 1)
 # for the first object (subset 1)
 cells.subset.1 <- base::sample(x = Cells(pbmc.rna.merge.samples), size = n.cells.subset.1, replace = F)
 cells.subset.2 <- base::sample(x = Cells(pbmc.atac.merge.samples), size = n.cells.subset.2, replace = F)
-cells.subset.3 <- base::sample(x = Cells(pbmc.atac.chrom.samples), size = n.cells.subset.2, replace = F)
 
 # Create 2 subsetted objects, each formed by the corresponding cells
 # Set 'do.clean = T' if you want to keep only the 'data' and 'raw.data' slots
 pbmc.rna.merge.samples <- subset(pbmc.rna.merge.samples, cells = cells.subset.1)
 pbmc.atac.merge.samples <- subset(pbmc.atac.merge.samples, cells = cells.subset.2)
-pbmc.atac.chrom.samples <- subset(pbmc.atac.chrom.samples, cells = cells.subset.3)
 #####################################################################################
 # Calculate NormalizeData
 pbmc.rna.merge.samples <- NormalizeData(pbmc.rna.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
@@ -101,11 +106,6 @@ pbmc.atac.merge.samples <- RunTFIDF(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff = "q0")
 pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
-# Also on pbmc.atac.chrom.samples
-pbmc.atac.chrom.samples <- RunTFIDF(pbmc.atac.chrom.samples)
-pbmc.atac.chrom.samples <- FindTopFeatures(pbmc.atac.chrom.samples, min.cutoff = "q0")
-pbmc.atac.chrom.samples <- RunSVD(pbmc.atac.chrom.samples)
-pbmc.atac.chrom.samples <- RunUMAP(pbmc.atac.chrom.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 # get some data to use in the following examples
@@ -119,7 +119,7 @@ png(filename=paste(output_dir,"plot_rna_atac.png",sep=""), width = 24, height = 
 dev.off()
 #####################################################################################
 # Make a copy of the seurat objectp
-pbmc.atac.chrom.samples.predicted=pbmc.atac.chrom.samples
+pbmc.atac.chrom.samples.predicted=pbmc.atac.merge.samples
 
 # Identifying anchors between scRNA-seq and scATAC-seq dataset
 # quantify gene activity
@@ -202,11 +202,10 @@ refdata <- GetAssayData(pbmc.varialble.rna, assay = "RNA", slot = "data")[genes.
 
 # refdata (input) contains a scRNA-seq expression matrix for the scRNA-seq cells.  imputation
 # (output) will contain an imputed scRNA-seq matrix for each of the ATAC cells
-imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weight.reduction = pbmc.atac.chrom.samples[["lsi"]],dims = 2:30)
-
+imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weight.reduction = pbmc.atac.merge.samples[["lsi"]],dims = 2:30)
 
 # Set atact tranfered data
-pbmc.atac.chrom.samples[["RNA"]] <- imputation
+pbmc.atac.merge.samples[["RNA"]] <- imputation
 
 # Merged data
 pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.merge.samples)
