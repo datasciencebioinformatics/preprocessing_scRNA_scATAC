@@ -214,9 +214,9 @@ pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac
 
 # Finally, we run PCA and UMAP on this combined object, to visualize the co-embedding of both
 # datasets
-pbmc.rna.atac.samples.coembed <- NormalizeData(pbmc.atac.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.atac.merge.samples, do.scale = TRUE)
-pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.atac.merge.samples,verbose = FALSE)
+pbmc.rna.atac.samples.coembed <- NormalizeData(pbmc.rna.atac.samples.coembed, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE)
+pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE)
 pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.atac.merge.samples, dims = 1:30)
 
 # Create plot
