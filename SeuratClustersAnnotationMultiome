@@ -40,18 +40,10 @@ cDNA_M1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.pbmc, pattern = "mt
 # Subset percent.mt < 2
 cDNA_M1.pbmc = subset(cDNA_M1.pbmc, subset = percent.mt < 2)
 #####################################################################################
-# Create multiome object
-obj.multi <- CreateSeuratObject(counts = cDNA_M1_h5)
-
-# add the ATAC-seq assay
-grange.counts <- StringToGRanges(rownames(ATAC_M1_h5), sep = c(":", "-"))
-
-# Use grange
-grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
-#####################################################################################
 # Read CSV into DataFrame
 Barcode_arc_RNA_ATAC = read.csv('/home/felipe/cellranger/cellranger-arc-2.0.2/Barcode_arc_RNA_ATAC',sep="\t")
-#####################################################################################
+
+# Create
 df_ATAC<-data.frame(Names=Cells(ATAC_M1_pbmc),IDs=substring(Cells(ATAC_M1_pbmc),1,16))
 df_RNA<-data.frame(Names=Cells(cDNA_M1.pbmc),IDs=substring(Cells(cDNA_M1.pbmc),1,16))
 
@@ -60,7 +52,21 @@ df_ATAC$RNA<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$ATAC %in% df_ATAC$I
 
 # S3 method for DimReduc
 ATAC_M1_pbmc<-RenameCells(ATAC_M1_pbmc, new.names = df_ATAC[which(df_ATAC$Names %in% Cells(ATAC_M1_pbmc)),"RNA"])
+#####################################################################################
+# Create combined multiome object
+combined.cell<-Cells(ATAC_M1_pbmc)[Cells(ATAC_M1_pbmc) %in% Cells(cDNA_M1.pbmc)]
 
-# Add the ATAC assay to the multiome object
-obj.multi[["ATAC"]] <- ATAC_M1_pbmc
+# add the ATAC-seq assay
+grange.counts <- StringToGRanges(rownames(ATAC_M1_h5), sep = c(":", "-"))
+
+# Use grange
+grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
+
+# Combine datasets with same cells
+ATAC_M1_pbmc.combined <- ATAC_M1_pbmc[,combined.cell]
+cDNA_M1.pbmc.combined <- cDNA_M1.pbmc[,combined.cell]
+
+save(ATAC_M1_pbmc.combined, file = "./ATAC_M1_pbmc.combined.RData")
+save(cDNA_M1.pbmc.combined, file = "./cDNA_M1.pbmc.combined.RData")
+
 
