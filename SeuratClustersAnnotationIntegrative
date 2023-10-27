@@ -30,9 +30,13 @@ output_dir="./"
 load("./ATAC_M1_pbmc.combined.RData")
 load("./cDNA_M1.pbmc.combined.RData")
 
+#####################################################################################
 pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
 pbmc.atac.merge.samples=ATAC_M1_pbmc.combined
-
+#####################################################################################
+# The two tables are being loaded. Interesting to do is the cross-sensitivity plot 
+# between ATAC and RNA seq. See link below
+# https://kb.10xgenomics.com/hc/en-us/articles/4412331593229-What-would-I-observe-if-I-mismatched-Multiome-ATAC-and-GEX-data-from-different-samples-
 #####################################################################################
 #n.cells <- length(Cells(pbmc.rna.merge.samples))
 
@@ -73,6 +77,10 @@ pbmc.rna.merge.samples <- RunUMAP(pbmc.rna.merge.samples, dims = 1:50,reduction 
 #pbmc.rna.merge.samples <- FindNeighbors(pbmc.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
 pbmc.rna.merge.samples <- FindNeighbors(pbmc.rna.merge.samples, dims = 1:50) # Optmize number of dimensions  ElbowPlot =10,15
 #####################################################################################
+# Step 1 : Output pbmc.rna.merge.samples
+# Data is being normalized and 3000 variable genes are further considered. Data is then scaled to be used in PCA, UMAP and FindNeighbors.
+# Important to note now, there is only one sample therefore batch correction is commented out.
+#####################################################################################
 # Run FindNeighbors
 # Run FindClusters # Find clusters for only RNA
 pbmc.rna.merge.samples <- FindClusters(pbmc.rna.merge.samples,reduction = "pca",resolution = 0.12)
@@ -99,13 +107,18 @@ df2<- df2 %>% mutate(ID = ifelse(Mbp > 6 & Mobp > 6, "Oligodendrocytes", df2$ID)
 y<-dplyr::select(df2,cluster)
 Idents(pbmc.rna.merge.samples)<-plyr::mapvalues(Idents(pbmc.rna.merge.samples), from = df2$cluster, to = df2$ID)
 pbmc.rna.merge.samples$group<-Idents(pbmc.rna.merge.samples)
-
+#####################################################################################
+# Step 2 : Output pbmc.rna.merge.samples.
+# Markers and markers limits were previously defined here used to calculate the celltypes.
 #####################################################################################
 # Process seurat on pbmc.atac.merge.samples
 pbmc.atac.merge.samples <- RunTFIDF(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff = "q0")
 pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
 pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
+#####################################################################################
+# Step 3 : Output pbmc.atac.merge.samples.
+# RunTFIDF, FindTopFeatures and RunSVD are used for RunUMAP.
 #####################################################################################
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 # get some data to use in the following examples
@@ -217,19 +230,32 @@ dev.off()
 #pbmc.atac.chrom.samples<-DietSeurat(pbmc.atac.chrom.samples,counts = FALSE,data = TRUE,scale.data = FALSE, dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
 #pbmc.rna.merge.samples<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE,  dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
 # merge
-pbmc.rna.atac.samples.coembed <- merge(pbmc.rna.merge.samples, pbmc.atac.chrom.samples.predicted)
+#pbmc.rna.atac.samples.coembed <- merge(pbmc.rna.merge.samples, pbmc.atac.chrom.samples.predicted)
 
 # Process seurat on pbmc.atac.merge.samples
 pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
 pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
 pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
 ######################################################
+# merge
+pbmc.rna.atac.samples.coembed <- merge(pbmc.rna.merge.samples, pbmc.atac.merge.samples)
+
+# Process seurat on pbmc.atac.merge.samples
+genes.use <- VariableFeatures(object = pbmc.varialble.rna)
+pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
+pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
+pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
+
+
+pbmc.rna.merge.samples.comb<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = TRUE,   graphs = FALSE, misc = FALSE)
+pbmc.atac.merge.samples.comb<-DietSeurat(pbmc.atac.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "peaks", dimreducs = TRUE,   graphs = FALSE, misc = FALSE)
+
 # Integration
 # find integration anchors
 integration.anchors <- FindIntegrationAnchors(
-  object.list = list(pbmc.rna.merge.samples, pbmc.atac.chrom.samples.predicted),
+  object.list = list(pbmc.rna.merge.samples.comb, pbmc.atac.merge.samples.comb),
   anchor.features = genes.use,
-#  reduction = "rlsi",
+  #reduction = "rlsi",
   dims = 2:30
 )
 
@@ -244,7 +270,6 @@ integrated <- IntegrateEmbeddings(
 # create a new UMAP using the integrated embeddings
 integrated <- RunUMAP(integrated, reduction = "integrated_lsi", dims = 2:30)
 p2 <- DimPlot(integrated, group.by = "dataset")
-######################################################
 #####################################################################################
 #Co-embedding scRNA-seq and scATAC-seq datasets
 # note that we restrict the imputation to variable genes from scRNA-seq, but could impute the
