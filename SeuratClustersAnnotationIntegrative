@@ -163,6 +163,10 @@ celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = Ide
 # Add celltype predictions
 pbmc.atac.chrom.samples.predicted <- AddMetaData(pbmc.atac.chrom.samples.predicted, metadata = celltype.predictions)
 #####################################################################################
+# Step 5 : plot_rna_atac
+# Perform function GeneActivity + FindTransferAnchors
+# FindTransferAnchors is meant to find anchors between RNA and ATAC
+#####################################################################################
 p1 <- DimPlot(pbmc.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour) + NoLegend() + ggtitle("RNA cDNA-M1")
 p2 <- DimPlot(pbmc.atac.chrom.samples.predicted, group.by = "predicted.id", label = TRUE,cols=colour)+ NoLegend() + ggtitle("ATAC ATAC-M1 predicted")
 plot_rna_atac_predicted<-p1 + p2
@@ -171,15 +175,16 @@ plot_rna_atac_predicted<-p1 + p2
 png(filename=paste(output_dir,"plot_rna_atac_predicted.png",sep=""), width = 24, height = 12, res=600, units = "cm")
 	plot_rna_atac_predicted
 dev.off()
-
+#####################################################################################
+# plot_rna_atac_predicted
+# Here the clusters seem to be coeherent between atac - rna in size per celltype
 #####################################################################################
 pbmc.rna.merge.samples$seurat_annotations<-Idents(pbmc.rna.merge.samples)
 predictions <- table(pbmc.atac.chrom.samples.predicted$predicted.id, pbmc.rna.merge.samples$seurat_annotations)
 predictions <- predictions/rowSums(predictions)  # normalize for number of cells in each cell type
 predictions <- as.data.frame(predictions)
 pbmc.atac.chrom.samples.predicted$annotation_correct <- pbmc.atac.chrom.samples.predicted$predicted.id == pbmc.rna.merge.samples$seurat_annotations
-p1 <- ggplot(predictions, aes(Var1, Var2, fill = Freq)) + geom_tile() + scale_fill_gradient(name = "Fraction of cells",
-    low = "#ffffc8", high = "#7d0025") + xlab("Cell type annotation (RNA)") + ylab("Predicted cell type label (ATAC)") + theme_bw()+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+p1 <- ggplot(predictions, aes(Var1, Var2, fill = Freq)) + geom_tile() +  xlab("Cell type annotation (RNA)") + ylab("Predicted cell type label (ATAC)") + theme_bw()+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_fill_distiller()
     
 correct <- length(which(pbmc.atac.chrom.samples.predicted$predicted.id == pbmc.rna.merge.samples$seurat_annotations))
 incorrect <- length(which(pbmc.atac.chrom.samples.predicted$predicted.id != pbmc.rna.merge.samples$seurat_annotations))
@@ -191,7 +196,7 @@ p2 <- ggplot(data, aes(prediction.score.max, fill = annotation_correct, colour =
 plot_rna_atac_predicted_table<-p1 + p2
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"plot_rna_atac_predicted.png",sep=""), width = 20, height = 14, res=600, units = "cm")
+png(filename=paste(output_dir,"plot_rna_atac_predicted.png",sep=""), width = 24, height = 14, res=600, units = "cm")
 	plot_rna_atac_predicted_table
 dev.off()
 
@@ -221,6 +226,9 @@ p1<-p + geom_point()+ theme_bw() + ggtitle("Number of cells per type")+  geom_te
 png(filename=paste(output_dir,"/Number_of_cells_per_type.png",sep=""), width = 10, height = 10, res=600, units = "cm")
 	p1
 dev.off()
+#####################################################################################
+# Here the correlation between the number of cells per celltype
+# Noteworhy that oligodentrocytes are less correlated than other celltypes
 #####################################################################################
 # Save all seurat object
 #save(pbmc.varialble.rna, file = "./bmc.varialble.rna.RData")
@@ -252,7 +260,6 @@ genes.use <- VariableFeatures(object = pbmc.varialble.rna)
 pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
 pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
 pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
-
 
 pbmc.rna.merge.samples.comb<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = TRUE,   graphs = FALSE, misc = FALSE)
 pbmc.atac.merge.samples.comb<-DietSeurat(pbmc.atac.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "peaks", dimreducs = TRUE,   graphs = FALSE, misc = FALSE)
