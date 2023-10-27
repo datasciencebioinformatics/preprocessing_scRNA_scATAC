@@ -214,10 +214,10 @@ pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac
 
 # Finally, we run PCA and UMAP on this combined object, to visualize the co-embedding of both
 # datasets
-pbmc.rna.atac.samples.coembed <- NormalizeData(pbmc.rna.atac.samples.coembed, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE)
-pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE)
-pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.atac.merge.samples, dims = 1:30)
+pbmc.rna.atac.samples.coembed <- NormalizeData(pbmc.rna.atac.samples.coembed, normalization.method = "LogNormalize", scale.factor = 10000,features = genes.use)
+pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
+pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
+pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30,features = genes.use)
 
 # Create plot
 dimplot<-DimPlot(pbmc.rna.atac.samples.coembed, group.by = c("ident", "predicted.id"))
