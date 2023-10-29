@@ -43,7 +43,7 @@ cDNA_M1.pbmc = subset(cDNA_M1.pbmc, subset = percent.mt < 2)
 pbmc.atac.merge.samples<- cDNA_M1.pbmc
 pbmc.merge.rna.samples <- DNA_M1.pbmc
 save(pbmc.atac.merge.samples,file="./pbmc.atac.merge.samples.RData")
-save(pbmc.merge.rna.samples ,file="./pbmc.merge.rna.samples.RData")
+save(pbmc.rna.merge.samples ,file="./pbmc.merge.rna.samples.RData")
 
 #load("./pbmc.atac.merge.samples.RData")
 #load("./pbmc.atac.chrom.samples.RData")
