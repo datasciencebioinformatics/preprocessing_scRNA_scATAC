@@ -24,8 +24,8 @@ output_dir="./"
 #####################################################################################
 # Save pbmc file
 #load("./pbmc.atac.merge.samples.RData")
-load("./pbmc.atac.chrom.samples.RData")
-load("./pbmc.merge.rna.samples.RData")
+load("./pbmc.atac.merge.samples.RData")
+load("./pbmc.rna.merge.samples.RData")
 
 #load("./ATAC_M1_pbmc.combined.RData")
 #load("./cDNA_M1.pbmc.combined.RData")
