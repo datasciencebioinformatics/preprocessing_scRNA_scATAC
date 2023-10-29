@@ -24,15 +24,15 @@ output_dir="./"
 #####################################################################################
 # Save pbmc file
 #load("./pbmc.atac.merge.samples.RData")
-#load("./pbmc.atac.chrom.samples.RData")
-#load("./pbmc.merge.rna.samples.RData")
+load("./pbmc.atac.chrom.samples.RData")
+load("./pbmc.merge.rna.samples.RData")
 
-load("./ATAC_M1_pbmc.combined.RData")
-load("./cDNA_M1.pbmc.combined.RData")
+#load("./ATAC_M1_pbmc.combined.RData")
+#load("./cDNA_M1.pbmc.combined.RData")
 
 #####################################################################################
-pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
-pbmc.atac.merge.samples=ATAC_M1_pbmc.combined
+#pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
+#pbmc.atac.merge.samples=ATAC_M1_pbmc.combined
 #####################################################################################
 # The two tables are being loaded. Interesting to do is the cross-sensitivity plot 
 # between ATAC and RNA seq. See link below
