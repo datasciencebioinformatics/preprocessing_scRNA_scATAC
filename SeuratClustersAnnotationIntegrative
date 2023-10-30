@@ -24,15 +24,15 @@ output_dir="./"
 #####################################################################################
 # Save pbmc file
 #load("./pbmc.atac.merge.samples.RData")
-load("./pbmc.atac.merge.samples.RData")
-load("./pbmc.rna.merge.samples.RData")
+#load("./pbmc.atac.merge.samples.RData")
+#load("./pbmc.rna.merge.samples.RData")
 
 #load("./ATAC_M1_pbmc.combined.RData")
 #load("./cDNA_M1.pbmc.combined.RData")
 
 #####################################################################################
-#pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
-#pbmc.atac.merge.samples=ATAC_M1_pbmc.combined
+pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
+pbmc.atac.merge.samples=ATAC_M1_pbmc.combined
 #####################################################################################
 # The two tables are being loaded. Interesting to do is the cross-sensitivity plot 
 # between ATAC and RNA seq. See link below
@@ -180,17 +180,6 @@ dev.off()
 # Here the clusters seem to be coeherent between atac - rna in size per celltype
 #####################################################################################
 common_cells<-names(pbmc.atac.chrom.samples.predicted$predicted.id[pbmc.atac.chrom.samples.predicted$predicted.id %in% pbmc.rna.merge.samples$seurat_annotations])
-#####################################################################################
-pbmc.atac.chrom.samples.common<-pbmc.atac.chrom.samples.predicted[,common_cells]
-pbmc.rna.merge.samples.common<-pbmc.rna.merge.samples
-pbmc.rna.merge.samples.common$common<-FALSE
-pbmc.rna.merge.samples.common$common<-
-
-
-
-
-
-
 #####################################################################################
 pbmc.rna.merge.samples.common$seurat_annotations<-Idents(pbmc.rna.merge.samples.common)
 
