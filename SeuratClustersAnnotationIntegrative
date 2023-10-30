@@ -181,11 +181,10 @@ dev.off()
 #####################################################################################
 common_cells<-names(pbmc.atac.chrom.samples.predicted$predicted.id[pbmc.atac.chrom.samples.predicted$predicted.id %in% pbmc.rna.merge.samples$seurat_annotations])
 #####################################################################################
-common_cells
+pbmc.rna.merge.samples.common<-subset(pbmc.rna.merge.samples, rownames(pbmc.atac.chrom.samples.predicted[["ACTIVITY"]]) %in% common_cells)
+pbmc.atac.chrom.samples.common<-subset(pbmc.atac.chrom.samples.predicted[["ACTIVITY"]], rownames(pbmc.atac.chrom.samples.predicted[["ACTIVITY"]]) %in% common_cells)
 #####################################################################################
-
-
-pbmc.rna.merge.samples$seurat_annotations<-Idents(pbmc.rna.merge.samples)
+pbmc.rna.merge.samples.common$seurat_annotations<-Idents(pbmc.rna.merge.samples.common)
 
 
 
