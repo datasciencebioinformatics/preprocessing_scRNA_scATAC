@@ -242,7 +242,7 @@ imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weig
 pbmc.atac.chrom.samples.predicted[["RNA"]] <- imputation
 
 # Combine datasets
-coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.chrom.samples.predicted)
+coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.chrom.samples)
 
 # Finally, we run PCA and UMAP on this combined object, to visualize the co-embedding of both
 # datasets
