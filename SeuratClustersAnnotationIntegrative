@@ -179,7 +179,16 @@ dev.off()
 # plot_rna_atac_predicted
 # Here the clusters seem to be coeherent between atac - rna in size per celltype
 #####################################################################################
+common_cells<-names(pbmc.atac.chrom.samples.predicted$predicted.id[pbmc.atac.chrom.samples.predicted$predicted.id %in% pbmc.rna.merge.samples$seurat_annotations])
+#####################################################################################
+
+#####################################################################################
+
+
 pbmc.rna.merge.samples$seurat_annotations<-Idents(pbmc.rna.merge.samples)
+
+
+
 predictions <- table(pbmc.atac.chrom.samples.predicted$predicted.id, pbmc.rna.merge.samples$seurat_annotations)
 predictions <- predictions/rowSums(predictions)  # normalize for number of cells in each cell type
 predictions <- as.data.frame(predictions)
