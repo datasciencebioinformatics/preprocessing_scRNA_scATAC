@@ -250,11 +250,14 @@ coembed <- ScaleData(coembed, features = genes.use, do.scale = FALSE)
 coembed <- RunPCA(coembed, features = genes.use, verbose = FALSE)
 coembed <- RunUMAP(coembed, dims = 1:30)
 
+Idents(coembed)<-
+coembed$predicted.id
+
 #DimPlot(coembed, group.by = c("orig.ident", "seurat_annotations"))
 # Create plot
-dimplot<-DimPlot(pbmc.rna.atac.samples.coembed, group.by = c("ident", "predicted.id"))
+dimplot<-DimPlot(coembed, group.by = c("ident", "predicted.id"))
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/coembed_results.png",sep=""), width = 10, height = 10, res=600, units = "cm")
+png(filename=paste(output_dir,"/coembed_results.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	dimplot
 dev.off()
