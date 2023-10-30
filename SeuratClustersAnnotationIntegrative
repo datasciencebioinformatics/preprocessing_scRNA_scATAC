@@ -27,8 +27,8 @@ output_dir="./"
 #load("./pbmc.atac.merge.samples.RData")
 #load("./pbmc.rna.merge.samples.RData")
 
-#load("./ATAC_M1_pbmc.combined.RData")
-#load("./cDNA_M1.pbmc.combined.RData")
+load("./ATAC_M1_pbmc.combined.RData")
+load("./cDNA_M1.pbmc.combined.RData")
 
 #####################################################################################
 pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
