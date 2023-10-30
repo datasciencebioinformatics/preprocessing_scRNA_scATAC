@@ -179,14 +179,7 @@ dev.off()
 # plot_rna_atac_predicted
 # Here the clusters seem to be coeherent between atac - rna in size per celltype
 #####################################################################################
-common_cells<-names(pbmc.atac.chrom.samples.predicted$predicted.id[pbmc.atac.chrom.samples.predicted$predicted.id %in% pbmc.rna.merge.samples$seurat_annotations])
-#####################################################################################
-pbmc.rna.merge.samples.common$seurat_annotations<-Idents(pbmc.rna.merge.samples.common)
-
-
-pbmc.atac.chrom.samples.predicted$predicted.id[common_cells]
-pbmc.rna.merge.samples$seurat_annotations[common_cells]
-
+pbmc.rna.merge.samples$seurat_annotations<-Idents(pbmc.rna.merge.samples)
 predictions <- table(pbmc.atac.chrom.samples.predicted$predicted.id, pbmc.rna.merge.samples$seurat_annotations)
 predictions <- predictions/rowSums(predictions)  # normalize for number of cells in each cell type
 predictions <- as.data.frame(predictions)
@@ -237,53 +230,26 @@ dev.off()
 # Here the correlation between the number of cells per celltype
 # Noteworhy that oligodentrocytes are less correlated than other celltypes
 #####################################################################################
-# Save all seurat object
-save(pbmc.varialble.rna, file = "./bmc.varialble.rna.RData")
-save(pbmc.atac.merge.samples, file = "./pbmc.atac.merge.samples.RData")
-save(pbmc.atac.chrom.samples.predicted, file = "./pbmc.atac.chrom.samples.predicted.RData")
-save(pbmc.rna.merge.samples, file = "./pbmc.rna.merge.samples.RData")
-
-load("./bmc.varialble.rna.RData")
-load("./pbmc.atac.merge.samples.RData")
-load("./pbmc.atac.chrom.samples.predicted.RData")
-load("./pbmc.rna.merge.samples.RData")
-######################################################
-# full transcriptome if we wanted to
-genes.use <- VariableFeatures(object = pbmc.varialble.rna)
-
-# Merge rna and atac
-pbmc.rna.atac.samples.coembed <- merge(pbmc.rna.merge.samples, pbmc.atac.merge.samples)
-
-# Process seurat on pbmc.atac.merge.samples
-pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
-pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
-pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
-######################################################
-#Co-embedding scRNA-seq and scATAC-seq datasets
 # note that we restrict the imputation to variable genes from scRNA-seq, but could impute the
 # full transcriptome if we wanted to
-genes.use <- VariableFeatures(object = pbmc.varialble.rna)
-refdata <- GetAssayData(pbmc.varialble.rna, assay = "RNA", slot = "data")[genes.use, ]
+genes.use <- VariableFeatures(pbmc.rna.merge.samples)
+refdata <- GetAssayData(pbmc.rna.merge.samples, assay = "RNA", slot = "data")[genes.use, ]
 
 # refdata (input) contains a scRNA-seq expression matrix for the scRNA-seq cells.  imputation
 # (output) will contain an imputed scRNA-seq matrix for each of the ATAC cells
-imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weight.reduction = pbmc.atac.chrom.samples.predicted[["lsi"]],dims = 2:30)
+imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weight.reduction = pbmc.atac.chrom.samples[["lsi"]],
+    dims = 2:30)
+pbmc.atac.chrom.samples[["RNA"]] <- imputation
 
-# Set atact tranfered data
-pbmc.atac.merge.samples[["RNA"]] <- imputation
-
-# Merged data
-pbmc.rna.atac.samples.coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.chrom.samples.predicted)
-
-#pbmc.rna.atac.samples.coembed <- readRDS("/home/felipe/CombinedFile.rds")
+coembed <- merge(x = pbmc.rna.merge.samples, y = pbmc.atac.chrom.samples)
 
 # Finally, we run PCA and UMAP on this combined object, to visualize the co-embedding of both
 # datasets
-pbmc.rna.atac.samples.coembed <- NormalizeData(pbmc.rna.atac.samples.coembed, normalization.method = "LogNormalize", scale.factor = 10000,features = genes.use)
-pbmc.rna.atac.samples.coembed <- ScaleData(pbmc.rna.atac.samples.coembed, do.scale = TRUE,features = genes.use)
-pbmc.rna.atac.samples.coembed <- RunPCA(pbmc.rna.atac.samples.coembed,verbose = FALSE,features = genes.use)
-pbmc.rna.atac.samples.coembed <- RunUMAP(pbmc.rna.atac.samples.coembed, dims = 1:30)
+coembed <- ScaleData(coembed, features = genes.use, do.scale = FALSE)
+coembed <- RunPCA(coembed, features = genes.use, verbose = FALSE)
+coembed <- RunUMAP(coembed, dims = 1:30)
 
+#DimPlot(coembed, group.by = c("orig.ident", "seurat_annotations"))
 # Create plot
 dimplot<-DimPlot(pbmc.rna.atac.samples.coembed, group.by = c("ident", "predicted.id"))
 
