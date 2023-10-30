@@ -182,7 +182,13 @@ dev.off()
 common_cells<-names(pbmc.atac.chrom.samples.predicted$predicted.id[pbmc.atac.chrom.samples.predicted$predicted.id %in% pbmc.rna.merge.samples$seurat_annotations])
 #####################################################################################
 pbmc.atac.chrom.samples.common<-pbmc.atac.chrom.samples.predicted[,common_cells]
-pbmc.rna.merge.samples[,common_cells]
+pbmc.rna.merge.samples.common<-pbmc.rna.merge.samples
+pbmc.rna.merge.samples.common$common<-FALSE
+pbmc.rna.merge.samples.common$common<-
+
+
+
+
 #####################################################################################
 pbmc.rna.merge.samples.common$seurat_annotations<-Idents(pbmc.rna.merge.samples.common)
 
