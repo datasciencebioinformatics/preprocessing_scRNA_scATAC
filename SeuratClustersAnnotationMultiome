@@ -34,7 +34,7 @@ ATAC_M1_counts         <-  FeatureMatrix(fragments = ATAC_M1_fragment,features =
 # Save whole workspace to working directory
 cDNA_M1_h5          <- Read10X_h5("/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix.h5")
 # Load table for all sample - aggreagate cellranger for the six samples
-cDNA_M1.pbmc <- CreateSeuratObject(counts = cDNA_M1_h5, project = "cDNA-M1")
+cDNA_M1.pbmc <- CreateSeuratObject(counts = cDNA_M1_h5, project = "cDNA-M1", assay = "RNA")
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
 cDNA_M1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.pbmc, pattern = "mt")
 # Subset percent.mt < 2
@@ -42,6 +42,13 @@ cDNA_M1.pbmc = subset(cDNA_M1.pbmc, subset = percent.mt < 2)
 #####################################################################################
 # I stopped here 
 # try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
+seqlevels(annotation) <- paste0('chr', seqlevels(annotation))
+
+# create a Seurat object containing the RNA adata
+pbmc <- cDNA_M1.pbmc
+
+# create ATAC assay and add it to the object
+pbmc[["ATAC"]] <- ATAC_M1_chrom_assay
 #####################################################################################
 pbmc.atac.merge.samples<- ATAC_M1_pbmc
 pbmc.rna.merge.samples <- cDNA_M1.pbmc
