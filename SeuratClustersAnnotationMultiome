@@ -40,16 +40,6 @@ cDNA_M1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.pbmc, pattern = "mt
 # Subset percent.mt < 2
 cDNA_M1.pbmc = subset(cDNA_M1.pbmc, subset = percent.mt < 2)
 #####################################################################################
-# I stopped here 
-# try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
-seqlevels(annotation) <- paste0('chr', seqlevels(annotation))
-
-# create a Seurat object containing the RNA adata
-pbmc <- cDNA_M1.pbmc
-
-# create ATAC assay and add it to the object
-pbmc[["ATAC"]] <- ATAC_M1_chrom_assay
-#####################################################################################
 # I stopped here 2:
 # Try again and check the assay cDNA_M1.pbmc with the name "RNA"
 pbmc.atac.merge.samples<- ATAC_M1_pbmc
@@ -61,7 +51,6 @@ save(pbmc.rna.merge.samples ,file="./pbmc.merge.rna.samples.RData")
 #load("./pbmc.atac.chrom.samples.RData")
 #load("./pbmc.merge.rna.samples.RData")
 #####################################################################################
-
 # Read CSV into DataFrame
 Barcode_arc_RNA_ATAC = read.csv('/home/felipe/cellranger/cellranger-arc-2.0.2/Barcode_arc_RNA_ATAC',sep="\t")
 
@@ -91,4 +80,13 @@ cDNA_M1.pbmc.combined <- cDNA_M1.pbmc[,combined.cell]
 save(ATAC_M1_pbmc.combined, file = "./ATAC_M1_pbmc.combined.RData")
 save(cDNA_M1.pbmc.combined, file = "./cDNA_M1.pbmc.combined.RData")
 
+#####################################################################################
+# I stopped here 
+# try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
+# create a Seurat object containing the RNA adata
+pbmc <- cDNA_M1.pbmc.combined
+
+# create ATAC assay and add it to the object
+pbmc[["ATAC"]] <- ATAC_M1_pbmc.combined[["peaks"]]
+#####################################################################################
 
