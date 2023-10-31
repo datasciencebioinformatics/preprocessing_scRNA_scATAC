@@ -89,4 +89,6 @@ pbmc <- cDNA_M1.pbmc.combined
 # create ATAC assay and add it to the object
 pbmc[["ATAC"]] <- ATAC_M1_pbmc.combined[["peaks"]]
 #####################################################################################
+save(pbmc, file = "./pbmc.RData")
+#####################################################################################
 
