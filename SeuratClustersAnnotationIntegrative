@@ -20,7 +20,7 @@ library(EnsDb.Mmusculus.v79)
 library("Signac")
 
 #####################################################################################
-output_dir="./"
+output_dir="/home/felipe/results_seurat/"
 #####################################################################################
 # Save pbmc file
 #load("./pbmc.atac.merge.samples.RData")
