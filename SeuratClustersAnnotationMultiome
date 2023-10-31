@@ -82,6 +82,19 @@ save(cDNA_M1.pbmc.combined, file = "./cDNA_M1.pbmc.combined.RData")
 load("./ATAC_M1_pbmc.combined.RData")
 load("./cDNA_M1.pbmc.combined.RData")
 #####################################################################################
+# Quality control 
+DefaultAssay(pbmc) <- "ATAC"
+
+pbmc <- NucleosomeSignal(pbmc)
+pbmc <- TSSEnrichment(pbmc)
+
+VlnPlot(
+  object = pbmc,
+  features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),
+  ncol = 4,
+  pt.size = 0
+)
+#####################################################################################
 # I stopped here 
 # try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
 # create a Seurat object containing the RNA adata
