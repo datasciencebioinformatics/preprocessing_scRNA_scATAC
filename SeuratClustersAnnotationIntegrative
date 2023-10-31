@@ -184,11 +184,16 @@ predictions <- table(pbmc.atac.chrom.samples.predicted$predicted.id, pbmc.rna.me
 predictions <- predictions/rowSums(predictions)  # normalize for number of cells in each cell type
 predictions <- as.data.frame(predictions)
 pbmc.atac.chrom.samples.predicted$annotation_correct <- pbmc.atac.chrom.samples.predicted$predicted.id == pbmc.rna.merge.samples$seurat_annotations
+
+predictions$Var1 <- factor(predictions$Var1,levels = c("Astrocytes","Microglia","Neurons","Oligodendrocytes","OPCs"))
+predictions$Var2 <- factor(predictions$Var1,levels = c("Astrocytes","Microglia","Neurons","Oligodendrocytes","OPCs"))
 p1 <- ggplot(predictions, aes(Var1, Var2, fill = Freq)) + geom_tile() +  xlab("Cell type annotation (RNA)") + ylab("Predicted cell type label (ATAC)") + theme_bw()+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_fill_distiller()
     
 correct <- length(which(pbmc.atac.chrom.samples.predicted$predicted.id == pbmc.rna.merge.samples$seurat_annotations))
 incorrect <- length(which(pbmc.atac.chrom.samples.predicted$predicted.id != pbmc.rna.merge.samples$seurat_annotations))
 data <- FetchData(pbmc.atac.chrom.samples.predicted, vars = c("prediction.score.max", "annotation_correct"))
+
+
 p2 <- ggplot(data, aes(prediction.score.max, fill = annotation_correct, colour = annotation_correct)) +
     geom_density(alpha = 0.5) + theme_bw() + scale_fill_discrete(name = "Annotation Correct",
     labels = c(paste0("FALSE (n = ", incorrect, ")"), paste0("TRUE (n = ", correct, ")"))) + scale_color_discrete(name = "Annotation Correct",
