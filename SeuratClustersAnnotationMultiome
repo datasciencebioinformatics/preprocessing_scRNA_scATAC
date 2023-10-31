@@ -79,8 +79,8 @@ cDNA_M1.pbmc.combined <- cDNA_M1.pbmc[,combined.cell]
 
 save(ATAC_M1_pbmc.combined, file = "./ATAC_M1_pbmc.combined.RData")
 save(cDNA_M1.pbmc.combined, file = "./cDNA_M1.pbmc.combined.RData")
-#load("./ATAC_M1_pbmc.combined.RData")
-#load("./cDNA_M1.pbmc.combined.RData")
+load("./ATAC_M1_pbmc.combined.RData")
+load("./cDNA_M1.pbmc.combined.RData")
 #####################################################################################
 # I stopped here 
 # try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
