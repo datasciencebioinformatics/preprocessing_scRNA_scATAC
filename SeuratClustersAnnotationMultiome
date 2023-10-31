@@ -130,3 +130,57 @@ save(pbmc, file = "./pbmc.RData") # Save pbmc Step 4
 #####################################################################################
 DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
 #####################################################################################
+#####################################################################################
+# Annotating cell types 
+# Create reference 
+pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
+#####################################################################################
+# Calculate NormalizeData
+pbmc.rna.merge.samples <- NormalizeData(pbmc.rna.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
+# Calculate FindVariableFeatures
+pbmc.varialble.rna <- FindVariableFeatures(object=pbmc.rna.merge.samples , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+# Diet Seurat - keep only data on the seurat object
+#pbmc.rna.merge.samples<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
+# Scale data
+pbmc.rna.merge.samples<- ScaleData(pbmc.rna.merge.samples,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = pbmc.varialble.rna))
+# Run PCA
+pbmc.rna.merge.samples <- RunPCA(pbmc.rna.merge.samples, features = VariableFeatures(object = pbmc.varialble.rna))
+# Run Harmony
+#pbmc.rna.merge.samples <- RunHarmony(pbmc.rna.merge.samples, group.by.vars = c('Sex'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
+# Run UMAP
+#pbmc.rna.merge.samples <- RunUMAP(pbmc.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
+pbmc.rna.merge.samples <- RunUMAP(pbmc.rna.merge.samples, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
+# Run FindNeighbors
+#pbmc.rna.merge.samples <- FindNeighbors(pbmc.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
+pbmc.rna.merge.samples <- FindNeighbors(pbmc.rna.merge.samples, dims = 1:50) # Optmize number of dimensions  ElbowPlot =10,15
+#####################################################################################
+# Step 1 : Output pbmc.rna.merge.samples
+# Data is being normalized and 3000 variable genes are further considered. Data is then scaled to be used in PCA, UMAP and FindNeighbors.
+# Important to note now, there is only one sample therefore batch correction is commented out.
+#####################################################################################
+# Run FindNeighbors
+# Run FindClusters # Find clusters for only RNA
+pbmc.rna.merge.samples <- FindClusters(pbmc.rna.merge.samples,reduction = "pca",resolution = 0.12)
+
+DefaultAssay(pbmc.rna.merge.samples) <- "RNA"
+clustavg<-AverageExpression(pbmc.rna.merge.samples)
+clustdf<-as.data.frame(clustavg$RNA)
+clustdf<-t(clustdf)
+clustdf<-as_tibble(clustdf, rownames = "cluster")
+marks<-c("Prr5l","St18","Syt1","Mog","Snap25","1700016P03Rik","1700047M11Rik","4930447C04Rik","6330403K07Rik","9630013A20Rik","Adam23","Adcyap1","Agrp","Agt","Apod","Apoe","Arhgap36","Arpp21","Atp1a2","Auts2","Avp","B230216N24Rik","Baiap2","Bcas1","C130073E24Rik","C1qa","C1qb","C1qc","C1ql1","C1ql3","Caly","Camkv","Caprin2","Cartpt","Cbln1","Ccdc136","Cck","Ccn3","Cd9","Cdh23","Celf2","Chrm3","Cit","Cited1","Cldn10","Cldn11","Cntnap5a","Col11a1","Col11a2","Col18a1","Col24a1","Col25a1","Coro6","Cpne7","Cpne9","Crhbp","Cryab","Csf1r","Csf2rb2","Cspg4","Cst3","Ctss","Cyp11a1","Dclk1","Ddc","Dgkb","Dlk1","Ebf1","Ecel1","Egr1","Elavl2","En1","Epha10","Esyt3","Fars2","Fign","Fos","Fxyd6","Gabra1","Gad1","Gad2","Gal","Ghrh","Gja1","Gjc3","Gm20515","Gm20751","Gm26771","Gm26871","Gm49359","Gpr17","Gpr37l1","Grip1","Grip2","Grp","Hbb-bs","Hcrt","Hcrtr2","Hdc","Hexb","Hmcn1","Htr2c","Icam5","Igfbp2","Igfbp5","Isl1","Itih3","Itm2a","Junb","Kcnc1","Kcnc2","Kcnk2","Kctd16","Lhx9","Lmnb2","Mag","Magel2","Mal","Matn4","Mbp","Meis2","Mgp","Mia","Mir99ahg","Mobp","Mrpl9","Msrb2","Neat1","Nefm","Nfasc","Nkx2-1","Nme7","Nms","Nnat","Npy","Npy1r","Nrgn","Nrn1","Nrxn3","Ntm","Ntng1","Nts","Ntsr2","Nxph4","Olig1","Otp","Oxt","Parpbp","Pbx1","Pcsk2","Pde10a","Pdgfra","Penk","Pitx2","Pla2g7","Plagl1","Pld4","Plp1","Pmch","Pnoc","Pomc","Pou3f2","Prkcd","Prxl2c","Ptbp3","Ptgds","Pthlh","Ptn","Ptpn3","Ptprn","Ptprz1","Pvalb","Qk","Rasal1","Rasgef1c","Rasgrf2","Rbms1","Resp18","Rinl","Rmst","Rorb","Rprm","Rprml","Rrad","Rreb1","S100a6","Scg2","Scrg1","Selplg","Serpine2","Sfrp2","Sgk1","Sim1","Sirt2","Six3","Slc10a4","Slc18a2","Slc32a1","Slc35d3","Slc6a11","Slc6a3","Sncg","Sparc","Sphkap","Sst","Syt7","Tac1","Tbx3os1","Tcf4","Tcf7l2","Tent5a","Th","Tiam2","Tmcc3","Tmem100","Tmem130","Tnxb","Traip","Trem2","Trf","Trh","Tspan7","Ubash3b","Unc13c","Vgf","Vip","Vipr2","Vstm2l","Vtn","Wfs1","Zbtb20")
+marks = data.frame(marks)
+colnames(marks)[1] = "Gene"
+df2<- clustdf %>% dplyr::select("cluster",marks$Gene) 
+df2$orig_cluster<-df2$cluster
+df2$ID<-NA
+	
+# Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 1, "Neurons", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Agt > 2, "Astrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Ctss > 1, "Microglia", df2$ID)) # Ok
+df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 2, "OPCs", df2$ID))    # Ok
+df2<- df2 %>% mutate(ID = ifelse(Mbp > 6 & Mobp > 6, "Oligodendrocytes", df2$ID))
+
+y<-dplyr::select(df2,cluster)
+Idents(pbmc.rna.merge.samples)<-plyr::mapvalues(Idents(pbmc.rna.merge.samples), from = df2$cluster, to = df2$ID)
+pbmc.rna.merge.samples$group<-Idents(pbmc.rna.merge.samples)
