@@ -17,6 +17,8 @@ library(EnsDb.Mmusculus.v79)
 library(dplyr)
 library(ggplot2)
 #####################################################################################
+output_dir="/home/felipe/results_seurat/"
+#####################################################################################
 # ATAC analysis add gene annotation information
 annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
 seqlevelsStyle(annotations) <- "UCSC"
@@ -82,19 +84,6 @@ save(cDNA_M1.pbmc.combined, file = "./cDNA_M1.pbmc.combined.RData")
 load("./ATAC_M1_pbmc.combined.RData")
 load("./cDNA_M1.pbmc.combined.RData")
 #####################################################################################
-# Quality control 
-DefaultAssay(pbmc) <- "ATAC"
-
-pbmc <- NucleosomeSignal(pbmc)
-pbmc <- TSSEnrichment(pbmc)
-
-VlnPlot(
-  object = pbmc,
-  features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),
-  ncol = 4,
-  pt.size = 0
-)
-#####################################################################################
 # I stopped here 
 # try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
 # create a Seurat object containing the RNA adata
@@ -102,6 +91,17 @@ pbmc <- cDNA_M1.pbmc.combined
 
 # create ATAC assay and add it to the object
 pbmc[["ATAC"]] <- ATAC_M1_pbmc.combined[["peaks"]]
+#####################################################################################
+# Quality control 
+DefaultAssay(pbmc) <- "ATAC"
+
+pbmc <- NucleosomeSignal(pbmc)
+pbmc <- TSSEnrichment(pbmc)
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"plot_VlnPlot_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	VlnPlot(object = pbmc, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
+dev.off()
 #####################################################################################
 # call peaks using MACS2
 peaks <- CallPeaks(pbmc)
@@ -166,7 +166,10 @@ pbmc <- RunUMAP(
 #####################################################################################
 save(pbmc, file = "./pbmc.RData") # Save pbmc Step 4
 #####################################################################################
-DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
+# FindClusters_resolution
+png(filename=paste(output_dir,"DimPlot_Multim_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
+dev.off()
 #####################################################################################
 # Annotating cell types 
 # Create reference 
@@ -226,3 +229,5 @@ reference=pbmc.rna.merge.samples
 #####################################################################################
 save(reference, file = "./reference.RData") # Save pbmc Step 5
 #####################################################################################
+load("./reference.RData")
+load("./pbmc.RData")
