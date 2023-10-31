@@ -40,7 +40,8 @@ cDNA_M1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.pbmc, pattern = "mt
 # Subset percent.mt < 2
 cDNA_M1.pbmc = subset(cDNA_M1.pbmc, subset = percent.mt < 2)
 #####################################################################################
-# I stopped here - try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
+# I stopped here 
+# try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
 #####################################################################################
 pbmc.atac.merge.samples<- ATAC_M1_pbmc
 pbmc.rna.merge.samples <- cDNA_M1.pbmc
