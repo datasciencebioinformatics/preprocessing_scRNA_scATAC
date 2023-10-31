@@ -79,7 +79,8 @@ cDNA_M1.pbmc.combined <- cDNA_M1.pbmc[,combined.cell]
 
 save(ATAC_M1_pbmc.combined, file = "./ATAC_M1_pbmc.combined.RData")
 save(cDNA_M1.pbmc.combined, file = "./cDNA_M1.pbmc.combined.RData")
-
+#load("./ATAC_M1_pbmc.combined.RData")
+#load("./cDNA_M1.pbmc.combined.RData")
 #####################################################################################
 # I stopped here 
 # try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
@@ -93,6 +94,7 @@ save(pbmc, file = "./pbmc.RData")
 #####################################################################################
 # Gene expression data processing 
 DefaultAssay(pbmc) <- "RNA"
+pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
 pbmc <- SCTransform(pbmc)
 pbmc <- RunPCA(pbmc)
 #####################################################################################
@@ -103,6 +105,8 @@ DefaultAssay(pbmc) <- "ATAC"
 pbmc <- FindTopFeatures(pbmc, min.cutoff = 5)
 pbmc <- RunTFIDF(pbmc)
 pbmc <- RunSVD(pbmc)
+pbmc <- NormalizeData(pbmc)
+pbmc <- ScaleData(pbmc)
 #####################################################################################
 save(pbmc, file = "./pbmc.RData") # Save pbmc Step 2
 #####################################################################################
@@ -130,7 +134,6 @@ save(pbmc, file = "./pbmc.RData") # Save pbmc Step 4
 #####################################################################################
 DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
 #####################################################################################
-#####################################################################################
 # Annotating cell types 
 # Create reference 
 pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
@@ -142,6 +145,7 @@ pbmc.varialble.rna <- FindVariableFeatures(object=pbmc.rna.merge.samples , selec
 # Diet Seurat - keep only data on the seurat object
 #pbmc.rna.merge.samples<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
 # Scale data
+pbmc.rna.merge.samples <- SCTransform(pbmc.rna.merge.samples)
 pbmc.rna.merge.samples<- ScaleData(pbmc.rna.merge.samples,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = pbmc.varialble.rna))
 # Run PCA
 pbmc.rna.merge.samples <- RunPCA(pbmc.rna.merge.samples, features = VariableFeatures(object = pbmc.varialble.rna))
@@ -184,3 +188,7 @@ df2<- df2 %>% mutate(ID = ifelse(Mbp > 6 & Mobp > 6, "Oligodendrocytes", df2$ID)
 y<-dplyr::select(df2,cluster)
 Idents(pbmc.rna.merge.samples)<-plyr::mapvalues(Idents(pbmc.rna.merge.samples), from = df2$cluster, to = df2$ID)
 pbmc.rna.merge.samples$group<-Idents(pbmc.rna.merge.samples)
+reference=pbmc.rna.merge.samples
+#####################################################################################
+save(reference, file = "./reference.RData") # Save pbmc Step 5
+#####################################################################################
