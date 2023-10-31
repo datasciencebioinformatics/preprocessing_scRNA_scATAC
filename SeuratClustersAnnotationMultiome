@@ -91,4 +91,15 @@ pbmc[["ATAC"]] <- ATAC_M1_pbmc.combined[["peaks"]]
 #####################################################################################
 save(pbmc, file = "./pbmc.RData")
 #####################################################################################
-
+# Gene expression data processing 
+DefaultAssay(pbmc) <- "RNA"
+pbmc <- SCTransform(pbmc)
+pbmc <- RunPCA(pbmc)
+#####################################################################################
+save(pbmc, file = "./pbmc.RData") # Save pbmc Step 1
+#####################################################################################
+#DNA accessibility data processing 
+DefaultAssay(pbmc) <- "peaks"
+pbmc <- FindTopFeatures(pbmc, min.cutoff = 5)
+pbmc <- RunTFIDF(pbmc)
+pbmc <- RunSVD(pbmc)
