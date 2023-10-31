@@ -50,6 +50,8 @@ pbmc <- cDNA_M1.pbmc
 # create ATAC assay and add it to the object
 pbmc[["ATAC"]] <- ATAC_M1_chrom_assay
 #####################################################################################
+# I stopped here 2:
+# Try again and check the assay cDNA_M1.pbmc with the name "RNA"
 pbmc.atac.merge.samples<- ATAC_M1_pbmc
 pbmc.rna.merge.samples <- cDNA_M1.pbmc
 save(pbmc.atac.merge.samples,file="./pbmc.atac.merge.samples.RData")
