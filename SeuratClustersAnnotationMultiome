@@ -254,5 +254,5 @@ pbmc <- RunUMAP(
 )
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 12, height = 12, res=600, units = "cm")
-	DimPlot(pbmc, label = FALSE, repel = TRUE, reduction = "umap") + NoLegend()
+	DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
 dev.off()
