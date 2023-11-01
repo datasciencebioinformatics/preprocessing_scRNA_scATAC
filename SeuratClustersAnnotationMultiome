@@ -115,7 +115,7 @@ peaks <- subsetByOverlaps(x = peaks, ranges = blacklist_mm10, invert = TRUE)
 
 # quantify counts in each peak
 macs2_counts <- FeatureMatrix(
-  fragments = Fragments(pbmc[["peaks"]]),
+  fragments = Fragments(pbmc[["ATAC"]]),
   features = peaks,
   cells = colnames(pbmc)
 )
