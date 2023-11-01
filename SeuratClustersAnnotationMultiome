@@ -18,6 +18,7 @@ library(dplyr)
 library(ggplot2)
 #####################################################################################
 output_dir="/home/felipe/results_seurat/"
+output_dir="/home/singlecell/results_seurat/"
 #####################################################################################
 # ATAC analysis add gene annotation information
 annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
