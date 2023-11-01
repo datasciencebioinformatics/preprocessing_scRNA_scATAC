@@ -54,7 +54,7 @@ save(pbmc.rna.merge.samples ,file="./pbmc.merge.rna.samples.RData")
 #load("./pbmc.merge.rna.samples.RData")
 #####################################################################################
 # Read CSV into DataFrame
-Barcode_arc_RNA_ATAC = read.csv('/home/felipe/cellranger/cellranger-arc-2.0.2/Barcode_arc_RNA_ATAC',sep="\t")
+Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
 
 # Create
 df_ATAC<-data.frame(Names=Cells(ATAC_M1_pbmc),IDs=substring(Cells(ATAC_M1_pbmc),1,16))
