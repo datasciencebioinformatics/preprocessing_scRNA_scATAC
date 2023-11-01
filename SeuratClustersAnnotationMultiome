@@ -18,7 +18,7 @@ library(dplyr)
 library(ggplot2)
 #####################################################################################
 output_dir="/home/felipe/results_seurat/"
-output_dir="/home/singlecell/results_seurat/"
+#output_dir="/home/singlecell/results_seurat/"
 #####################################################################################
 # ATAC analysis add gene annotation information
 annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
@@ -56,6 +56,7 @@ save(pbmc.rna.merge.samples ,file="./pbmc.merge.rna.samples.RData")
 #####################################################################################
 # Read CSV into DataFrame
 Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
+Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
 
 # Create
 df_ATAC<-data.frame(Names=Cells(ATAC_M1_pbmc),IDs=substring(Cells(ATAC_M1_pbmc),1,16))
