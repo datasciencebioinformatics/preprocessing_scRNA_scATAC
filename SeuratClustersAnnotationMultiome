@@ -104,6 +104,8 @@ png(filename=paste(output_dir,"plot_VlnPlot_rna_atac.png",sep=""), width = 24, h
 	VlnPlot(object = pbmc, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
 dev.off()
 #####################################################################################
+save(pbmc, file = "./pbmc.RData")
+#####################################################################################
 # call peaks using MACS2
 peaks <- CallPeaks(pbmc)
 
