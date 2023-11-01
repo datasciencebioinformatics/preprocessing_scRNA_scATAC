@@ -111,11 +111,11 @@ peaks <- CallPeaks(pbmc)
 
 # remove peaks on nonstandard chromosomes and in genomic blacklist regions
 peaks <- keepStandardChromosomes(peaks, pruning.mode = "coarse")
-peaks <- subsetByOverlaps(x = peaks, ranges = blacklist_hg38_unified, invert = TRUE)
+peaks <- subsetByOverlaps(x = peaks, ranges = blacklist_mm10, invert = TRUE)
 
 # quantify counts in each peak
 macs2_counts <- FeatureMatrix(
-  fragments = Fragments(pbmc),
+  fragments = Fragments(pbmc[["peaks"]]),
   features = peaks,
   cells = colnames(pbmc)
 )
@@ -123,7 +123,7 @@ macs2_counts <- FeatureMatrix(
 # create a new assay using the MACS2 peak set and add it to the Seurat object
 pbmc[["peaks"]] <- CreateChromatinAssay(
   counts = macs2_counts,
-  fragments = fragpath,
+  fragments = Fragments(pbmc[["peaks"]]),
   annotation = annotation
 )
 #####################################################################################
