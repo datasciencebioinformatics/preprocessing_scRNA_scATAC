@@ -170,8 +170,8 @@ pbmc <- RunUMAP(
 save(pbmc, file = "./pbmc.RData") # Save pbmc Step 4
 #####################################################################################
 # FindClusters_resolution
-png(filename=paste(output_dir,"DimPlot_Multim_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
-	DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
+png(filename=paste(output_dir,"DimPlot_Multim_rna_atac.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	DimPlot(pbmc, label = FALSE, repel = TRUE, reduction = "umap") + NoLegend()
 dev.off()
 #####################################################################################
 # Annotating cell types 
@@ -232,5 +232,27 @@ reference=pbmc.rna.merge.samples
 #####################################################################################
 save(reference, file = "./reference.RData") # Save pbmc Step 5
 #####################################################################################
-load("./reference.RData")
-load("./pbmc.RData")
+# Annotating cell types 
+Idents(pbmc) <- Idents(pbmc.rna.merge.samples)
+
+# Joint UMAP visualization 
+# build a joint neighbor graph using both assays
+pbmc <- FindMultiModalNeighbors(
+  object = pbmc,
+  reduction.list = list("pca", "lsi"), 
+  dims.list = list(1:50, 2:40),
+  modality.weight.name = "RNA.weight",
+  verbose = TRUE
+)
+
+# build a joint UMAP visualization
+pbmc <- RunUMAP(
+  object = pbmc,
+  nn.name = "weighted.nn",
+  assay = "RNA",
+  verbose = TRUE
+)
+# FindClusters_resolution
+png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	DimPlot(pbmc, label = FALSE, repel = TRUE, reduction = "umap") + NoLegend()
+dev.off()
