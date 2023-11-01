@@ -43,7 +43,6 @@ cDNA_M1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.pbmc, pattern = "mt
 # Subset percent.mt < 2
 cDNA_M1.pbmc = subset(cDNA_M1.pbmc, subset = percent.mt < 2)
 #####################################################################################
-# I stopped here 2:
 # Try again and check the assay cDNA_M1.pbmc with the name "RNA"
 pbmc.atac.merge.samples<- ATAC_M1_pbmc
 pbmc.rna.merge.samples <- cDNA_M1.pbmc
@@ -128,7 +127,7 @@ pbmc[["peaks"]] <- CreateChromatinAssay(
   annotation = annotation
 )
 #####################################################################################
-save(pbmc, file = "./pbmc.RData")
+save(pbmc, file = "./pbmc.RData") # I stopped here
 #####################################################################################
 # Gene expression data processing 
 DefaultAssay(pbmc) <- "RNA"
