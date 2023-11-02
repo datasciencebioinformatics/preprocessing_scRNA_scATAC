@@ -16,6 +16,7 @@ library(Signac)
 library(EnsDb.Mmusculus.v79)
 library(dplyr)
 library(ggplot2)
+colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 #####################################################################################
 output_dir="/home/felipe/results_seurat/"
 #output_dir="/home/singlecell/results_seurat/"
@@ -170,10 +171,10 @@ pbmc <- RunUMAP(
 save(pbmc, file = "./pbmc.RData") # Save pbmc Step 4
 #####################################################################################
 # Create DimMap
-DimPlot_Multim_rna_atac<-DimPlot(pbmc, label = FALSE, repel = TRUE, reduction = "umap") + NoLegend()
+DimPlot_Multim_rna_atac<-DimPlot(pbmc, label = TRUE, repel = TRUE, group.by = "ident", reduction = "umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1")+ NoLegend()
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"DimPlot_Multim_rna_atac.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+png(filename=paste(output_dir,"DimPlot_Multim_rna_atac2.png",sep=""), width = 12, height = 12, res=600, units = "cm")
 	DimPlot_Multim_rna_atac
 dev.off()
 #####################################################################################
@@ -182,16 +183,13 @@ pbmc.2 <- RunUMAP(pbmc, nn.name = "weighted.nn", reduction.name = "wnn.umap", re
 pbmc.2 <- FindClusters(pbmc.2, graph.name = "wsnn", algorithm = 1, resolution = 0.1, verbose = FALSE)
 
 # Find DimPlot_weighted_nn
-DimPlot_weighted_nn <- DimPlot(pbmc.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5) + NoLegend()
+DimPlot_weighted_nn <- DimPlot(pbmc.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5,cols=colour) + ggtitle("WNN Clusters M1")+ NoLegend()
 
 #####################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"DimPlot_weighted_nn.png",sep=""), width = 12, height = 12, res=600, units = "cm")
 	DimPlot_weighted_nn
 dev.off()
-
-DimPlot_Multim_rna_atac
-DimPlot_weighted_nn
 #####################################################################################
 # Annotating cell types 
 # Create reference 
@@ -274,6 +272,32 @@ pbmc <- RunUMAP(
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 12, height = 12, res=600, units = "cm")
 	DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
+dev.off()
+#####################################################################################
+# Step 2 : Output pbmc.rna.merge.samples.
+# Markers and markers limits were previously defined here used to calculate the celltypes.
+#####################################################################################
+# Process seurat on pbmc.atac.merge.samples
+pbmc.atac.merge.samples <- RunTFIDF(pbmc.atac.merge.samples)
+pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff = "q0")
+pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
+pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
+#####################################################################################
+# Step 3 : Output pbmc.atac.merge.samples.
+# RunTFIDF, FindTopFeatures and RunSVD are used for RunUMAP.
+
+#####################################################################################
+save(pbmc, file = "./pbmc.RData")
+#####################################################################################
+colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
+DimPlot_Multim_rna_atac
+DimPlot_weighted_nn
+DimPlot_RNA <- DimPlot(pbmc.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1") + NoLegend()
+DimPlot_ATAC <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = TRUE,cols="#3b528b") + ggtitle("ATAC ATAC-M1") + NoLegend()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	grid.arrange(DimPlot_RNA,DimPlot_ATAC,DimPlot_Multim_rna_atac,DimPlot_weighted_nn,ncol = 2)
 dev.off()
 #####################################################################################
 # Linking peaks to genes 
