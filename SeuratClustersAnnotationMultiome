@@ -169,10 +169,29 @@ pbmc <- RunUMAP(
 #####################################################################################
 save(pbmc, file = "./pbmc.RData") # Save pbmc Step 4
 #####################################################################################
+# Create DimMap
+DimPlot_Multim_rna_atac<-DimPlot(pbmc, label = FALSE, repel = TRUE, reduction = "umap") + NoLegend()
+
 # FindClusters_resolution
 png(filename=paste(output_dir,"DimPlot_Multim_rna_atac.png",sep=""), width = 12, height = 12, res=600, units = "cm")
-	DimPlot(pbmc, label = FALSE, repel = TRUE, reduction = "umap") + NoLegend()
+	DimPlot_Multim_rna_atac
 dev.off()
+#####################################################################################
+# FindClusters_resolution
+pbmc.2 <- RunUMAP(pbmc, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
+pbmc.2 <- FindClusters(pbmc.2, graph.name = "wsnn", algorithm = 1, resolution = 0.1, verbose = FALSE)
+
+# Find DimPlot_weighted_nn
+DimPlot_weighted_nn <- DimPlot(pbmc.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5) + NoLegend()
+
+#####################################################################################
+# FindClusters_resolution
+png(filename=paste(output_dir,"DimPlot_weighted_nn.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	DimPlot_weighted_nn
+dev.off()
+
+DimPlot_Multim_rna_atac
+DimPlot_weighted_nn
 #####################################################################################
 # Annotating cell types 
 # Create reference 
