@@ -327,3 +327,8 @@ p1 <- CoveragePlot(
   extend.upstream = 500,
   extend.downstream = 10000
 )
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"CoveragePlot_p1.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	p1
+dev.off()
