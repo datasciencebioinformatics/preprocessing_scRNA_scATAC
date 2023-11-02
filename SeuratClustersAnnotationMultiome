@@ -261,7 +261,7 @@ dev.off()
 DefaultAssay(pbmc) <- "ATAC"
 
 # first compute the GC content for each peak
-pbmc <- RegionStats(pbmc, genome = EnsDb.Mmusculus.v79)
+pbmc <- RegionStats(pbmc, genome = BSgenome.Mmusculus.UCSC.mm10)
 
 
 # link peaks to genes
