@@ -271,3 +271,16 @@ pbmc <- LinkPeaks(
   expression.assay = "SCT",
   genes.use = c("Snap25", "Agt","Ctss","Pdgfra","Mbp","Mobp")
 )
+
+idents.plot <- c("Neurons", "Astrocytes", "Microglia",
+                 "OPCs", "Oligodendrocytes")
+
+p1 <- CoveragePlot(
+  object = pbmc,
+  region = "Snap25",
+  features = "Snap25",
+  expression.assay = "SCT",
+  idents = idents.plot,
+  extend.upstream = 500,
+  extend.downstream = 10000
+)
