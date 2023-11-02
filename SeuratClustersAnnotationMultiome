@@ -256,3 +256,18 @@ pbmc <- RunUMAP(
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 12, height = 12, res=600, units = "cm")
 	DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
 dev.off()
+#####################################################################################
+# Linking peaks to genes 
+DefaultAssay(pbmc) <- "ATAC"
+
+# first compute the GC content for each peak
+pbmc <- RegionStats(pbmc, genome = EnsDb.Mmusculus.v79)
+
+
+# link peaks to genes
+pbmc <- LinkPeaks(
+  object = pbmc,
+  peak.assay = "ATAC",
+  expression.assay = "SCT",
+  genes.use = c("Snap25", "Agt","Ctss","Pdgfra","Mbp","Mobp")
+)
