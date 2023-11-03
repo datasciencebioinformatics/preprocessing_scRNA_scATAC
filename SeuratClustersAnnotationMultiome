@@ -152,12 +152,12 @@ save(pbmc, file = "./pbmc.RData") # Save pbmc Step 2
 pbmc <- FindMultiModalNeighbors(
   object = pbmc,
   reduction.list = list("pca", "lsi"), 
-  dims.list = list(1:50, 2:40),
+  dims.list = list(1:100, 2:100),
   modality.weight.name = "RNA.weight",
   verbose = TRUE
 )
 #####################################################################################
-save(pbmc, file = "./pbmc.RData") # Save pbmc Step 3
+#save(pbmc, file = "./pbmc.RData") # Save pbmc Step 3
 #####################################################################################
 # build a joint UMAP visualization
 pbmc <- RunUMAP(
@@ -167,7 +167,7 @@ pbmc <- RunUMAP(
   verbose = TRUE
 )
 #####################################################################################
-save(pbmc, file = "./pbmc.RData") # Save pbmc Step 4
+#save(pbmc, file = "./pbmc.RData") # Save pbmc Step 4
 #####################################################################################
 # Create DimMap
 DimPlot_Multim_rna_atac<-DimPlot(pbmc, label = TRUE, repel = TRUE, group.by = "ident", reduction = "umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1")+ NoLegend()
