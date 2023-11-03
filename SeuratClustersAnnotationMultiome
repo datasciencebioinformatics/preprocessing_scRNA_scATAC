@@ -152,7 +152,7 @@ save(pbmc, file = "./pbmc.RData") # Save pbmc Step 2
 pbmc <- FindMultiModalNeighbors(
   object = pbmc,
   reduction.list = list("pca", "lsi"), 
-  dims.list = list(1:100, 2:100),
+  dims.list = list(1:50, 2:40),
   modality.weight.name = "RNA.weight",
   verbose = TRUE
 )
