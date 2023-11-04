@@ -16,6 +16,7 @@ library(Signac)
 library(EnsDb.Mmusculus.v79)
 library(dplyr)
 library(ggplot2)
+library(loupeR)
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 #####################################################################################
 output_dir="/home/felipe/results_seurat/"
