@@ -1,0 +1,62 @@
+# Script for installling all R packages necessary for our analysis
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(gridExtra)
+library(ggplot2)
+library(plyr)
+library(SeuratObject)
+library("harmony")
+library(rhdf5)
+library("hdf5r")
+library("Signac")
+options(Seurat.object.assay.version = "v5")
+library(EnsDb.Mmusculus.v79)
+library(loupeR)
+
+###########################################################################################################33
+# First, upgrade R
+# Remove R 
+apt-get remove r-base
+apt-get install libssl-dev
+
+# If you don’t have this line, you can run the following in a terminal session to use the R CRAN version:
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+
+# Next line
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+
+# Upgrade R
+apt install r-base
+###########################################################################################################
+# Install packages
+sudo apt-get install libcurl4-openssl-dev
+sudo apt-get install libssl-dev
+sudo apt-get install libhdf5-dev
+sudo apt-get install libxml2-dev
+
+sudo R --vanilla -e 'install.packages("remotes", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("BiocManager", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("dplyr", repos="http://cran.us.r-project.org")' # OK
+sudo R --vanilla -e 'install.packages("patchwork", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("gridExtra", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("ggplot2", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("plyr", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("SeuratObject", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("openssl", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("curl", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("harmony", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'install.packages("hdf5r", repos="http://cran.us.r-project.org")' # Ok
+sudo R --vanilla -e 'BiocManager::install("rhdf5")' # Ok
+
+sudo R --vanilla -e 'BiocManager::install("GenomeInfoDb")' # Ok
+sudo R --vanilla -e 'BiocManager::install("ensembldb")'  # Ok
+sudo R --vanilla -e 'BiocManager::install("GenomicRanges")'  # Ok
+sudo R --vanilla -e 'BiocManager::install("IRanges")'  # Ok
+sudo R --vanilla -e 'BiocManager::install("Rsamtools")'  # Ok
+sudo R --vanilla -e 'BiocManager::install("S4Vectors")'  # Ok
+sudo R --vanilla -e 'BiocManager::install("EnsDb.Mmusculus.v79")'  # Ok
+sudo R --vanilla -e 'install.packages("Signac", repos="http://cran.us.r-project.org")' # Ok
+
+sudo R --vanilla -e 'remotes::install_github("10XGenomics/loupeR")' # Ok
+sudo R --vanilla -e 'install.packages("Seurat", repos="http://cran.us.r-project.org")' # Ok
