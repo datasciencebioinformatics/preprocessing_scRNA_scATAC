@@ -1,19 +1,19 @@
 # Script for installling all R packages necessary for our analysis
-library(dplyr)
-library(Seurat)
-library(patchwork)
-library(gridExtra)
-library(ggplot2)
-library(plyr)
-library(SeuratObject)
-library("harmony")
-library(rhdf5)
-library("hdf5r")
-library("Signac")
-options(Seurat.object.assay.version = "v5")
-library(EnsDb.Mmusculus.v79)
-library(loupeR)
-
+# library(dplyr)
+# library(Seurat)
+# library(patchwork)
+# library(gridExtra)
+# library(ggplot2)
+# library(plyr)
+# library(SeuratObject)
+# library("harmony")
+# library(rhdf5)
+# library("hdf5r")
+# library("Signac")
+# options(Seurat.object.assay.version = "v5")
+# library(EnsDb.Mmusculus.v79)
+# library(loupeR)
+# library(azimuth)
 ###########################################################################################################33
 # First, upgrade R
 # Remove R 
@@ -48,6 +48,7 @@ sudo R --vanilla -e 'install.packages("curl", repos="http://cran.us.r-project.or
 sudo R --vanilla -e 'install.packages("harmony", repos="http://cran.us.r-project.org")' # Ok
 sudo R --vanilla -e 'install.packages("hdf5r", repos="http://cran.us.r-project.org")' # Ok
 sudo R --vanilla -e 'BiocManager::install("rhdf5")' # Ok
+sudo R --vanilla -e 'remotes::install_github("satijalab/azimuth", ref = "master")' # Ok
 
 sudo R --vanilla -e 'BiocManager::install("GenomeInfoDb")' # Ok
 sudo R --vanilla -e 'BiocManager::install("ensembldb")'  # Ok
@@ -59,4 +60,6 @@ sudo R --vanilla -e 'BiocManager::install("EnsDb.Mmusculus.v79")'  # Ok
 sudo R --vanilla -e 'install.packages("Signac", repos="http://cran.us.r-project.org")' # Ok
 
 sudo R --vanilla -e 'remotes::install_github("10XGenomics/loupeR")' # Ok
+sudo R --vanilla -e 'install.packages("Azimuth", repos="http://cran.us.r-project.org")' # Ok
 sudo R --vanilla -e 'install.packages("Seurat", repos="http://cran.us.r-project.org")' # Ok
+
