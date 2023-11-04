@@ -51,8 +51,8 @@ pbmc.rna.merge.samples <- cDNA_M1.pbmc
 save(pbmc.atac.merge.samples,file="./pbmc.atac.merge.samples.RData")
 save(pbmc.rna.merge.samples ,file="./pbmc.merge.rna.samples.RData")
 
-load("./pbmc.atac.merge.samples.RData")
-load("./pbmc.merge.rna.samples.RData")
+#load("./pbmc.atac.merge.samples.RData")
+#load("./pbmc.merge.rna.samples.RData")
 #####################################################################################
 # Read CSV into DataFrame
 Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
@@ -83,8 +83,8 @@ cDNA_M1.pbmc.combined <- cDNA_M1.pbmc[,combined.cell]
 
 save(ATAC_M1_pbmc.combined, file = "./ATAC_M1_pbmc.combined.RData")
 save(cDNA_M1.pbmc.combined, file = "./cDNA_M1.pbmc.combined.RData")
-load("./ATAC_M1_pbmc.combined.RData")
-load("./cDNA_M1.pbmc.combined.RData")
+#load("./ATAC_M1_pbmc.combined.RData")
+#load("./cDNA_M1.pbmc.combined.RData")
 #####################################################################################
 # I stopped here 
 # try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
