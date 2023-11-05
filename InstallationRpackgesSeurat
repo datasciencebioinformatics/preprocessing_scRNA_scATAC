@@ -58,6 +58,7 @@ sudo R --vanilla -e 'BiocManager::install("Rsamtools")'  # Ok
 sudo R --vanilla -e 'BiocManager::install("S4Vectors")'  # Ok
 sudo R --vanilla -e 'BiocManager::install("EnsDb.Mmusculus.v79")'  # Ok
 sudo R --vanilla -e 'BiocManager::install("biovizBase")'  # Ok
+sudo R --vanilla -e 'BiocManager::install("TxDb.Mmusculus.UCSC.mm10.knownGene")'  # Ok
 sudo R --vanilla -e 'install.packages("Signac", repos="http://cran.us.r-project.org")' # Ok
 
 sudo R --vanilla -e 'remotes::install_github("10XGenomics/loupeR")' # Ok
