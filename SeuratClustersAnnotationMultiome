@@ -114,6 +114,9 @@ peaks <- CallPeaks(pbmc)
 peaks <- keepStandardChromosomes(peaks, pruning.mode = "coarse")
 peaks <- subsetByOverlaps(x = peaks, ranges = blacklist_mm10, invert = TRUE)
 
+#####################################################################################
+save(peaks, file = "./peaks.RData")
+#####################################################################################
 # quantify counts in each peak
 macs2_counts <- FeatureMatrix(
   fragments = Fragments(pbmc[["ATAC"]]),
