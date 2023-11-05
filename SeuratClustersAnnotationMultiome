@@ -131,7 +131,7 @@ annot <- transcripts("TxDb.Mmusculus.UCSC.mm10.knownGene")
 pbmc[["peaks"]] <- CreateChromatinAssay(
   counts = macs2_counts,
   fragments = Fragments(pbmc[["ATAC"]]),
-  annotation = annotation
+  annotation = annot
 )
 #####################################################################################
 save(pbmc, file = "./pbmc.RData") # I stopped here
