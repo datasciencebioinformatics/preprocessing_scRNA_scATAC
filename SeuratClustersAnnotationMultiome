@@ -200,7 +200,7 @@ for (index in 1:length(list_dimensions))
 	myplotsA[[lab_cuple]]<-DimPlot_Multim_rna_atac
 }
 #####################################################################################
-png(filename=paste(output_dir,"FindClusters_resolutions8.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
+png(filename=paste(output_dir,"FineTune_multiome.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
 	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]], nrow = 3, top = "")
 dev.off()
 #####################################################################################
