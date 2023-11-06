@@ -33,43 +33,43 @@ ATAC_M1_singlecell     <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M
 ATAC_M1_fragment_file  <-  "/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz"
 ATAC_M1_fragment       <-  CreateFragmentObject(ATAC_M1_fragment_file)
 ATAC_M1_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"), annotation = annotations,fragments ='/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz')
-ATAC_M1_pbmc           <-  CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
-ATAC_M1_counts         <-  FeatureMatrix(fragments = ATAC_M1_fragment,features = granges(ATAC_M1_pbmc))
+ATAC_M1_hypotha           <-  CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
+ATAC_M1_counts         <-  FeatureMatrix(fragments = ATAC_M1_fragment,features = granges(ATAC_M1_hypotha))
 #####################################################################################
 # Save whole workspace to working directory
 cDNA_M1_h5          <- Read10X_h5("/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix.h5")
 # Load table for all sample - aggreagate cellranger for the six samples
-cDNA_M1.pbmc <- CreateSeuratObject(counts = cDNA_M1_h5, project = "cDNA-M1", assay = "RNA")
+cDNA_M1.hypotha <- CreateSeuratObject(counts = cDNA_M1_h5, project = "cDNA-M1", assay = "RNA")
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats
-cDNA_M1.pbmc[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.pbmc, pattern = "mt")
+cDNA_M1.hypotha[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.hypotha, pattern = "mt")
 # Subset percent.mt < 2
-cDNA_M1.pbmc = subset(cDNA_M1.pbmc, subset = percent.mt < 2)
+cDNA_M1.hypotha = subset(cDNA_M1.hypotha, subset = percent.mt < 2)
 #####################################################################################
-# Try again and check the assay cDNA_M1.pbmc with the name "RNA"
-pbmc.atac.merge.samples<- ATAC_M1_pbmc
-pbmc.rna.merge.samples <- cDNA_M1.pbmc
-save(pbmc.atac.merge.samples,file="./pbmc.atac.merge.samples.RData")
-save(pbmc.rna.merge.samples ,file="./pbmc.merge.rna.samples.RData")
+# Try again and check the assay cDNA_M1.hypotha with the name "RNA"
+hypotha.atac.merge.samples<- ATAC_M1_hypotha
+hypotha.rna.merge.samples <- cDNA_M1.hypotha
+save(hypotha.atac.merge.samples,file="./hypotha.atac.merge.samples.RData")
+save(hypotha.rna.merge.samples ,file="./hypotha.merge.rna.samples.RData")
 
-#load("./pbmc.atac.merge.samples.RData")
-#load("./pbmc.merge.rna.samples.RData")
+#load("./hypotha.atac.merge.samples.RData")
+#load("./hypotha.merge.rna.samples.RData")
 #####################################################################################
 # Read CSV into DataFrame
 Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
 Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
 
 # Create
-df_ATAC<-data.frame(Names=Cells(ATAC_M1_pbmc),IDs=substring(Cells(ATAC_M1_pbmc),1,16))
-df_RNA<-data.frame(Names=Cells(cDNA_M1.pbmc),IDs=substring(Cells(cDNA_M1.pbmc),1,16))
+df_ATAC<-data.frame(Names=Cells(ATAC_M1_hypotha),IDs=substring(Cells(ATAC_M1_hypotha),1,16))
+df_RNA<-data.frame(Names=Cells(cDNA_M1.hypotha),IDs=substring(Cells(cDNA_M1.hypotha),1,16))
 
 # Create ATAC-RNA
 df_ATAC$RNA<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$ATAC %in% df_ATAC$IDs,"RNA"],substring(df_ATAC$Names,17,18),sep="")
 
 # S3 method for DimReduc
-ATAC_M1_pbmc<-RenameCells(ATAC_M1_pbmc, new.names = df_ATAC[which(df_ATAC$Names %in% Cells(ATAC_M1_pbmc)),"RNA"])
+ATAC_M1_hypotha<-RenameCells(ATAC_M1_hypotha, new.names = df_ATAC[which(df_ATAC$Names %in% Cells(ATAC_M1_hypotha)),"RNA"])
 #####################################################################################
 # Create combined multiome object
-combined.cell<-Cells(ATAC_M1_pbmc)[Cells(ATAC_M1_pbmc) %in% Cells(cDNA_M1.pbmc)]
+combined.cell<-Cells(ATAC_M1_hypotha)[Cells(ATAC_M1_hypotha) %in% Cells(cDNA_M1.hypotha)]
 
 # add the ATAC-seq assay
 grange.counts <- StringToGRanges(rownames(ATAC_M1_h5), sep = c(":", "-"))
@@ -78,37 +78,37 @@ grange.counts <- StringToGRanges(rownames(ATAC_M1_h5), sep = c(":", "-"))
 grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
 
 # Combine datasets with same cells
-ATAC_M1_pbmc.combined <- ATAC_M1_pbmc[,combined.cell]
-cDNA_M1.pbmc.combined <- cDNA_M1.pbmc[,combined.cell]
+ATAC_M1_hypotha.combined <- ATAC_M1_hypotha[,combined.cell]
+cDNA_M1.hypotha.combined <- cDNA_M1.hypotha[,combined.cell]
 
-save(ATAC_M1_pbmc.combined, file = "./ATAC_M1_pbmc.combined.RData")
-save(cDNA_M1.pbmc.combined, file = "./cDNA_M1.pbmc.combined.RData")
-#load("./ATAC_M1_pbmc.combined.RData")
-#load("./cDNA_M1.pbmc.combined.RData")
+save(ATAC_M1_hypotha.combined, file = "./ATAC_M1_hypotha.combined.RData")
+save(cDNA_M1.hypotha.combined, file = "./cDNA_M1.hypotha.combined.RData")
+#load("./ATAC_M1_hypotha.combined.RData")
+#load("./cDNA_M1.hypotha.combined.RData")
 #####################################################################################
 # I stopped here 
-# try to do this https://stuartlab.org/signac/articles/pbmc_multiomic
+# try to do this https://stuartlab.org/signac/articles/hypotha_multiomic
 # create a Seurat object containing the RNA adata
-pbmc <- cDNA_M1.pbmc.combined
+hypotha <- cDNA_M1.hypotha.combined
 
 # create ATAC assay and add it to the object
-pbmc[["ATAC"]] <- ATAC_M1_pbmc.combined[["peaks"]]
+hypotha[["ATAC"]] <- ATAC_M1_hypotha.combined[["peaks"]]
 #####################################################################################
 # Quality control 
-DefaultAssay(pbmc) <- "ATAC"
+DefaultAssay(hypotha) <- "ATAC"
 
-pbmc <- NucleosomeSignal(pbmc)
-pbmc <- TSSEnrichment(pbmc)
+hypotha <- NucleosomeSignal(hypotha)
+hypotha <- TSSEnrichment(hypotha)
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"plot_VlnPlot_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
-	VlnPlot(object = pbmc, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
+	VlnPlot(object = hypotha, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
 dev.off()
 #####################################################################################
-save(pbmc, file = "./pbmc.RData")
+save(hypotha, file = "./hypotha.RData")
 #####################################################################################
 # call peaks using MACS2
-peaks <- CallPeaks(pbmc)
+peaks <- CallPeaks(hypotha)
 
 # remove peaks on nonstandard chromosomes and in genomic blacklist regions
 peaks <- keepStandardChromosomes(peaks, pruning.mode = "coarse")
@@ -119,65 +119,65 @@ save(peaks, file = "./peaks.RData")
 #####################################################################################
 # quantify counts in each peak
 macs2_counts <- FeatureMatrix(
-  fragments = Fragments(pbmc[["ATAC"]]),
+  fragments = Fragments(hypotha[["ATAC"]]),
   features = peaks,
-  cells = colnames(pbmc)
+  cells = colnames(hypotha)
 )
 
 library(TxDb.Mmusculus.UCSC.mm10.knownGene)
 annot <- transcripts(TxDb.Mmusculus.UCSC.mm10.knownGene)
 
 # create a new assay using the MACS2 peak set and add it to the Seurat object
-pbmc[["peaks"]] <- CreateChromatinAssay(
+hypotha[["peaks"]] <- CreateChromatinAssay(
   counts = macs2_counts,
-  fragments = Fragments(pbmc[["ATAC"]]),
+  fragments = Fragments(hypotha[["ATAC"]]),
   annotation = annot
 )
 #####################################################################################
-save(pbmc, file = "./pbmc.RData") # I stopped here
+save(hypotha, file = "./hypotha.RData") # I stopped here
 #####################################################################################
 # Gene expression data processing 
-DefaultAssay(pbmc) <- "RNA"
-pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc <- SCTransform(pbmc)
-pbmc <- RunPCA(pbmc)
+DefaultAssay(hypotha) <- "RNA"
+hypotha <- NormalizeData(hypotha, normalization.method = "LogNormalize", scale.factor = 10000)
+hypotha <- SCTransform(hypotha)
+hypotha <- RunPCA(hypotha)
 #####################################################################################
-save(pbmc, file = "./pbmc.RData") # Save pbmc Step 1
+save(hypotha, file = "./hypotha.RData") # Save hypotha Step 1
 #####################################################################################
 #DNA accessibility data processing 
-DefaultAssay(pbmc) <- "ATAC"
-pbmc <- FindTopFeatures(pbmc, min.cutoff = 5)
-pbmc <- RunTFIDF(pbmc)
-pbmc <- RunSVD(pbmc)
-pbmc <- NormalizeData(pbmc)
-pbmc <- ScaleData(pbmc)
+DefaultAssay(hypotha) <- "ATAC"
+hypotha <- FindTopFeatures(hypotha, min.cutoff = 5)
+hypotha <- RunTFIDF(hypotha)
+hypotha <- RunSVD(hypotha)
+hypotha <- NormalizeData(hypotha)
+hypotha <- ScaleData(hypotha)
 #####################################################################################
-save(pbmc, file = "./pbmc.RData") # Save pbmc Step 2
+save(hypotha, file = "./hypotha.RData") # Save hypotha Step 2
 #####################################################################################
 # Annotating cell types 
 # build a joint neighbor graph using both assays
-pbmc <- FindMultiModalNeighbors(
-  object = pbmc,
+hypotha <- FindMultiModalNeighbors(
+  object = hypotha,
   reduction.list = list("pca", "lsi"), 
-  dims.list = list(1:50, 2:40),
+  dims.list = list(1:50, 2:50),
   modality.weight.name = "RNA.weight",
   verbose = TRUE
 )
 #####################################################################################
-#save(pbmc, file = "./pbmc.RData") # Save pbmc Step 3
+#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 3
 #####################################################################################
 # build a joint UMAP visualization
-pbmc <- RunUMAP(
-  object = pbmc,
+hypotha <- RunUMAP(
+  object = hypotha,
   nn.name = "weighted.nn",
   assay = "RNA",
   verbose = TRUE
 )
 #####################################################################################
-#save(pbmc, file = "./pbmc.RData") # Save pbmc Step 4
+#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 4
 #####################################################################################
 # Create DimMap
-DimPlot_Multim_rna_atac<-DimPlot(pbmc, label = TRUE, repel = TRUE, group.by = "ident", reduction = "umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1")+ NoLegend()
+DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "ident", reduction = "umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1")+ NoLegend()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"DimPlot_Multim_rna_atac2.png",sep=""), width = 12, height = 12, res=600, units = "cm")
@@ -185,11 +185,11 @@ png(filename=paste(output_dir,"DimPlot_Multim_rna_atac2.png",sep=""), width = 12
 dev.off()
 #####################################################################################
 # FindClusters_resolution
-pbmc.2 <- RunUMAP(pbmc, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
-pbmc.2 <- FindClusters(pbmc.2, graph.name = "wsnn", algorithm = 1, resolution = 0.1, verbose = FALSE)
+hypotha.2 <- RunUMAP(hypotha, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
+hypotha.2 <- FindClusters(hypotha.2, graph.name = "wsnn", algorithm = 1, resolution = 0.1, verbose = FALSE)
 
 # Find DimPlot_weighted_nn
-DimPlot_weighted_nn <- DimPlot(pbmc.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5,cols=colour) + ggtitle("WNN Clusters M1")+ NoLegend()
+DimPlot_weighted_nn <- DimPlot(hypotha.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5,cols=colour) + ggtitle("WNN Clusters M1")+ NoLegend()
 
 #####################################################################################
 # FindClusters_resolution
@@ -199,38 +199,38 @@ dev.off()
 #####################################################################################
 # Annotating cell types 
 # Create reference 
-pbmc.rna.merge.samples=cDNA_M1.pbmc.combined
+hypotha.rna.merge.samples=cDNA_M1.hypotha.combined
 #####################################################################################
 # Calculate NormalizeData
-pbmc.rna.merge.samples <- NormalizeData(pbmc.rna.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
+hypotha.rna.merge.samples <- NormalizeData(hypotha.rna.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
 # Calculate FindVariableFeatures
-pbmc.varialble.rna <- FindVariableFeatures(object=pbmc.rna.merge.samples , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+hypotha.varialble.rna <- FindVariableFeatures(object=hypotha.rna.merge.samples , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
 # Diet Seurat - keep only data on the seurat object
-#pbmc.rna.merge.samples<-DietSeurat(pbmc.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
+#hypotha.rna.merge.samples<-DietSeurat(hypotha.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
 # Scale data
-pbmc.rna.merge.samples <- SCTransform(pbmc.rna.merge.samples)
-pbmc.rna.merge.samples<- ScaleData(pbmc.rna.merge.samples,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = pbmc.varialble.rna))
+hypotha.rna.merge.samples <- SCTransform(hypotha.rna.merge.samples)
+hypotha.rna.merge.samples<- ScaleData(hypotha.rna.merge.samples,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = hypotha.varialble.rna))
 # Run PCA
-pbmc.rna.merge.samples <- RunPCA(pbmc.rna.merge.samples, features = VariableFeatures(object = pbmc.varialble.rna))
+hypotha.rna.merge.samples <- RunPCA(hypotha.rna.merge.samples, features = VariableFeatures(object = hypotha.varialble.rna))
 # Run Harmony
-#pbmc.rna.merge.samples <- RunHarmony(pbmc.rna.merge.samples, group.by.vars = c('Sex'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
+#hypotha.rna.merge.samples <- RunHarmony(hypotha.rna.merge.samples, group.by.vars = c('Sex'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 # Run UMAP
-#pbmc.rna.merge.samples <- RunUMAP(pbmc.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
-pbmc.rna.merge.samples <- RunUMAP(pbmc.rna.merge.samples, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
+#hypotha.rna.merge.samples <- RunUMAP(hypotha.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
+hypotha.rna.merge.samples <- RunUMAP(hypotha.rna.merge.samples, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
 # Run FindNeighbors
-#pbmc.rna.merge.samples <- FindNeighbors(pbmc.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
-pbmc.rna.merge.samples <- FindNeighbors(pbmc.rna.merge.samples, dims = 1:50) # Optmize number of dimensions  ElbowPlot =10,15
+#hypotha.rna.merge.samples <- FindNeighbors(hypotha.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
+hypotha.rna.merge.samples <- FindNeighbors(hypotha.rna.merge.samples, dims = 1:50) # Optmize number of dimensions  ElbowPlot =10,15
 #####################################################################################
-# Step 1 : Output pbmc.rna.merge.samples
+# Step 1 : Output hypotha.rna.merge.samples
 # Data is being normalized and 3000 variable genes are further considered. Data is then scaled to be used in PCA, UMAP and FindNeighbors.
 # Important to note now, there is only one sample therefore batch correction is commented out.
 #####################################################################################
 # Run FindNeighbors
 # Run FindClusters # Find clusters for only RNA
-pbmc.rna.merge.samples <- FindClusters(pbmc.rna.merge.samples,reduction = "pca",resolution = 0.12)
+hypotha.rna.merge.samples <- FindClusters(hypotha.rna.merge.samples,reduction = "pca",resolution = 0.12)
 
-DefaultAssay(pbmc.rna.merge.samples) <- "RNA"
-clustavg<-AverageExpression(pbmc.rna.merge.samples)
+DefaultAssay(hypotha.rna.merge.samples) <- "RNA"
+clustavg<-AverageExpression(hypotha.rna.merge.samples)
 clustdf<-as.data.frame(clustavg$RNA)
 clustdf<-t(clustdf)
 clustdf<-as_tibble(clustdf, rownames = "cluster")
@@ -249,19 +249,19 @@ df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 2, "OPCs", df2$ID))    # Ok
 df2<- df2 %>% mutate(ID = ifelse(Mbp > 6 & Mobp > 6, "Oligodendrocytes", df2$ID))
 
 y<-dplyr::select(df2,cluster)
-Idents(pbmc.rna.merge.samples)<-plyr::mapvalues(Idents(pbmc.rna.merge.samples), from = df2$cluster, to = df2$ID)
-pbmc.rna.merge.samples$group<-Idents(pbmc.rna.merge.samples)
-reference=pbmc.rna.merge.samples
+Idents(hypotha.rna.merge.samples)<-plyr::mapvalues(Idents(hypotha.rna.merge.samples), from = df2$cluster, to = df2$ID)
+hypotha.rna.merge.samples$group<-Idents(hypotha.rna.merge.samples)
+reference=hypotha.rna.merge.samples
 #####################################################################################
-save(reference, file = "./reference.RData") # Save pbmc Step 5
+save(reference, file = "./reference.RData") # Save hypotha Step 5
 #####################################################################################
 # Annotating cell types 
-Idents(pbmc) <- Idents(pbmc.rna.merge.samples)
+Idents(hypotha) <- Idents(hypotha.rna.merge.samples)
 
 # Joint UMAP visualization 
 # build a joint neighbor graph using both assays
-pbmc <- FindMultiModalNeighbors(
-  object = pbmc,
+hypotha <- FindMultiModalNeighbors(
+  object = hypotha,
   reduction.list = list("pca", "lsi"), 
   dims.list = list(1:50, 2:40),
   modality.weight.name = "RNA.weight",
@@ -269,37 +269,37 @@ pbmc <- FindMultiModalNeighbors(
 )
 
 # build a joint UMAP visualization
-pbmc <- RunUMAP(
-  object = pbmc,
+hypotha <- RunUMAP(
+  object = hypotha,
   nn.name = "weighted.nn",
   assay = "RNA",
   verbose = TRUE
 )
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 12, height = 12, res=600, units = "cm")
-	DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
+	DimPlot(hypotha, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
 dev.off()
 #####################################################################################
-# Step 2 : Output pbmc.rna.merge.samples.
+# Step 2 : Output hypotha.rna.merge.samples.
 # Markers and markers limits were previously defined here used to calculate the celltypes.
 #####################################################################################
-# Process seurat on pbmc.atac.merge.samples
-pbmc.atac.merge.samples <- RunTFIDF(pbmc.atac.merge.samples)
-pbmc.atac.merge.samples <- FindTopFeatures(pbmc.atac.merge.samples, min.cutoff = "q0")
-pbmc.atac.merge.samples <- RunSVD(pbmc.atac.merge.samples)
-pbmc.atac.merge.samples <- RunUMAP(pbmc.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
+# Process seurat on hypotha.atac.merge.samples
+hypotha.atac.merge.samples <- RunTFIDF(hypotha.atac.merge.samples)
+hypotha.atac.merge.samples <- FindTopFeatures(hypotha.atac.merge.samples, min.cutoff = "q0")
+hypotha.atac.merge.samples <- RunSVD(hypotha.atac.merge.samples)
+hypotha.atac.merge.samples <- RunUMAP(hypotha.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
-# Step 3 : Output pbmc.atac.merge.samples.
+# Step 3 : Output hypotha.atac.merge.samples.
 # RunTFIDF, FindTopFeatures and RunSVD are used for RunUMAP.
 
 #####################################################################################
-save(pbmc, file = "./pbmc.RData")
+save(hypotha, file = "./hypotha.RData")
 #####################################################################################
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 DimPlot_Multim_rna_atac
 DimPlot_weighted_nn
-DimPlot_RNA <- DimPlot(pbmc.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1") + NoLegend()
-DimPlot_ATAC <- DimPlot(pbmc.atac.merge.samples, group.by = "orig.ident", label = TRUE,cols="#3b528b") + ggtitle("ATAC ATAC-M1") + NoLegend()
+DimPlot_RNA <- DimPlot(hypotha.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1") + NoLegend()
+DimPlot_ATAC <- DimPlot(hypotha.atac.merge.samples, group.by = "orig.ident", label = TRUE,cols="#3b528b") + ggtitle("ATAC ATAC-M1") + NoLegend()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
@@ -307,15 +307,15 @@ png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24
 dev.off()
 #####################################################################################
 # Linking peaks to genes 
-DefaultAssay(pbmc) <- "ATAC"
+DefaultAssay(hypotha) <- "ATAC"
 
 # first compute the GC content for each peak
-pbmc <- RegionStats(pbmc, genome = BSgenome.Mmusculus.UCSC.mm10)
+hypotha <- RegionStats(hypotha, genome = BSgenome.Mmusculus.UCSC.mm10)
 
 
 # link peaks to genes
-pbmc <- LinkPeaks(
-  object = pbmc,
+hypotha <- LinkPeaks(
+  object = hypotha,
   peak.assay = "ATAC",
   expression.assay = "SCT",
   genes.use = c("Snap25", "Agt","Ctss","Pdgfra","Mbp","Mobp")
@@ -325,7 +325,7 @@ idents.plot <- c("Neurons", "Astrocytes", "Microglia",
                  "OPCs", "Oligodendrocytes")
 
 p1 <- CoveragePlot(
-  object = pbmc,
+  object = hypotha,
   region = "Snap25",
   features = "Snap25",
   expression.assay = "SCT",
