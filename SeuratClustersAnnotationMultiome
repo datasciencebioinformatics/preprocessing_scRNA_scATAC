@@ -162,13 +162,47 @@ hypotha <- FindMultiModalNeighbors(
   dims.list = list(1:50, 2:50)
 )
 #####################################################################################
-# Create a list of lists
-list_dimensios<-list(list(1:50,2:50),list(1:50,2:50),list(1:15,2:15),list(1:15,1:15),list(1:20,2:20),list(1:20,1:20),list(1:25,2:25),list(1:25,1:25),list(1:30,2:25))
-
-# For each dimentions
-
-
+hypotha_tune<-hypotha
 #####################################################################################
+# Create a list of lists
+list_dimensions<-list(list(1:50,2:50),list(1:50,2:50),list(1:15,2:15),list(1:15,1:15),list(1:20,2:20),list(1:20,1:20),list(1:25,2:25),list(1:25,1:25),list(1:30,2:25))
+label_dimensions<-list(list("1:50","2:50"),list("1:50","2:50"),list("1:15","2:15"),list("1:15","1:15"),list("1:20","2:20"),list("1:20","1:20"),list("1:25","2:25"),list("1:25","1:25"),list("1:30","2:25"))
+
+# List of plots
+myplotsA<-list()
+
+# For each value in the reslution vector
+for (index in 1:length(list_dimensions)) 
+{
+	# Take a couple of dimension
+	dim_cuple<−list_dimensions[[index]]
+
+	# Take a couple of dimension
+	lab_cuple<−label_dimensions[[index]]
+
+	# Annotating cell types 
+	# build a joint neighbor graph using both assays
+	hypotha <- FindMultiModalNeighbors(
+	  object = hypotha,
+	  reduction.list = list("pca", "lsi"), 
+	  dims.list = dim_cuple
+	)
+
+	# build a joint UMAP visualization
+	hypotha <- RunUMAP(
+	  object = hypotha, 
+	  nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
+	)
+	# Create DimMap
+	DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "ident", reduction = "umap",cols=colour) + ggtitle(lab_cuple)+ NoLegend()
+
+	# Save plots
+	myplotsA[[lab_cuple]]<-DimPlot_Multim_rna_atac
+}
+#####################################################################################
+png(filename=paste(output_dir,"FindClusters_resolutions8.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
+	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]], nrow = 3, top = "")
+dev.off()
 #####################################################################################
 #save(hypotha, file = "./hypotha.RData") # Save hypotha Step 3
 #####################################################################################
