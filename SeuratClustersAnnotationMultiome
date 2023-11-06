@@ -159,19 +159,15 @@ save(hypotha, file = "./hypotha.RData") # Save hypotha Step 2
 hypotha <- FindMultiModalNeighbors(
   object = hypotha,
   reduction.list = list("pca", "lsi"), 
-  dims.list = list(1:50, 2:50),
-  modality.weight.name = "RNA.weight",
-  verbose = TRUE
+  dims.list = list(1:50, 2:50)
 )
 #####################################################################################
 #save(hypotha, file = "./hypotha.RData") # Save hypotha Step 3
 #####################################################################################
 # build a joint UMAP visualization
 hypotha <- RunUMAP(
-  object = hypotha,
-  nn.name = "weighted.nn",
-  assay = "RNA",
-  verbose = TRUE
+  object = hypotha, 
+  nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
 )
 #####################################################################################
 #save(hypotha, file = "./hypotha.RData") # Save hypotha Step 4
