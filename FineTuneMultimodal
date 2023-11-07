@@ -131,7 +131,7 @@ for (index in 1:length(list_finetunetopgenes))
 	myplotsC[[index]]<-DimPlot_Multim_rna_atac
 }
 #####################################################################################
-png(filename=paste(output_dir,"FineTune_multiome2.png",sep=""), width = 20, height = 20, res=1600, units = "cm")	
-	grid.arrange(myplotsB[[1]],myplotsB[[2]],myplotsB[[3]],myplotsB[[4]], nrow = 3, top = "")
+png(filename=paste(output_dir,"FineTune_multiome3.png",sep=""), width = 20, height = 10, res=1600, units = "cm")	
+	grid.arrange(myplotsC[[1]],myplotsC[[2]], nrow = 1, top = "")
 dev.off()
 #####################################################################################
