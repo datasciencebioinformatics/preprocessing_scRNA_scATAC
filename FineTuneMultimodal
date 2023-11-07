@@ -135,3 +135,102 @@ png(filename=paste(output_dir,"FineTune_multiome3.png",sep=""), width = 20, heig
 	grid.arrange(myplotsC[[1]],myplotsC[[2]], nrow = 1, top = "")
 dev.off()
 #####################################################################################
+
+
+
+
+# List of plots
+myplotsD<-list()
+
+
+# Annotating cell types 
+hypotha_tune<-hypotha
+
+DefaultAssay(hypotha) <- "ATAC"
+hypotha_tune <- FindTopFeatures(hypotha_tune, min.cutoff = 10)
+hypotha_tune <- RunTFIDF(hypotha_tune)
+hypotha_tune <- RunSVD(hypotha_tune)
+
+# Annotating cell types 
+# build a joint neighbor graph using both assays
+hypotha_tune <- FindMultiModalNeighbors(
+  object = hypotha_tune,
+  reduction.list = list("pca", "lsi"), 
+  dims.list = list(1:50, 2:25)
+)
+
+# build a joint UMAP visualization
+hypotha_tune <- RunUMAP(
+  object = hypotha_tune, 
+  nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
+)
+
+# Create DimMap
+myplotsD[[1]]<-DimPlot_Multim_rna_atac<-DimPlot(hypotha_tune, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("1:50, 2:25")+ NoLegend()
+#############################################################################################
+# Annotating cell types 
+hypotha_tune<-hypotha
+
+DefaultAssay(hypotha) <- "ATAC"
+hypotha_tune <- FindTopFeatures(hypotha_tune, min.cutoff = 10)
+hypotha_tune <- RunTFIDF(hypotha_tune)
+hypotha_tune <- RunSVD(hypotha_tune)
+
+# Annotating cell types 
+# build a joint neighbor graph using both assays
+hypotha_tune <- FindMultiModalNeighbors(
+  object = hypotha_tune,
+  reduction.list = list("pca", "lsi"), 
+  dims.list = list(1:15, 2:50)
+)
+
+# build a joint UMAP visualization
+hypotha_tune <- RunUMAP(
+  object = hypotha_tune, 
+  nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
+)
+
+# Create DimMap
+myplotsD[[2]]<-DimPlot_Multim_rna_atac<-DimPlot(hypotha_tune, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("1:15, 2:50")+ NoLegend()
+
+
+
+#############################################################################################
+# Annotating cell types 
+hypotha_tune<-hypotha
+
+DefaultAssay(hypotha) <- "ATAC"
+hypotha_tune <- FindTopFeatures(hypotha_tune, min.cutoff = 10)
+hypotha_tune <- RunTFIDF(hypotha_tune)
+hypotha_tune <- RunSVD(hypotha_tune)
+
+# Annotating cell types 
+# build a joint neighbor graph using both assays
+hypotha_tune <- FindMultiModalNeighbors(
+  object = hypotha_tune,
+  reduction.list = list("pca", "lsi"), 
+  dims.list = list(1:20, 2:50)
+)
+
+# build a joint UMAP visualization
+hypotha_tune <- RunUMAP(
+  object = hypotha_tune, 
+  nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
+)
+
+# Create DimMap
+myplotsD[[3]]<-DimPlot_Multim_rna_atac<-DimPlot(hypotha_tune, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("1:20, 2:50")+ NoLegend()
+
+
+
+
+
+
+
+
+
+
+#############################################################################################
+png(filename=paste(output_dir,"FineTune_multiome5.png",sep=""), width = 10, height = 10, res=1600, units = "cm")	
+	grid.arrange(myplotsD[[1]],myplotsD[[2]],myplotsD[[3]], nrow = 2, top = "")
+dev.off()
