@@ -281,3 +281,38 @@ for (index in 1:length(list_dimensions))
 	# Save plots
 	myplotsE[[index]]<-DimPlot_Multim_rna_atac
 }
+
+
+#####################################################################################
+png(filename=paste(output_dir,"FineTune_multiome_k_nn.png",sep=""), width = 20, height = 20, res=1600, units = "cm")	
+	grid.arrange(myplotsE[[1]],myplotsE[[2]],myplotsE[[3]],myplotsE[[4]],myplotsE[[5]],myplotsE[[6]],myplotsE[[7]],myplotsE[[8]],myplotsE[[9]], nrow = 3, top = "")
+dev.off()
+#####################################################################################
+
+
+hypotha_tune<-hypotha
+# Annotating cell types 
+# build a joint neighbor graph using both assays
+hypotha_tune <- FindMultiModalNeighbors(
+  object = hypotha_tune,
+  reduction.list = list("pca", "lsi"), 
+  dims.list = list(1:20,2:50),k.nn = 50
+)
+
+
+# Take a couple of dimension
+lab_cuple=paste("neighbors = ",nNN,sep="")
+
+# build a joint UMAP visualization
+hypotha_tune <- RunUMAP(
+  object = hypotha_tune, 
+  nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
+)
+
+# Create DimMap
+DimPlot_Multim_opt<-DimPlot(hypotha_tune, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle(lab_cuple)+ NoLegend()
+
+
+png(filename=paste(output_dir,"DimPlot_Multim_opt.png",sep=""), width = 10, height = 10, res=1600, units = "cm")	
+	grid.arrange(DimPlot_Multim_opt, nrow = 1, top = "")
+dev.off()
