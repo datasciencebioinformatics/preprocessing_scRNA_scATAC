@@ -51,7 +51,7 @@ list_finetunetopgenes<-list(1,5,10,20)
 myplotsB<-list()
 
 # For each value in the reslution vector
-for (index in 1:length(list_dimensions)) 
+for (index in 1:length(list_finetunetopgenes)) 
 {
 	hypotha_tune<-hypotha
 
@@ -59,7 +59,7 @@ for (index in 1:length(list_dimensions))
 	FindTopFeatures_n=list_finetunetopgenes[[index]]
 
 	# Take a couple of dimension
-	FindTopFeatures_l=paste(list_finetunetopgenes[[index]]
+	FindTopFeatures_l=paste("FindTopFeatures",list_finetunetopgenes[[index]],sep="")
 	
 	DefaultAssay(hypotha) <- "ATAC"
 	hypotha_tune <- FindTopFeatures(hypotha_tune, min.cutoff = FindTopFeatures_n)
