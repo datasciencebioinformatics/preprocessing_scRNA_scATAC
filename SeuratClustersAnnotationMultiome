@@ -83,7 +83,7 @@ cDNA_M1.hypotha.combined <- cDNA_M1.hypotha[,combined.cell]
 
 save(ATAC_M1.hypotha.combined, file = "./ATAC_M1.hypotha.combined.RData")
 save(cDNA_M1.hypotha.combined, file = "./cDNA_M1.hypotha.combined.RData")
-#load("./ATAC_M1.hypotha.combined.RData")
+#load("./ATAC_M1_hypotha.combined.RData")
 #load("./cDNA_M1.hypotha.combined.RData")
 #####################################################################################
 # I stopped here 
@@ -135,6 +135,7 @@ hypotha[["peaks"]] <- CreateChromatinAssay(
 )
 #####################################################################################
 save(hypotha, file = "./hypotha.RData") # I stopped here
+load("./hypotha.RData") # I stopped here
 #####################################################################################
 # Gene expression data processing 
 DefaultAssay(hypotha) <- "RNA"
@@ -146,11 +147,9 @@ save(hypotha, file = "./hypotha.RData") # Save hypotha Step 1
 #####################################################################################
 #DNA accessibility data processing 
 DefaultAssay(hypotha) <- "ATAC"
-hypotha <- FindTopFeatures(hypotha, min.cutoff = 5)
+hypotha <- FindTopFeatures(hypotha, min.cutoff = 10)
 hypotha <- RunTFIDF(hypotha)
 hypotha <- RunSVD(hypotha)
-hypotha <- NormalizeData(hypotha)
-hypotha <- ScaleData(hypotha)
 #####################################################################################
 save(hypotha, file = "./hypotha.RData") # Save hypotha Step 2
 #####################################################################################
@@ -159,11 +158,8 @@ save(hypotha, file = "./hypotha.RData") # Save hypotha Step 2
 hypotha <- FindMultiModalNeighbors(
   object = hypotha,
   reduction.list = list("pca", "lsi"), 
-  dims.list = list(1:50, 2:50)
+  dims.list = list(1:20, 2:50),k.nn = 50
 )
-#####################################################################################
-hypotha_tune<-hypotha
-#####################################################################################
 #####################################################################################
 #save(hypotha, file = "./hypotha.RData") # Save hypotha Step 3
 #####################################################################################
@@ -176,7 +172,7 @@ hypotha <- RunUMAP(
 #save(hypotha, file = "./hypotha.RData") # Save hypotha Step 4
 #####################################################################################
 # Create DimMap
-DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "ident", reduction = "umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1")+ NoLegend()
+DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1")+ NoLegend()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"DimPlot_Multim_rna_atac2.png",sep=""), width = 12, height = 12, res=600, units = "cm")
@@ -255,50 +251,57 @@ reference=hypotha.rna.merge.samples
 save(reference, file = "./reference.RData") # Save hypotha Step 5
 #####################################################################################
 # Annotating cell types 
-Idents(hypotha) <- Idents(hypotha.rna.merge.samples)
+Idents(hypotha) <- Idents(reference)
 
-# Joint UMAP visualization 
-# build a joint neighbor graph using both assays
-hypotha <- FindMultiModalNeighbors(
-  object = hypotha,
-  reduction.list = list("pca", "lsi"), 
-  dims.list = list(1:50, 2:40),
-  modality.weight.name = "RNA.weight",
-  verbose = TRUE
-)
-
-# build a joint UMAP visualization
-hypotha <- RunUMAP(
-  object = hypotha,
-  nn.name = "weighted.nn",
-  assay = "RNA",
-  verbose = TRUE
-)
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 12, height = 12, res=600, units = "cm")
-	DimPlot(hypotha, label = TRUE, repel = TRUE, reduction = "umap") + NoLegend()
+	DimPlot(hypotha, label = TRUE, repel = TRUE, reduction = "wnn.umap") + NoLegend()
 dev.off()
 #####################################################################################
 # Step 2 : Output hypotha.rna.merge.samples.
 # Markers and markers limits were previously defined here used to calculate the celltypes.
 #####################################################################################
 # Process seurat on hypotha.atac.merge.samples
-hypotha.atac.merge.samples <- RunTFIDF(hypotha.atac.merge.samples)
-hypotha.atac.merge.samples <- FindTopFeatures(hypotha.atac.merge.samples, min.cutoff = "q0")
-hypotha.atac.merge.samples <- RunSVD(hypotha.atac.merge.samples)
-hypotha.atac.merge.samples <- RunUMAP(hypotha.atac.merge.samples, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
+ATAC_M1_hypotha.combined <- RunTFIDF(ATAC_M1_hypotha.combined)
+ATAC_M1_hypotha.combined <- FindTopFeatures(ATAC_M1_hypotha.combined, min.cutoff = "q0")
+ATAC_M1_hypotha.combined <- RunSVD(ATAC_M1_hypotha.combined)
+ATAC_M1_hypotha.combined <- RunUMAP(ATAC_M1_hypotha.combined, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
+
+ATAC_M1_hypotha.combined <- NormalizeData(ATAC_M1_hypotha.combined)
+ATAC_M1_hypotha.combined <- ScaleData(ATAC_M1_hypotha.combined, features = rownames(ATAC_M1_hypotha.combined))
+
+# quantify gene activity
+gene.activities <- GeneActivity(ATAC_M1_hypotha.combined, features = VariableFeatures(reference))
+
+# add gene activities as a new assay
+ATAC_M1_hypotha.combined[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
+
+# normalize gene activities
+DefaultAssay(ATAC_M1_hypotha.combined) <- "ACTIVITY"
+ATAC_M1_hypotha.combined <- NormalizeData(ATAC_M1_hypotha.combined)
+ATAC_M1_hypotha.combined <- ScaleData(ATAC_M1_hypotha.combined, features = rownames(ATAC_M1_hypotha.combined))
+
+# Identify anchors
+transfer.anchors <- FindTransferAnchors(reference = reference, query = ATAC_M1_hypotha.combined, features = VariableFeatures(object = pbmc.rna),
+    reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
+    
+celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = reference$idents,
+    weight.reduction = ATAC_M1_hypotha.combined[["lsi"]], dims = 2:30)
+
+ATAC_M1_hypotha.combined <- AddMetaData(ATAC_M1_hypotha.combined, metadata = celltype.predictions)    
+
 #####################################################################################
 # Step 3 : Output hypotha.atac.merge.samples.
 # RunTFIDF, FindTopFeatures and RunSVD are used for RunUMAP.
 
 #####################################################################################
-save(hypotha, file = "./hypotha.RData")
+#save(hypotha, file = "./hypotha.RData")
 #####################################################################################
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
-DimPlot_Multim_rna_atac
+DimPlot_Multim_rna_atac <- DimPlot(hypotha, label = TRUE, repel = TRUE, reduction = "wnn.umap",cols=colour) + NoLegend() + ggtitle("Multimodal cDNA-M1/ATAC-M1")
 DimPlot_weighted_nn
 DimPlot_RNA <- DimPlot(hypotha.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1") + NoLegend()
-DimPlot_ATAC <- DimPlot(hypotha.atac.merge.samples, group.by = "orig.ident", label = TRUE,cols="#3b528b") + ggtitle("ATAC ATAC-M1") + NoLegend()
+DimPlot_ATAC <- DimPlot(ATAC_M1_hypotha.combined, group.by = "ident", label = TRUE,cols=colour) + ggtitle("ATAC ATAC-M1") + NoLegend()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
