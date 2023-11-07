@@ -316,3 +316,7 @@ DimPlot_Multim_opt<-DimPlot(hypotha_tune, label = TRUE, repel = TRUE, group.by =
 png(filename=paste(output_dir,"DimPlot_Multim_opt.png",sep=""), width = 10, height = 10, res=1600, units = "cm")	
 	grid.arrange(DimPlot_Multim_opt, nrow = 1, top = "")
 dev.off()
+
+#####################################################################################
+save(hypotha_tune, file = "./hypotha_tune.RData")
+#####################################################################################
