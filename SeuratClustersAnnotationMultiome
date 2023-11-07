@@ -48,15 +48,15 @@ cDNA_M1.hypotha = subset(cDNA_M1.hypotha, subset = percent.mt < 2)
 # Try again and check the assay cDNA_M1.hypotha with the name "RNA"
 hypotha.atac.merge.samples<- ATAC_M1.hypotha
 hypotha.rna.merge.samples <- cDNA_M1.hypotha
-save(hypotha.atac.merge.samples,file="./hypotha.atac.merge.samples.RData")
-save(hypotha.rna.merge.samples ,file="./hypotha.merge.rna.samples.RData")
+#save(hypotha.atac.merge.samples,file="./hypotha.atac.merge.samples.RData")
+#save(hypotha.rna.merge.samples ,file="./hypotha.merge.rna.samples.RData")
 
 #load("./hypotha.atac.merge.samples.RData")
 #load("./hypotha.merge.rna.samples.RData")
 #####################################################################################
 # Read CSV into DataFrame
 Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
-Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
+#Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
 
 # Create
 df_ATAC<-data.frame(Names=Cells(ATAC_M1.hypotha),IDs=substring(Cells(ATAC_M1.hypotha),1,16))
@@ -81,8 +81,8 @@ grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
 ATAC_M1.hypotha.combined <- ATAC_M1.hypotha[,combined.cell]
 cDNA_M1.hypotha.combined <- cDNA_M1.hypotha[,combined.cell]
 
-save(ATAC_M1.hypotha.combined, file = "./ATAC_M1.hypotha.combined.RData")
-save(cDNA_M1.hypotha.combined, file = "./cDNA_M1.hypotha.combined.RData")
+#save(ATAC_M1.hypotha.combined, file = "./ATAC_M1.hypotha.combined.RData")
+#save(cDNA_M1.hypotha.combined, file = "./cDNA_M1.hypotha.combined.RData")
 #load("./ATAC_M1_hypotha.combined.RData")
 #load("./cDNA_M1.hypotha.combined.RData")
 #####################################################################################
@@ -98,7 +98,7 @@ hypotha[["ATAC"]] <- ATAC_M1.hypotha.combined[["peaks"]]
 DefaultAssay(hypotha) <- "ATAC"
 
 hypotha <- NucleosomeSignal(hypotha)
-hypotha <- TSSEnrichment(hypotha)
+hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"plot_VlnPlot_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
@@ -135,7 +135,7 @@ hypotha[["peaks"]] <- CreateChromatinAssay(
 )
 #####################################################################################
 save(hypotha, file = "./hypotha.RData") # I stopped here
-load("./hypotha.RData") # I stopped here
+#load("./hypotha.RData") # I stopped here
 #####################################################################################
 # Gene expression data processing 
 DefaultAssay(hypotha) <- "RNA"
@@ -143,7 +143,7 @@ hypotha <- NormalizeData(hypotha, normalization.method = "LogNormalize", scale.f
 hypotha <- SCTransform(hypotha)
 hypotha <- RunPCA(hypotha)
 #####################################################################################
-save(hypotha, file = "./hypotha.RData") # Save hypotha Step 1
+#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 1
 #####################################################################################
 #DNA accessibility data processing 
 DefaultAssay(hypotha) <- "ATAC"
@@ -151,7 +151,7 @@ hypotha <- FindTopFeatures(hypotha, min.cutoff = 10)
 hypotha <- RunTFIDF(hypotha)
 hypotha <- RunSVD(hypotha)
 #####################################################################################
-save(hypotha, file = "./hypotha.RData") # Save hypotha Step 2
+#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 2
 #####################################################################################
 # Annotating cell types 
 # build a joint neighbor graph using both assays
@@ -174,10 +174,6 @@ hypotha <- RunUMAP(
 # Create DimMap
 DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1")+ NoLegend()
 
-# FindClusters_resolution
-png(filename=paste(output_dir,"DimPlot_Multim_rna_atac2.png",sep=""), width = 12, height = 12, res=600, units = "cm")
-	DimPlot_Multim_rna_atac
-dev.off()
 #####################################################################################
 # FindClusters_resolution
 hypotha.2 <- RunUMAP(hypotha, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
@@ -295,13 +291,13 @@ ATAC_M1_hypotha.combined <- AddMetaData(ATAC_M1_hypotha.combined, metadata = cel
 # RunTFIDF, FindTopFeatures and RunSVD are used for RunUMAP.
 
 #####################################################################################
-#save(hypotha, file = "./hypotha.RData")
+save(hypotha, file = "./hypotha.RData")
 #####################################################################################
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 DimPlot_Multim_rna_atac <- DimPlot(hypotha, label = TRUE, repel = TRUE, reduction = "wnn.umap",cols=colour) + NoLegend() + ggtitle("Multimodal cDNA-M1/ATAC-M1")
 DimPlot_weighted_nn
 DimPlot_RNA <- DimPlot(hypotha.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1") + NoLegend()
-DimPlot_ATAC <- DimPlot(ATAC_M1_hypotha.combined, group.by = "ident", label = TRUE,cols=colour) + ggtitle("ATAC ATAC-M1") + NoLegend()
+DimPlot_ATAC <- DimPlot(ATAC_M1_hypotha.combined, group.by = "ident", label = TRUE,cols="#3b528b") + ggtitle("ATAC ATAC-M1") + NoLegend()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
