@@ -164,6 +164,7 @@ hypotha <- FindMultiModalNeighbors(
 #####################################################################################
 hypotha_tune<-hypotha
 #####################################################################################
+#####################################################################################
 # Create a list of lists
 list_dimensions<-list(list(1:50,2:50),list(1:50,2:50),list(1:15,2:15),list(1:15,1:15),list(1:20,2:20),list(1:20,1:20),list(1:25,2:25),list(1:25,1:25),list(1:30,2:25))
 label_dimensions<-list(list("1:50","2:50"),list("1:50","2:50"),list("1:15","2:15"),list("1:15","1:15"),list("1:20","2:20"),list("1:20","1:20"),list("1:25","2:25"),list("1:25","1:25"),list("1:30","2:25"))
@@ -204,10 +205,6 @@ for (index in 1:length(list_dimensions))
 }
 #####################################################################################
 png(filename=paste(output_dir,"FineTune_multiome.png",sep=""), width = 48, height = 48, res=1600, units = "cm")	
-	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]], nrow = 3, top = "")
-dev.off()
-#####################################################################################
-png(filename=paste(output_dir,"FineTune_multiome.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
 	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]], nrow = 3, top = "")
 dev.off()
 #####################################################################################
