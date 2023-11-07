@@ -33,8 +33,8 @@ ATAC_M1_singlecell     <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M
 ATAC_M1_fragment_file  <-  "/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz"
 ATAC_M1_fragment       <-  CreateFragmentObject(ATAC_M1_fragment_file)
 ATAC_M1_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"), annotation = annotations,fragments ='/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz')
-ATAC_M1_hypotha           <-  CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
-ATAC_M1_counts         <-  FeatureMatrix(fragments = ATAC_M1_fragment,features = granges(ATAC_M1_hypotha))
+ATAC_M1.hypotha           <-  CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
+ATAC_M1_counts         <-  FeatureMatrix(fragments = ATAC_M1_fragment,features = granges(ATAC_M1.hypotha))
 #####################################################################################
 # Save whole workspace to working directory
 cDNA_M1_h5          <- Read10X_h5("/home/felipe/snRNASeq_output/cDNA-M1/outs/filtered_feature_bc_matrix.h5")
@@ -46,7 +46,7 @@ cDNA_M1.hypotha[["percent.mt"]] <- PercentageFeatureSet(cDNA_M1.hypotha, pattern
 cDNA_M1.hypotha = subset(cDNA_M1.hypotha, subset = percent.mt < 2)
 #####################################################################################
 # Try again and check the assay cDNA_M1.hypotha with the name "RNA"
-hypotha.atac.merge.samples<- ATAC_M1_hypotha
+hypotha.atac.merge.samples<- ATAC_M1.hypotha
 hypotha.rna.merge.samples <- cDNA_M1.hypotha
 save(hypotha.atac.merge.samples,file="./hypotha.atac.merge.samples.RData")
 save(hypotha.rna.merge.samples ,file="./hypotha.merge.rna.samples.RData")
@@ -59,17 +59,17 @@ Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC'
 Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
 
 # Create
-df_ATAC<-data.frame(Names=Cells(ATAC_M1_hypotha),IDs=substring(Cells(ATAC_M1_hypotha),1,16))
+df_ATAC<-data.frame(Names=Cells(ATAC_M1.hypotha),IDs=substring(Cells(ATAC_M1.hypotha),1,16))
 df_RNA<-data.frame(Names=Cells(cDNA_M1.hypotha),IDs=substring(Cells(cDNA_M1.hypotha),1,16))
 
 # Create ATAC-RNA
 df_ATAC$RNA<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$ATAC %in% df_ATAC$IDs,"RNA"],substring(df_ATAC$Names,17,18),sep="")
 
 # S3 method for DimReduc
-ATAC_M1_hypotha<-RenameCells(ATAC_M1_hypotha, new.names = df_ATAC[which(df_ATAC$Names %in% Cells(ATAC_M1_hypotha)),"RNA"])
+ATAC_M1.hypotha<-RenameCells(ATAC_M1.hypotha, new.names = df_ATAC[which(df_ATAC$Names %in% Cells(ATAC_M1.hypotha)),"RNA"])
 #####################################################################################
 # Create combined multiome object
-combined.cell<-Cells(ATAC_M1_hypotha)[Cells(ATAC_M1_hypotha) %in% Cells(cDNA_M1.hypotha)]
+combined.cell<-Cells(ATAC_M1.hypotha)[Cells(ATAC_M1.hypotha) %in% Cells(cDNA_M1.hypotha)]
 
 # add the ATAC-seq assay
 grange.counts <- StringToGRanges(rownames(ATAC_M1_h5), sep = c(":", "-"))
@@ -78,12 +78,12 @@ grange.counts <- StringToGRanges(rownames(ATAC_M1_h5), sep = c(":", "-"))
 grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
 
 # Combine datasets with same cells
-ATAC_M1_hypotha.combined <- ATAC_M1_hypotha[,combined.cell]
+ATAC_M1.hypotha.combined <- ATAC_M1.hypotha[,combined.cell]
 cDNA_M1.hypotha.combined <- cDNA_M1.hypotha[,combined.cell]
 
-save(ATAC_M1_hypotha.combined, file = "./ATAC_M1_hypotha.combined.RData")
+save(ATAC_M1.hypotha.combined, file = "./ATAC_M1.hypotha.combined.RData")
 save(cDNA_M1.hypotha.combined, file = "./cDNA_M1.hypotha.combined.RData")
-#load("./ATAC_M1_hypotha.combined.RData")
+#load("./ATAC_M1.hypotha.combined.RData")
 #load("./cDNA_M1.hypotha.combined.RData")
 #####################################################################################
 # I stopped here 
@@ -92,7 +92,7 @@ save(cDNA_M1.hypotha.combined, file = "./cDNA_M1.hypotha.combined.RData")
 hypotha <- cDNA_M1.hypotha.combined
 
 # create ATAC assay and add it to the object
-hypotha[["ATAC"]] <- ATAC_M1_hypotha.combined[["peaks"]]
+hypotha[["ATAC"]] <- ATAC_M1.hypotha.combined[["peaks"]]
 #####################################################################################
 # Quality control 
 DefaultAssay(hypotha) <- "ATAC"
