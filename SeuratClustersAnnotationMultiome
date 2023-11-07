@@ -174,31 +174,38 @@ myplotsA<-list()
 # For each value in the reslution vector
 for (index in 1:length(list_dimensions)) 
 {
-	# Take a couple of dimension
-	dim_cuple<−list_dimensions[[index]]
+	hypotha_tune<-hypotha
 
 	# Take a couple of dimension
-	lab_cuple<−label_dimensions[[index]]
+	dim_cuple=list_dimensions[[index]]
+
+	# Take a couple of dimension
+	lab_cuple=label_dimensions[[index]]
 
 	# Annotating cell types 
 	# build a joint neighbor graph using both assays
-	hypotha <- FindMultiModalNeighbors(
-	  object = hypotha,
+	hypotha_tune <- FindMultiModalNeighbors(
+	  object = hypotha_tune,
 	  reduction.list = list("pca", "lsi"), 
 	  dims.list = dim_cuple
 	)
 
 	# build a joint UMAP visualization
-	hypotha <- RunUMAP(
+	hypotha_tune <- RunUMAP(
 	  object = hypotha, 
 	  nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
 	)
+	
 	# Create DimMap
-	DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "ident", reduction = "umap",cols=colour) + ggtitle(lab_cuple)+ NoLegend()
+	DimPlot_Multim_rna_atac<-DimPlot(hypotha_tune, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle(lab_cuple)+ NoLegend()
 
 	# Save plots
-	myplotsA[[lab_cuple]]<-DimPlot_Multim_rna_atac
+	myplotsA[[index]]<-DimPlot_Multim_rna_atac
 }
+#####################################################################################
+png(filename=paste(output_dir,"FineTune_multiome.png",sep=""), width = 48, height = 48, res=1600, units = "cm")	
+	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]], nrow = 3, top = "")
+dev.off()
 #####################################################################################
 png(filename=paste(output_dir,"FineTune_multiome.png",sep=""), width = 48, height = 48, res=1600, units = "cm")
 	grid.arrange(myplotsA[[1]],myplotsA[[2]],myplotsA[[3]],myplotsA[[4]],myplotsA[[5]],myplotsA[[6]],myplotsA[[7]],myplotsA[[8]],myplotsA[[9]], nrow = 3, top = "")
