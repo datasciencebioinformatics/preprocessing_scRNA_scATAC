@@ -26,6 +26,9 @@ output_dir="/home/felipe/results_seurat/"
 annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
 seqlevelsStyle(annotations) <- "UCSC"
 genome(annotations) <- "mm10"
+
+library(TxDb.Mmusculus.UCSC.mm10.knownGene)
+annotations <- transcripts(TxDb.Mmusculus.UCSC.mm10.knownGene)
 #####################################################################################
 # Set intput dir ATAC-M1 and seurat objects
 ATAC_M1_h5             <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/M1/filtered_peak_bc_matrix.h5")
@@ -33,7 +36,7 @@ ATAC_M1_singlecell     <-  read.csv(file = "/home/felipe/snATACSeq_out/ATAC-M1/M
 ATAC_M1_fragment_file  <-  "/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz"
 ATAC_M1_fragment       <-  CreateFragmentObject(ATAC_M1_fragment_file)
 ATAC_M1_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_M1_h5,sep = c(":", "-"), annotation = annotations,fragments ='/home/felipe/snATACSeq_out/ATAC-M1/M1/fragments.tsv.gz')
-ATAC_M1.hypotha           <-  CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
+ATAC_M1.hypotha        <-  CreateSeuratObject(counts = ATAC_M1_chrom_assay,assay = "peaks")
 ATAC_M1_counts         <-  FeatureMatrix(fragments = ATAC_M1_fragment,features = granges(ATAC_M1.hypotha))
 #####################################################################################
 # Save whole workspace to working directory
@@ -52,7 +55,9 @@ hypotha.rna.merge.samples <- cDNA_M1.hypotha
 #save(hypotha.rna.merge.samples ,file="./hypotha.merge.rna.samples.RData")
 
 #load("./hypotha.atac.merge.samples.RData")
-#load("./hypotha.merge.rna.samples.RData")
+load("./hypotha.merge.rna.samples.RData")
+ATAC_M1.hypotha=hypotha.atac.merge.samples
+cDNA_M1.hypotha=hypotha.rna.merge.samples
 #####################################################################################
 # Read CSV into DataFrame
 Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
@@ -123,10 +128,6 @@ macs2_counts <- FeatureMatrix(
   features = peaks,
   cells = colnames(hypotha)
 )
-
-library(TxDb.Mmusculus.UCSC.mm10.knownGene)
-annot <- transcripts(TxDb.Mmusculus.UCSC.mm10.knownGene)
-
 # create a new assay using the MACS2 peak set and add it to the Seurat object
 hypotha[["peaks"]] <- CreateChromatinAssay(
   counts = macs2_counts,
@@ -307,9 +308,11 @@ dev.off()
 # Linking peaks to genes 
 DefaultAssay(hypotha) <- "ATAC"
 
+library(BSgenome.Mmusculus.UCSC.mm10)
+
+
 # first compute the GC content for each peak
 hypotha <- RegionStats(hypotha, genome = BSgenome.Mmusculus.UCSC.mm10)
-
 
 # link peaks to genes
 hypotha <- LinkPeaks(
