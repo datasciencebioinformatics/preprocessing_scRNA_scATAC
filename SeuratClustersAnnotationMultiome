@@ -88,8 +88,8 @@ cDNA_M1.hypotha.combined <- cDNA_M1.hypotha[,combined.cell]
 
 #save(ATAC_M1.hypotha.combined, file = "./ATAC_M1.hypotha.combined.RData")
 #save(cDNA_M1.hypotha.combined, file = "./cDNA_M1.hypotha.combined.RData")
-#load("./ATAC_M1_hypotha.combined.RData")
-#load("./cDNA_M1.hypotha.combined.RData")
+load("./ATAC_M1_hypotha.combined.RData")
+load("./cDNA_M1.hypotha.combined.RData")
 #####################################################################################
 # I stopped here 
 # try to do this https://stuartlab.org/signac/articles/hypotha_multiomic
