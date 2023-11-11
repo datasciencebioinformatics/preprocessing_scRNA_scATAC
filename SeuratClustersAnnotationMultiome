@@ -265,15 +265,15 @@ dev.off()
 gene.activities <- GeneActivity(ATAC_M1.hypotha.combined, features = VariableFeatures(reference))
 
 # add gene activities as a new assay
-ATAC_M1_hypotha.combined[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
+ATAC_M1.hypotha.combined[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
 
 # normalize gene activities
-DefaultAssay(ATAC_M1_hypotha.combined) <- "ACTIVITY"
-ATAC_M1_hypotha.combined <- NormalizeData(ATAC_M1_hypotha.combined)
-ATAC_M1_hypotha.combined <- ScaleData(ATAC_M1_hypotha.combined, features = rownames(ATAC_M1_hypotha.combined))
+DefaultAssay(ATAC_M1.hypotha.combined) <- "ACTIVITY"
+ATAC_M1.hypotha.combined <- NormalizeData(ATAC_M1.hypotha.combined)
+ATAC_M1.hypotha.combined <- ScaleData(ATAC_M1.hypotha.combined, features = rownames(ATAC_M1.hypotha.combined))
 
 # Identify anchors
-transfer.anchors <- FindTransferAnchors(reference = reference, query = ATAC_M1_hypotha.combined, features = VariableFeatures(object = pbmc.rna),
+transfer.anchors <- FindTransferAnchors(reference = reference, query = ATAC_M1.hypotha.combined, features = VariableFeatures(hypotha.varialble.rna ),
     reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
     
 celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = reference$idents,
