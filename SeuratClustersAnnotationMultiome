@@ -301,7 +301,7 @@ colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neuro
 DimPlot_Multim_rna_atac <- DimPlot(hypotha, label = TRUE, repel = TRUE, reduction = "wnn.umap",cols=colour) + NoLegend() + ggtitle("Multimodal cDNA-M1/ATAC-M1")
 DimPlot_weighted_nn
 DimPlot_RNA <- DimPlot(hypotha.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1") + NoLegend()
-DimPlot_ATAC <- DimPlot(ATAC_M1.hypotha.combined, group.by = "ident", label = TRUE,cols=colour, reduction = "umap") + ggtitle("ATAC ATAC-M1") + NoLegend()
+DimPlot_ATAC <- DimPlot(ATAC_M1.hypotha.combined, group.by = "celltype.predictions", label = TRUE,cols=colour, reduction = "umap") + ggtitle("ATAC ATAC-M1") + NoLegend()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
@@ -325,13 +325,14 @@ hypotha <- LinkPeaks(
   genes.use = c("Snap25", "Agt","Ctss","Pdgfra","Mbp","Mobp")
 )
 
+# link peaks to genes
 idents.plot <- c("Neurons", "Astrocytes", "Microglia",
                  "OPCs", "Oligodendrocytes")
 
 p1 <- CoveragePlot(
   object = hypotha,
-  region = "Snap25",
-  features = "Snap25",
+  region = "Agt",
+  features = "Agt",
   expression.assay = "SCT",
   idents = idents.plot,
   extend.upstream = 500,
