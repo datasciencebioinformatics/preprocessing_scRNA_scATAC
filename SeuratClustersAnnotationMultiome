@@ -128,6 +128,7 @@ macs2_counts <- FeatureMatrix(
   features = peaks,
   cells = colnames(hypotha)
 )
+annot=annotations
 # create a new assay using the MACS2 peak set and add it to the Seurat object
 hypotha[["peaks"]] <- CreateChromatinAssay(
   counts = macs2_counts,
@@ -258,17 +259,10 @@ dev.off()
 # Step 2 : Output hypotha.rna.merge.samples.
 # Markers and markers limits were previously defined here used to calculate the celltypes.
 #####################################################################################
-# Process seurat on hypotha.atac.merge.samples
-ATAC_M1_hypotha.combined <- RunTFIDF(ATAC_M1_hypotha.combined)
-ATAC_M1_hypotha.combined <- FindTopFeatures(ATAC_M1_hypotha.combined, min.cutoff = "q0")
-ATAC_M1_hypotha.combined <- RunSVD(ATAC_M1_hypotha.combined)
-ATAC_M1_hypotha.combined <- RunUMAP(ATAC_M1_hypotha.combined, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
-
-ATAC_M1_hypotha.combined <- NormalizeData(ATAC_M1_hypotha.combined)
-ATAC_M1_hypotha.combined <- ScaleData(ATAC_M1_hypotha.combined, features = rownames(ATAC_M1_hypotha.combined))
+## Process seurat on hypotha.atac.merge.samples
 
 # quantify gene activity
-gene.activities <- GeneActivity(ATAC_M1_hypotha.combined, features = VariableFeatures(reference))
+gene.activities <- GeneActivity(ATAC_M1.hypotha.combined, features = VariableFeatures(reference))
 
 # add gene activities as a new assay
 ATAC_M1_hypotha.combined[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
