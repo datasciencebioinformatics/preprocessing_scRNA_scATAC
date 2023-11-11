@@ -331,8 +331,8 @@ idents.plot <- c("Neurons", "Astrocytes", "Microglia",
 
 p1 <- CoveragePlot(
   object = hypotha,
-  region = "Agt",
-  features = "Agt",
+  region = "Pdgfra",
+  features = "Pdgfra",
   expression.assay = "SCT",
   idents = idents.plot,
   extend.upstream = 500,
