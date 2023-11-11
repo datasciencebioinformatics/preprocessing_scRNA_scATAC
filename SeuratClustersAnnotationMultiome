@@ -259,10 +259,15 @@ dev.off()
 # Step 2 : Output hypotha.rna.merge.samples.
 # Markers and markers limits were previously defined here used to calculate the celltypes.
 #####################################################################################
+#DNA accessibility data processing 
+DefaultAssay(ATAC_M1.hypotha.combined) <- "peaks"
+ATAC_M1.hypotha.combined <- FindTopFeatures(ATAC_M1.hypotha.combined, min.cutoff = 10)
+ATAC_M1.hypotha.combined <- RunTFIDF(ATAC_M1.hypotha.combined)
+ATAC_M1.hypotha.combined <- RunSVD(ATAC_M1.hypotha.combined)
+#####################################################################################
 ## Process seurat on hypotha.atac.merge.samples
-
 # quantify gene activity
-gene.activities <- GeneActivity(ATAC_M1.hypotha.combined, features = VariableFeatures(reference))
+gene.activities <- GeneActivity(ATAC_M1.hypotha.combined, features = VariableFeatures(hypotha.varialble.rna))
 
 # add gene activities as a new assay
 ATAC_M1.hypotha.combined[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
@@ -276,8 +281,8 @@ ATAC_M1.hypotha.combined <- ScaleData(ATAC_M1.hypotha.combined, features = rowna
 transfer.anchors <- FindTransferAnchors(reference = reference, query = ATAC_M1.hypotha.combined, features = VariableFeatures(hypotha.varialble.rna ),
     reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
     
-celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = reference$idents,
-    weight.reduction = ATAC_M1_hypotha.combined[["lsi"]], dims = 2:30)
+celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = reference$group,
+    weight.reduction = ATAC_M1.hypotha.combined[["lsi"]], dims = 2:30)
 
 ATAC_M1_hypotha.combined <- AddMetaData(ATAC_M1_hypotha.combined, metadata = celltype.predictions)    
 
