@@ -27,8 +27,8 @@ annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
 seqlevelsStyle(annotations) <- "UCSC"
 genome(annotations) <- "mm10"
 
-library(TxDb.Mmusculus.UCSC.mm10.knownGene)
-annotations <- transcripts(TxDb.Mmusculus.UCSC.mm10.knownGene)
+#library(TxDb.Mmusculus.UCSC.mm10.knownGene)
+#annotations <- transcripts(TxDb.Mmusculus.UCSC.mm10.knownGene)
 #####################################################################################
 # Set intput dir ATAC-M1 and seurat objects
 ATAC_M1_h5             <-  Read10X_h5("/home/felipe/snATACSeq_out/ATAC-M1/outs/filtered_peak_bc_matrix.h5")
@@ -55,13 +55,13 @@ hypotha.rna.merge.samples <- cDNA_M1.hypotha
 #save(hypotha.rna.merge.samples ,file="./hypotha.merge.rna.samples.RData")
 
 #load("./hypotha.atac.merge.samples.RData")
-load("./hypotha.merge.rna.samples.RData")
+#load("./hypotha.merge.rna.samples.RData")
 ATAC_M1.hypotha=hypotha.atac.merge.samples
 cDNA_M1.hypotha=hypotha.rna.merge.samples
 #####################################################################################
 # Read CSV into DataFrame
 Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
-#Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
+Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
 
 # Create
 df_ATAC<-data.frame(Names=Cells(ATAC_M1.hypotha),IDs=substring(Cells(ATAC_M1.hypotha),1,16))
@@ -88,8 +88,8 @@ cDNA_M1.hypotha.combined <- cDNA_M1.hypotha[,combined.cell]
 
 #save(ATAC_M1.hypotha.combined, file = "./ATAC_M1.hypotha.combined.RData")
 #save(cDNA_M1.hypotha.combined, file = "./cDNA_M1.hypotha.combined.RData")
-load("./ATAC_M1_hypotha.combined.RData")
-load("./cDNA_M1.hypotha.combined.RData")
+#load("./ATAC_M1_hypotha.combined.RData")
+#load("./cDNA_M1.hypotha.combined.RData")
 #####################################################################################
 # I stopped here 
 # try to do this https://stuartlab.org/signac/articles/hypotha_multiomic
@@ -110,7 +110,7 @@ png(filename=paste(output_dir,"plot_VlnPlot_rna_atac.png",sep=""), width = 24, h
 	VlnPlot(object = hypotha, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
 dev.off()
 #####################################################################################
-save(hypotha, file = "./hypotha.RData")
+#save(hypotha, file = "./hypotha.RData")
 #####################################################################################
 # call peaks using MACS2
 peaks <- CallPeaks(hypotha)
