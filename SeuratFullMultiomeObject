@@ -37,7 +37,6 @@ n_samples=3
 list_ATAC_objects=list()
 list_ATAC_h5_objects=list()
 list_ATAC_singlecell_objects=list()
-list_ATAC_counts_objects=list()
 list_RNA_objects=list()
 
 
@@ -64,7 +63,6 @@ for (sample in 1:n_samples)
 	list_ATAC_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_M1_hypotha
 	list_ATAC_h5_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_file_h5
 	list_ATAC_singlecell_objects[[paste("ATAC-M",sample,sep="")]]<-list_ATAC_singlecell_objects
-	list_ATAC_counts_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_counts
 	
 	###### Second the RNA folder    
 	# Save whole workspace to working directory
