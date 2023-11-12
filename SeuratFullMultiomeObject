@@ -84,6 +84,9 @@ ATAC_objects_combined <- merge(
   y = list_ATAC_objects[2:length(names(list_ATAC_objects))],
   add.cell.ids = names(list_ATAC_objects)
 )
+#####################################################################################
+save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
+#####################################################################################
 
 # process 
 ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
