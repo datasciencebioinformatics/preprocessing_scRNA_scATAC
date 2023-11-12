@@ -38,7 +38,6 @@ list_ATAC_objects=list()
 list_ATAC_h5_objects=list()
 list_ATAC_singlecell_objects=list()
 list_ATAC_counts_objects=list()
-
 list_RNA_objects=list()
 
 
@@ -55,7 +54,7 @@ for (sample in 1:n_samples)
 	ATAC_h5                 <-  Read10X_h5(ATAC_file_h5)
 	ATAC_singlecell         <-  read.csv(file = ATAC_singlecell_file ,header = TRUE,row.names = 1)		
 	ATAC_fragment           <-  CreateFragmentObject(ATAC_fragment_file)        
-	ATAC_counts             <-  FeatureMatrix(fragments = ATAC_fragment,features = combined.peaks,cells = rownames(ATAC_h5))
+	ATAC_counts             <-  FeatureMatrix(fragments = ATAC_fragment,cells = rownames(ATAC_h5))
 
 	ATAC_chrom_assay        <-  CreateChromatinAssay(counts = ATAC_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_fragment_file)
 	ATAC_M1_hypotha         <-  CreateSeuratObject(ATAC_chrom_assay,assay = "peaks",project = paste("ATAC-M",sample,sep=""))
