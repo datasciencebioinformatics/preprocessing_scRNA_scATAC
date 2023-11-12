@@ -1,1 +1,64 @@
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(gridExtra)
+library(ggplot2)
+library(plyr)
+library(SeuratObject)
+library(Seurat)
+library("harmony")
+library(rhdf5)
+library("hdf5r")
+library("Signac")
+library(Seurat)
+options(Seurat.object.assay.version = "v5")
+library(Signac)
+library(EnsDb.Mmusculus.v79)
+library(dplyr)
+library(ggplot2)
+library(loupeR)
+colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
+#####################################################################################
+output_dir="/home/felipe/results_seurat/"
+#output_dir="/home/singlecell/results_seurat/"
+#####################################################################################
+# ATAC analysis add gene annotation information
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
+seqlevelsStyle(annotations) <- "UCSC"
+genome(annotations) <- "mm10"
 
+#library(TxDb.Mmusculus.UCSC.mm10.knownGene)
+#annotations <- transcripts(TxDb.Mmusculus.UCSC.mm10.knownGene)
+#####################################################################################
+# Set number of samples
+n_samples=4
+
+# Create list to save seurat objects for ATAC
+list_ATAC_objects=list()
+
+# For each sample
+for (sample in 1:n_samples)
+{
+    # Set intput dir ATAC-M1 and seurat objects
+    ATAC_file_h5           <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample,"/filtered_peak_bc_matrix.h5",sep="")
+    ATAC_singlecell_file   <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample,"/singlecell.csv",sep="")
+    ATAC_fragment_file     <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample,"/fragments.tsv.gz",sep="") 
+
+    # Set intput dir ATAC-M1 and seurat objects
+    ATAC_h5               <-  Read10X_h5(ATAC_file_h5)
+    ATAC_singlecell       <-  read.csv(file = ATAC_singlecell_file ,header = TRUE,row.names = 1)
+    ATAC_fragment         <-  CreateFragmentObject(ATAC_fragment_file)        
+    ATAC_chrom_assay      <-  CreateChromatinAssay(counts = ATAC_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_fragment_file)
+  
+    # Add object to list
+    list_ATAC_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_chrom_assay
+}
+#####################################################################################
+# Change names
+# Check merged objects
+# merge
+ATAC_objects_combined <- merge(
+  x = list_ATAC_objects[[1]],
+  y = list_ATAC_objects[2:length(names(list_ATAC_objects))],
+  add.cell.ids = names(list_ATAC_objects)
+)
