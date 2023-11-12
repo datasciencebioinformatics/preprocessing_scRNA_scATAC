@@ -49,7 +49,10 @@ for (sample in 1:n_samples)
     ATAC_singlecell       <-  read.csv(file = ATAC_singlecell_file ,header = TRUE,row.names = 1)
     ATAC_fragment         <-  CreateFragmentObject(ATAC_fragment_file)        
     ATAC_chrom_assay      <-  CreateChromatinAssay(counts = ATAC_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_fragment_file)
-  
+
+    # add information to identify dataset of origin
+    ATAC_chrom_assay$dataset <- paste("ATAC-M",sample,sep="")]
+
     # Add object to list
     list_ATAC_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_chrom_assay
 }
@@ -62,3 +65,9 @@ ATAC_objects_combined <- merge(
   y = list_ATAC_objects[2:length(names(list_ATAC_objects))],
   add.cell.ids = names(list_ATAC_objects)
 )
+
+# process 
+ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
+ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
+ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
+ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'lsi')
