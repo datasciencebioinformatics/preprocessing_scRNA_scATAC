@@ -53,8 +53,7 @@ for (sample in 1:n_samples)
     ATAC_chrom_assay        <-  CreateChromatinAssay(counts = ATAC_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_fragment_file)
     ATAC_M1_hypotha         <-  CreateSeuratObject(ATAC_chrom_assay,assay = "peaks",project = paste("ATAC-M",sample,sep=""))
     ATAC_M1_hypotha$dataset <-  paste("ATAC-M",sample,sep="")
-    Idents(ATAC_M1_hypotha) <- paste("ATAC-M",sample,sep="")#save(ATAC_M1.hypotha.combined, file = "./ATAC_M1.hypotha.combined.RData")
-#save(cDNA_M1.hypotha.combined, file = "./cDNA_M1.hypotha.combined.RData")
+    Idents(ATAC_M1_hypotha) <- paste("ATAC-M",sample,sep="")
 
     # Add object to list
     list_ATAC_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_M1_hypotha
