@@ -51,6 +51,9 @@ for (sample in 1:n_samples)
     ATAC_singlecell       <-  read.csv(file = ATAC_singlecell_file ,header = TRUE,row.names = 1)
     ATAC_fragment         <-  CreateFragmentObject(ATAC_fragment_file)        
     ATAC_chrom_assay      <-  CreateChromatinAssay(counts = ATAC_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_fragment_file)
+    
+    # Set identity classes to an existing column in meta data
+    Idents(object = ATAC_chrom_assay) <- paste("ATAC-M",sample,sep="")
 
     # Add object to list
     list_ATAC_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_chrom_assay
@@ -64,6 +67,9 @@ for (sample in 1:n_samples)
     cDNA_hypotha[["percent.mt"]] <- PercentageFeatureSet(cDNA_hypotha, pattern = "mt")
     # Subset percent.mt < 2
     cDNA_hypotha = subset(cDNA_hypotha, subset = percent.mt < 2)
+
+    # Set identity classes to an existing column in meta data
+    Idents(object = cDNA_hypotha) <- paste("cDNA-M",sample,sep="")
 
     # Add object to list
     list_RNA_objects[[paste("cDNA-M",sample,sep="")]]<-cDNA_hypotha
