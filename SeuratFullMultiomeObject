@@ -84,15 +84,34 @@ ATAC_objects_combined <- merge(
   y = list_ATAC_objects[2:length(names(list_ATAC_objects))],
   add.cell.ids = names(list_ATAC_objects)
 )
+
+# Merge samples
+RNA_objects_combined <- merge(
+  x = list_RNA_objects[[1]],
+  y = list_RNA_objects[2:length(names(list_RNA_objects))],
+  add.cell.ids = names(list_RNA_objects)
+)
 #####################################################################################
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
 #####################################################################################
-
 # process 
 ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
 ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
 ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
 ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'lsi')
 
+# Calculate FindVariableFeatures
+RNA_objects_FindVariableFeatures <- FindVariableFeatures(object=RNA_objects_combined , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+RNA_objects_combined             <- NormalizeData(RNA_objects_combined, normalization.method = "LogNormalize", scale.factor = 10000)
+RNA_objects_combined             <- ScaleData(RNA_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_FindVariableFeatures))
+RNA_objects_combined             <- RunPCA(RNA_objects_combined, features = VariableFeatures(object = RNA_objects_FindVariableFeatures))
+RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50)
 #####################################################################################
 # Quality control - add  too mitocondrial percentage to quality control plot
+DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("ATAC-M1/M2/M3")
+DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("cDNA-M1/M2/M3")
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"DimPlotsRaw.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	grid.arrange(DimPlot_ATAC_objects_combined, DimPlot_RNA_objects_combined, nrow = 1)
+dev.off()
