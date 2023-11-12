@@ -50,7 +50,7 @@ for (sample in 1:n_samples)
     ATAC_h5               <-  Read10X_h5(ATAC_file_h5)
     ATAC_singlecell       <-  read.csv(file = ATAC_singlecell_file ,header = TRUE,row.names = 1)
     ATAC_fragment         <-  CreateFragmentObject(ATAC_fragment_file)        
-    ATAC_chrom_assay      <-  CreateChromatinAssay(counts = ATAC_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_fragment_file,  project = paste("ATAC-M",sample,sep=""))
+    ATAC_chrom_assay      <-  CreateChromatinAssay(counts = ATAC_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_fragment_file)
 
     # Add object to list
     list_ATAC_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_chrom_assay
