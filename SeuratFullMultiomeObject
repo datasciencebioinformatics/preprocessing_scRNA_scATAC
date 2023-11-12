@@ -74,7 +74,7 @@ for (sample in 1:n_samples)
 }
 #####################################################################################
 save(list_RNA_objects, file = "./list_RNA_objects.RData")                   #
-save(list_ATAC_objects, file = "./list_RNA_objects.RData")
+save(list_ATAC_objects, file = "./list_ATAC_objects.RData")
 #####################################################################################
 # Change names
 # Check merged objects
