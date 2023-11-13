@@ -137,3 +137,20 @@ DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, group.by = 'dataset'
 png(filename=paste(output_dir,"DimPlotsRaw.png",sep=""), width = 24, height = 12, res=600, units = "cm")
 	grid.arrange(DimPlot_ATAC_objects_combined, DimPlot_RNA_objects_combined, nrow = 1)
 dev.off()
+
+#####################################################################################
+# list_RNA_chrom_assay
+list_RNA_chrom_assay=list() 
+
+# For each sample
+for (sample in 1:n_samples)
+{
+	###### Second the RNA folder    
+	cDNA_file_h5                 <- paste("/home/felipe/snRNASeq_output/cDNA-M",sample,"/outs/filtered_feature_bc_matrix.h5",sep="")
+	cDNA_h5                      <- Read10X_h5(cDNA_file_h5) # Load table for all sample - aggreagate cellranger for the six samples    
+	cDNA_hypotha                 <- CreateSeuratObject(counts = cDNA_h5, project = paste("cDNA-M",sample,sep=""), assay = "RNA")    
+	
+	# Add object to list
+	list_RNA_objects[[paste("cDNA-M",sample,sep="")]]<-cDNA_hypotha
+}
+save(list_RNA_objects, file = "./list_RNA_objects.RData")                       #
