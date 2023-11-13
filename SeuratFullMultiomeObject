@@ -76,21 +76,23 @@ combined.peaks <- reduce(x = c(list_ATAC_peaks[[1]],list_ATAC_peaks[[2]],list_AT
 # Filter out bad peaks based on length
 peakwidths <- width(combined.peaks)
 #####################################################################################
-# list_ATAC_peaks=list()
+list_ATAC_peaks=list()
 # For each sample
 for (sample in 1:n_samples)
 { 
 	# Quantify peaks in each dataset 
 	ATAC_counts <- FeatureMatrix(
-	  fragments = ATAC_fragment,
+	  fragments = list_ATAC_fr[[sample]],
 	  features = combined.peaks,
-	  cells = rownames(ATAC_fragment)
+	  cells = rownames(list_ATAC_fr[[sample]])
 	)
 	# For each sample, cerate chrom_assay and atac obje
-	ATAC_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_counts,fragments =ATAC_fragment_file)
+	ATAC_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_counts[[sample]],fragments =ATAC_fragment_file[[sample]])
 	ATAC_obje <- CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
 	list_ATAC_peaks[[sample]]<-ATAC_obje
 }
+#####################################################################################
+save(list_ATAC_peaks, file = "./list_ATAC_peaks.RData")
 #####################################################################################
 # https://stuartlab.org/signac/articles/merging
 # Change names
@@ -101,7 +103,8 @@ ATAC_objects_combined <- merge(
   y = list_ATAC_peaks[2:length(names(list_ATAC_peaks))],
   add.cell.ids = names(list_ATAC_peaks)
 )
-
+save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
+#####################################################################################
 ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
 ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
 ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
