@@ -64,18 +64,17 @@ for (sample in 1:n_samples)
 	list_ATAC_fr[[paste("ATAC-M",sample,sep="")]]<-ATAC_fragment	
 }
 #####################################################################################
-save(list_ATAC_gr, file =     "./list_ATAC_gr.RData")                           #
-save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                           #
-save(list_ATAC_peaks, file =     "./list_ATAC_peaks.RData")                     #
-save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                           #
-save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")         #
+save(list_ATAC_gr, file =     "./list_ATAC_gr.RData")                              #
+save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                              #
+save(list_ATAC_peaks, file =     "./list_ATAC_peaks.RData")                        #
+save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                              #
+save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")            #
 #####################################################################################
 # Create a unified set of peaks to quantify in each dataset
 combined.peaks <- reduce(x = unlist(list_ATAC_peaks))
 
 # Filter out bad peaks based on length
 peakwidths <- width(combined.peaks)
-
 #####################################################################################
 # list_ATAC_peaks=list()
 # For each sample
