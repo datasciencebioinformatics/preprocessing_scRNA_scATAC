@@ -34,10 +34,9 @@ genome(annotations) <- "mm10"
 n_samples=3
 
 # Create list to save seurat objects for ATAC
-list_ATAC_objects=list()
-list_ATAC_h5_objects=list()
-list_ATAC_singlecell_objects=list()
-list_RNA_objects=list()
+list_ATAC_h5=list()
+list_ATAC_gr=list()
+list_RNA=list()
 
 
 # For each sample
@@ -51,18 +50,11 @@ for (sample in 1:n_samples)
 	
 	# Set intput dir ATAC-M1 and seurat objects
 	ATAC_h5                 <-  Read10X_h5(ATAC_file_h5)
-	ATAC_singlecell         <-  read.csv(file = ATAC_singlecell_file ,header = TRUE,row.names = 1)		
-	ATAC_fragment           <-  CreateFragmentObject(ATAC_fragment_file)        
-
-	ATAC_chrom_assay        <-  CreateChromatinAssay(counts = ATAC_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_fragment_file)
-	ATAC_M1_hypotha         <-  CreateSeuratObject(ATAC_chrom_assay,assay = "peaks",project = paste("ATAC-M",sample,sep=""))
-	ATAC_M1_hypotha$dataset <-  paste("ATAC-M",sample,sep="")
-	Idents(ATAC_M1_hypotha) <-  paste("ATAC-M",sample,sep="")
+	ATAC_gr 		<-  makeGRangesFromDataFrame(ATAC_h5)
 	
 	# Add object to list
-	list_ATAC_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_M1_hypotha
-	list_ATAC_h5_objects[[paste("ATAC-M",sample,sep="")]]<-ATAC_file_h5
-	list_ATAC_singlecell_objects[[paste("ATAC-M",sample,sep="")]]<-list_ATAC_singlecell_objects
+	list_ATAC_h5[[paste("ATAC-M",sample,sep="")]]<-ATAC_M1_hypotha
+	list_ATAC_gr[[paste("ATAC-M",sample,sep="")]]<-ATAC_file_h5	
 	
 	###### Second the RNA folder    
 	# Save whole workspace to working directory
@@ -71,18 +63,15 @@ for (sample in 1:n_samples)
 	cDNA_hypotha                 <- CreateSeuratObject(counts = cDNA_h5, project = paste("cDNA-M",sample,sep=""), assay = "RNA")    
 	cDNA_hypotha[["percent.mt"]] <- PercentageFeatureSet(cDNA_hypotha, pattern = "mt")    
 	cDNA_hypotha = subset(cDNA_hypotha, subset = percent.mt < 2) # Subset percent.mt < 2
-	Idents(cDNA_hypotha)         <- paste("cDNA-M",sample,sep="")
 	cDNA_hypotha$dataset         <- paste("cDNA-M",sample,sep="")
 	
 	# Add object to list
 	list_RNA_objects[[paste("cDNA-M",sample,sep="")]]<-cDNA_hypotha
 }
 #####################################################################################
-save(list_ATAC_counts_objects, file = "./list_ATAC_counts_objects.RData")           #
-save(list_ATAC_singlecell_objects, file = "./list_ATAC_singlecell_objects.RData")           #
-save(list_ATAC_h5_objects, file = "./list_ATAC_h5_objects.RData")           #
-save(list_RNA_objects, file = "./list_RNA_objects.RData")                   #
-save(list_ATAC_objects, file = "./list_ATAC_objects.RData")
+save(list_ATAC_h5, file =     "./list_ATAC_h5.RData")                           #
+save(list_ATAC_gr, file =     "./list_ATAC_gr.RData")                           #
+save(list_RNA_objects, file = "./list_RNA_objects.RData")                       #
 #####################################################################################
 # https://stuartlab.org/signac/articles/merging
 # Change names
