@@ -71,7 +71,7 @@ save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                           
 save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")            #
 #####################################################################################
 # Create a unified set of peaks to quantify in each dataset
-combined.peaks <- reduce(x = unlist(list_ATAC_peaks))
+combined.peaks <- reduce(x = c(list_ATAC_peaks[[1]],list_ATAC_peaks[[2]],list_ATAC_peaks[[3]]) )
 
 # Filter out bad peaks based on length
 peakwidths <- width(combined.peaks)
@@ -88,7 +88,7 @@ for (sample in 1:n_samples)
 	)
 	# For each sample, cerate chrom_assay and atac obje
 	ATAC_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_counts,fragments =ATAC_fragment_file)
-	ATAC_obje <- CreateSeuratObject(pbmc500_assay, assay = "ATAC")
+	ATAC_obje <- CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
 	list_ATAC_peaks[[sample]]<-ATAC_obje
 }
 #####################################################################################
@@ -145,6 +145,29 @@ RNA_objects_combined             <- NormalizeData(RNA_objects_combined, normaliz
 RNA_objects_combined             <- ScaleData(RNA_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_FindVariableFeatures))
 RNA_objects_combined             <- RunPCA(RNA_objects_combined, features = VariableFeatures(object = RNA_objects_FindVariableFeatures))
 RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50)
+
+#####################################################################################
+# Read CSV into DataFrame
+#Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
+Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
+
+# Create
+df_ATAC<-data.frame(Names=Cells(ATAC_objects_combined),IDs=substring(Cells(ATAC_objects_combined),1,16))
+df_RNA<-data.frame(Names=Cells(RNA_objects_combined),IDs=substring(Cells(RNA_objects_combined),1,16))
+
+# Create ATAC-RNA
+df_ATAC$RNA<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$ATAC %in% df_ATAC$IDs,"RNA"],substring(df_ATAC$Names,17,18),sep="")
+
+# S3 method for DimReduc
+ATAC_objects_combined<-RenameCells(ATAC_objects_combined, new.names = df_ATAC[which(df_ATAC$Names %in% Cells(ATAC_M1.hypotha)),"RNA"])
+#####################################################################################
+# Create combined multiome object
+combined.cell<-Cells(ATAC_objects_combined)[Cells(ATAC_objects_combined) %in% Cells(RNA_objects_combined)]
+
+# Combine datasets with same cells
+ATAC_objects_combined <-  ATAC_objects_combined[,combined.cell]
+RNA_objects_combined  <-  RNA_objects_combined[,combined.cell]
+#####################################################################################
 
 # Quality control - add  too mitocondrial percentage to quality control plot
 DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("ATAC-M1/M2/M3")
