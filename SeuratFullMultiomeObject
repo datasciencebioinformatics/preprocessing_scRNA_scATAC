@@ -102,6 +102,11 @@ ATAC_objects_combined <- merge(
   add.cell.ids = names(list_ATAC_peaks)
 )
 
+ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
+ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
+ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
+ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'lsi')
+
 # Merge samples
 RNA_objects_combined <- merge(
   x = list_RNA_objects[[1]],
