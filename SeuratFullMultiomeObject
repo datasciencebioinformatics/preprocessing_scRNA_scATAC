@@ -36,8 +36,8 @@ n_samples=3
 # Create list to save seurat objects for ATAC
 list_ATAC_gr=list()
 list_ATAC_fr=list()
-list_RNA=list()
-
+list_ATAC_peaks=list()
+list_ATAC_chrom_assay=list() 
 
 # For each sample
 for (sample in 1:n_samples)
@@ -58,23 +58,17 @@ for (sample in 1:n_samples)
 	ATAC_gr 	    <-  makeGRangesFromDataFrame(ATAC_peaks)
 	
 	# Add object to list
-	list_ATAC_peaks[[paste("ATAC-M",sample,sep="")]]<-ATAC_M1_hypotha
+	list_ATAC_peaks[[paste("ATAC-M",sample,sep="")]]<-ATAC_peaks
+	list_ATAC_chrom_assay[[paste("ATAC-M",sample,sep="")]]<-ATAC_chrom_assay
 	list_ATAC_gr[[paste("ATAC-M",sample,sep="")]]<-ATAC_file_h5	
-	list_ATAC_fr[[paste("ATAC-M",sample,sep="")]]<-ATAC_fragment
-	
-	###### Second the RNA folder    
-	# Save whole workspace to working directory
-	cDNA_file_h5                 <-  paste("/home/felipe/snRNASeq_output/cDNA-M",sample,"/outs/filtered_feature_bc_matrix.h5",sep="")
-	cDNA_h5                      <- Read10X_h5(cDNA_file_h5) # Load table for all sample - aggreagate cellranger for the six samples    
-	cDNA_hypotha                 <- CreateSeuratObject(counts = cDNA_h5, project = paste("cDNA-M",sample,sep=""), assay = "RNA")    
-
-	# Add object to list
-	list_RNA_objects[[paste("cDNA-M",sample,sep="")]]<-cDNA_hypotha
+	list_ATAC_fr[[paste("ATAC-M",sample,sep="")]]<-ATAC_fragment	
 }
 #####################################################################################
-save(list_ATAC_h5, file =     "./list_ATAC_h5.RData")                           #
 save(list_ATAC_gr, file =     "./list_ATAC_gr.RData")                           #
-save(list_RNA_objects, file = "./list_RNA_objects.RData")                       #
+save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                     #
+save(list_ATAC_peaks, file =     "./list_ATAC_peaks.RData")                           #
+save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                           #
+save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")         #
 #####################################################################################
 # https://stuartlab.org/signac/articles/merging
 # Change names
