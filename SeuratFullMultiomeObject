@@ -61,10 +61,7 @@ for (sample in 1:n_samples)
 	cDNA_file_h5                 <-  paste("/home/felipe/snRNASeq_output/cDNA-M",sample,"/outs/filtered_feature_bc_matrix.h5",sep="")
 	cDNA_h5                      <- Read10X_h5(cDNA_file_h5) # Load table for all sample - aggreagate cellranger for the six samples    
 	cDNA_hypotha                 <- CreateSeuratObject(counts = cDNA_h5, project = paste("cDNA-M",sample,sep=""), assay = "RNA")    
-	cDNA_hypotha[["percent.mt"]] <- PercentageFeatureSet(cDNA_hypotha, pattern = "mt")    
-	cDNA_hypotha = subset(cDNA_hypotha, subset = percent.mt < 2) # Subset percent.mt < 2
-	cDNA_hypotha$dataset         <- paste("cDNA-M",sample,sep="")
-	
+
 	# Add object to list
 	list_RNA_objects[[paste("cDNA-M",sample,sep="")]]<-cDNA_hypotha
 }
