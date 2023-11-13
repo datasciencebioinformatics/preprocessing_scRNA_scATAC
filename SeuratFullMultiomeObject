@@ -65,19 +65,42 @@ for (sample in 1:n_samples)
 }
 #####################################################################################
 save(list_ATAC_gr, file =     "./list_ATAC_gr.RData")                           #
-save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                     #
-save(list_ATAC_peaks, file =     "./list_ATAC_peaks.RData")                           #
+save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                           #
+save(list_ATAC_peaks, file =     "./list_ATAC_peaks.RData")                     #
 save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                           #
 save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")         #
+#####################################################################################
+# Create a unified set of peaks to quantify in each dataset
+combined.peaks <- reduce(x = unlist(list_ATAC_peaks))
+
+# Filter out bad peaks based on length
+peakwidths <- width(combined.peaks)
+
+#####################################################################################
+# list_ATAC_peaks=list()
+# For each sample
+for (sample in 1:n_samples)
+{ 
+	# Quantify peaks in each dataset 
+	ATAC_counts <- FeatureMatrix(
+	  fragments = ATAC_fragment,
+	  features = combined.peaks,
+	  cells = rownames(ATAC_fragment)
+	)
+	# For each sample, cerate chrom_assay and atac obje
+	ATAC_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_counts,fragments =ATAC_fragment_file)
+	ATAC_obje <- CreateSeuratObject(pbmc500_assay, assay = "ATAC")
+	list_ATAC_peaks[[sample]]<-ATAC_obje
+}
 #####################################################################################
 # https://stuartlab.org/signac/articles/merging
 # Change names
 # Check merged objects
 # merge
 ATAC_objects_combined <- merge(
-  x = list_ATAC_objects[[1]],
-  y = list_ATAC_objects[2:length(names(list_ATAC_objects))],
-  add.cell.ids = names(list_ATAC_objects)
+  x = list_ATAC_peaks[[1]],
+  y = list_ATAC_peaks[2:length(names(list_ATAC_peaks))],
+  add.cell.ids = names(list_ATAC_peaks)
 )
 
 # Merge samples
