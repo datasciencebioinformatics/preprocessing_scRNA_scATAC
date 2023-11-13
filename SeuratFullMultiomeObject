@@ -34,8 +34,8 @@ genome(annotations) <- "mm10"
 n_samples=3
 
 # Create list to save seurat objects for ATAC
-list_ATAC_h5=list()
 list_ATAC_gr=list()
+list_ATAC_fr=list()
 list_RNA=list()
 
 
@@ -49,12 +49,18 @@ for (sample in 1:n_samples)
 	ATAC_fragment_file     <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample,"/fragments.tsv.gz",sep="") 
 	
 	# Set intput dir ATAC-M1 and seurat objects
-	ATAC_h5                 <-  Read10X_h5(ATAC_file_h5)
-	ATAC_gr 		<-  makeGRangesFromDataFrame(ATAC_h5)
+	ATAC_h5             <-  Read10X_h5(ATAC_file_h5)
+	ATAC_singlecell     <-  read.csv(file = ATAC_singlecell_file,header = TRUE,row.names = 1)
+	ATAC_fragment       <-  CreateFragmentObject(ATAC_fragment_file)
+	ATAC_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_fragment_file)
+	ATAC_hypotha        <-  CreateSeuratObject(counts = ATAC_chrom_assay,assay = "peaks")
+	ATAC_peaks	    <-  CallPeaks(object = ATAC_hypotha)	
+	ATAC_gr 	    <-  makeGRangesFromDataFrame(ATAC_peaks)
 	
 	# Add object to list
-	list_ATAC_h5[[paste("ATAC-M",sample,sep="")]]<-ATAC_M1_hypotha
+	list_ATAC_peaks[[paste("ATAC-M",sample,sep="")]]<-ATAC_M1_hypotha
 	list_ATAC_gr[[paste("ATAC-M",sample,sep="")]]<-ATAC_file_h5	
+	list_ATAC_fr[[paste("ATAC-M",sample,sep="")]]<-ATAC_fragment
 	
 	###### Second the RNA folder    
 	# Save whole workspace to working directory
