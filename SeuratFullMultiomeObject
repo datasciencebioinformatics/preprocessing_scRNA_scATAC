@@ -254,7 +254,7 @@ plot_nCells<-m_df_cells %>%  ggplot(aes(x=Sample,y=nCells)) +  geom_col(fill="bl
 output_dir="/home/felipe/results_seurat/"
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"plot_number_of_cells.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+png(filename=paste(output_dir,"plot_number_of_cells.png",sep=""), width = 14, height = 6, res=600, units = "cm")
 	plot_nCells
 dev.off()
 
