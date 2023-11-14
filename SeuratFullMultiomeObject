@@ -122,21 +122,6 @@ ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
 ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
 ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'lsi')
 #####################################################################################
-# list_RNA_chrom_assay
-list_RNA_chrom_assay=list() 
-
-# For each sample
-for (sample in 1:n_samples)
-{
-	###### Second the RNA folder    
-	cDNA_file_h5                 <- paste("/home/felipe/snRNASeq_output/cDNA-M",sample,"/outs/filtered_feature_bc_matrix.h5",sep="")
-	cDNA_h5                      <- Read10X_h5(cDNA_file_h5) # Load table for all sample - aggreagate cellranger for the six samples    
-	cDNA_hypotha                 <- CreateSeuratObject(counts = cDNA_h5, project = paste("cDNA-M",sample,sep=""), assay = "RNA")    
-	
-	# Add object to list
-	list_RNA_objects[[paste("cDNA-M",sample,sep="")]]<-cDNA_hypotha
-}
-#####################################################################################
 save(list_RNA_objects, file = "./list_RNA_objects.RData")                       #
 #####################################################################################
 # Merge samples
