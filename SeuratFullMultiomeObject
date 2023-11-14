@@ -60,18 +60,25 @@ for (sample in 1:n_samples)
 	# Add object to list
 	list_ATAC_peaks[[paste("ATAC-M",sample,sep="")]]<-ATAC_peaks
 	list_ATAC_chrom_assay[[paste("ATAC-M",sample,sep="")]]<-ATAC_chrom_assay
-	list_ATAC_gr[[paste("ATAC-M",sample,sep="")]]<-ATAC_file_h5	
+	list_ATAC_gr[[paste("ATAC-M",sample,sep="")]]<-ATAC_gr	
 	list_ATAC_fr[[paste("ATAC-M",sample,sep="")]]<-ATAC_fragment	
 }
 #####################################################################################
-save(list_ATAC_gr, file =     "./list_ATAC_gr.RData")                              #
-save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                              #
-save(list_ATAC_peaks, file =     "./list_ATAC_peaks.RData")                        #
-save(list_ATAC_fr, file =     "./list_ATAC_fr.RData")                              #
-save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")            #
+save(list_ATAC_gr, file =              "./list_ATAC_gr.RData")                      #
+save(list_ATAC_fr, file =              "./list_ATAC_fr.RData")                      #
+save(list_ATAC_peaks, file =           "./list_ATAC_peaks.RData")                   #
+save(list_ATAC_fr, file =              "./list_ATAC_fr.RData")                      #
+save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")             #
+#####################################################################################
+load("./list_ATAC_peaks.RData")                                                     #
+load("./list_ATAC_fr.RData")                                                        # 
+load("./list_ATAC_gr.RData")     						    #
 #####################################################################################
 # Create a unified set of peaks to quantify in each dataset
-combined.peaks <- reduce(x = c(list_ATAC_peaks[[1]],list_ATAC_peaks[[2]],list_ATAC_peaks[[3]]) )
+
+makeGRangesFromDataFrame(	)
+
+combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]]))
 
 # Filter out bad peaks based on length
 peakwidths <- width(combined.peaks)
