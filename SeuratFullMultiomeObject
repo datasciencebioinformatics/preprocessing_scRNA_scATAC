@@ -97,6 +97,7 @@ for (sample in 1:n_samples)
 }
 #####################################################################################
 save(list_ATAC_peaks, file = "./list_ATAC_peaks.RData")
+load("./list_ATAC_peaks.RData")
 #####################################################################################
 # https://stuartlab.org/signac/articles/merging
 # Change names
@@ -115,14 +116,6 @@ ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
 ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'lsi')
 #####################################################################################
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
-#####################################################################################
-# process 
-ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
-ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
-ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
-ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'lsi')
-#####################################################################################
-save(list_RNA_objects, file = "./list_RNA_objects.RData")                           #
 #####################################################################################
 # Set number of samples
 n_samples=3
@@ -163,7 +156,6 @@ RNA_objects_combined             <- ScaleData(RNA_objects_combined,block.size = 
 RNA_objects_combined             <- RunPCA(RNA_objects_combined, features = VariableFeatures(object = RNA_objects_FindVariableFeatures))
 RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50)
 #####################################################################################
-
 # Quality control - add  too mitocondrial percentage to quality control plot
 DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("ATAC-M1/M2/M3")
 DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("cDNA-M1/M2/M3")
