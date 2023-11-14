@@ -221,5 +221,5 @@ dev.off()
 # Create a bar plot with number of cell per sample ATAC
 # Create a bar plot with number of cell per sample RNA
 # Create a bar plot with number of common cell RNA+ATAC
-
-
+list_RNA_objects      =
+list_ATAC_chrom_assay =
