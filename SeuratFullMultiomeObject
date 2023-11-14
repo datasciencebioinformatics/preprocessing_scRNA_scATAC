@@ -108,7 +108,9 @@ ATAC_objects_combined <- merge(
   y = list_ATAC_peaks[2:length(names(list_ATAC_peaks))],
   add.cell.ids = names(list_ATAC_peaks)
 )
+#####################################################################################
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
+load("./ATAC_objects_combined.RData")
 #####################################################################################
 ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
 ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
