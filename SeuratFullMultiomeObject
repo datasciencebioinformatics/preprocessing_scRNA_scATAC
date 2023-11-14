@@ -87,8 +87,8 @@ for (sample in 1:n_samples)
 	  cells = rownames(list_ATAC_fr[[sample]])
 	)
 	# For each sample, cerate chrom_assay and atac obje
-	ATAC_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_counts[[sample]],fragments =ATAC_fragment_file[[sample]])
-	ATAC_obje <- CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
+	ATAC_chrom_assay         <-  CreateChromatinAssay(counts = ATAC_counts,fragments =list_ATAC_fr[[sample]])
+	ATAC_obje                <- CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
 	list_ATAC_peaks[[sample]]<-ATAC_obje
 }
 #####################################################################################
