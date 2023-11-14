@@ -217,4 +217,9 @@ pbmc <- subset(
 png(filename=paste(output_dir,"plot_VlnPlot_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
 	VlnPlot(object = hypotha, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
 dev.off()
+#####################################################################################
+# Create a bar plot with number of cell per sample ATAC
+# Create a bar plot with number of cell per sample RNA
+# Create a bar plot with number of common cell RNA+ATAC
+
 
