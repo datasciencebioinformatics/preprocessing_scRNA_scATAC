@@ -221,5 +221,25 @@ dev.off()
 # Create a bar plot with number of cell per sample ATAC
 # Create a bar plot with number of cell per sample RNA
 # Create a bar plot with number of common cell RNA+ATAC
-list_RNA_objects      =
-list_ATAC_chrom_assay =
+# list_RNA_objects      
+# list_ATAC_chrom_assay 
+# n_samples
+# For each sample
+df_cells<-data.frame(RNA=c(),ATAC=c(),MULTIOME=c())
+for (sample in 1:n_samples)
+{
+	# Take the number of cells
+	nCells_ATAC     =length(Cells(list_ATAC_chrom_assay[[sample]]))
+	nCells_RNA      =length(Cells(list_ATAC_chrom_assay[[sample]]))
+	nCells_MULTIOME =sum(Cells(list_ATAC_chrom_assay[[sample]]) %in% Cells(list_ATAC_chrom_assay[[sample]]))
+	df_cells<-rbind(df_cells,data.frame(nCells_RNA,nCells_ATAC,nCells_MULTIOME))
+}
+rownames(df_cells)<-paste("Sample", 1:n_samples,sep=" ") # Set rownames
+colnames(df_cells)<-c("RNA","ATAC","MULTIOME")
+# Melt table
+m_df_cells<-melt(t(df_cells))
+
+# Colnames(m_df_cells)
+colnames(m_df_cells)<-c("Experiment","Sample","nCells")
+
+m_df_cells %>%  ggplot(aes(x=Sample,y=nCells)) +  geom_col(fill="steelblue") + theme_bw() + facet_grid(. ~ Experiment)
