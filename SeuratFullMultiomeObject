@@ -146,9 +146,9 @@ save(list_RNA_obj, file =              "./list_RNA_obj.RData")                  
 #####################################################################################
 # Merge samples
 RNA_objects_combined <- merge(
-  x = list_RNA_objects[[1]],
-  y = list_RNA_objects[2:length(names(list_RNA_objects))],
-  add.cell.ids = names(list_RNA_objects)
+  x = list_RNA_obj[[1]],
+  y = list_RNA_obj[2:length(names(list_RNA_obj))],
+  add.cell.ids = names(list_RNA_obj)
 )
 
 # Calculate FindVariableFeatures
@@ -157,6 +157,8 @@ RNA_objects_combined             <- NormalizeData(RNA_objects_combined, normaliz
 RNA_objects_combined             <- ScaleData(RNA_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_FindVariableFeatures))
 RNA_objects_combined             <- RunPCA(RNA_objects_combined, features = VariableFeatures(object = RNA_objects_FindVariableFeatures))
 RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50)
+#####################################################################################
+
 #####################################################################################
 # Quality control - add  too mitocondrial percentage to quality control plot
 DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("ATAC-M1/M2/M3")
