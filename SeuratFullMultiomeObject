@@ -159,10 +159,10 @@ RNA_objects_combined             <- RunPCA(RNA_objects_combined, features = Vari
 RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50)
 #####################################################################################
 # Quality control - add  too mitocondrial percentage to quality control plot
-DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, pt.size = 0.1,raster=FALSE) + ggtitle("ATAC-M1/M2/M3")
-DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, pt.size = 0.1, raster=FALSE) + ggtitle("cDNA-M1/M2/M3")
-#DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("ATAC-M1/M2/M3")
-#DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("cDNA-M1/M2/M3")
+DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, pt.size = 0.1,raster=FALSE) + ggtitle("ATAC-M1/M2/M3") + theme(legend.position = "none") 
+DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, pt.size = 0.1, raster=FALSE) + ggtitle("cDNA-M1/M2/M3") + theme(legend.position = "none") 
+#DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("ATAC-M1/M2/M3") + theme(legend.position = "none") 
+#DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, group.by = 'dataset', pt.size = 0.1) + ggtitle("cDNA-M1/M2/M3") + theme(legend.position = "none") 
 
 # FindClusters_resolution
 output_dir="/home/felipe/results_seurat/"
