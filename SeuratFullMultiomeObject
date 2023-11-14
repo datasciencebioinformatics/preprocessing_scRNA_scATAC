@@ -75,9 +75,6 @@ load("./list_ATAC_fr.RData")                                                    
 load("./list_ATAC_gr.RData")     						    #
 #####################################################################################
 # Create a unified set of peaks to quantify in each dataset
-
-makeGRangesFromDataFrame(	)
-
 combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]]))
 
 # Filter out bad peaks based on length
