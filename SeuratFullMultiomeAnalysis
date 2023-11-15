@@ -41,6 +41,32 @@ load("./RNA_objects_combined.RData")                                            
 #	- TSS/nuclueosome/peaks per cell
 #	- mitocondial/genes per cell
 #####################################################################################
+# Create combined multiome object
+combined.cell<-Cells(ATAC_objects_combined)[Cells(ATAC_objects_combined) %in% Cells(RNA_objects_combined)]
+#####################################################################################
+# Combine datasets with same cells
+ATAC_objects_combined <- ATAC_objects_combined[,combined.cell]
+RNA_objects_combined  <- RNA_objects_combined[,combined.cell]
+#####################################################################################
+# I stopped here 
+# try to do this https://stuartlab.org/signac/articles/hypotha_multiomic
+# create a Seurat object containing the RNA adata
+hypotha <- RNA_objects_combined
+
+# create ATAC assay and add it to the object
+hypotha[["ATAC"]] <- ATAC_objects_combined[["ATAC"]]
+#####################################################################################
+# Quality control 
+DefaultAssay(hypotha) <- "ATAC"
+
+hypotha <- NucleosomeSignal(hypotha)
+hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"plot_VlnPlot_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	VlnPlot(object = hypotha, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
+dev.off()
+#####################################################################################
 # Filter multiome
 Multiome_objects_combined <- subset(
   x = ATAC_objects_combined,
@@ -50,5 +76,6 @@ Multiome_objects_combined <- subset(
     nFeature_RNA > 100 &
     nucleosome_signal < 2 &
     TSS.enrichment > 1
+    CellName %in% combined.cell)
 )
 #####################################################################################
