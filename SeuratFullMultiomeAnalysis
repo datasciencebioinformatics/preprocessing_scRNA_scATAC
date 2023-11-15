@@ -32,3 +32,21 @@ Multiome_objects_combined <- subset(
     TSS.enrichment > 1
 )
 #####################################################################################
+#  Take cell names
+ATAC_CellNames<-Cells(ATAC_objects_combined)
+RNA_CellNames<-Cells(RNA_objects_combined)
+
+# Com
+df_ATAC<-data.frame(Names=ATAC_CellNames,IDs=substring(ATAC_CellNames,1,16),Index=substring(ATAC_CellNames,17,20))
+df_RNA<-data.frame(Names=RNA_CellNames,Index=substring(RNA_CellNames,9,24),IDs=substring(RNA_CellNames,1,7))
+df_RNA<-data.frame(Names=RNA_CellNames,Index=substring(RNA_CellNames,9,24),IDs=substring(RNA_CellNames,1,7),Indexes= paste(df_RNA$Index,paste(substring(RNA_CellNames,25,26),substring(df_RNA$IDs,7, 8),sep="_"),sep=""))
+
+
+
+
+
+x
+
+df_RNA$IDs
+
+
