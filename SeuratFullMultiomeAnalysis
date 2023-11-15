@@ -41,12 +41,13 @@ df_ATAC<-data.frame(Names=ATAC_CellNames,IDs=substring(ATAC_CellNames,1,16),Inde
 df_RNA<-data.frame(Names=RNA_CellNames,Index=substring(RNA_CellNames,9,24),IDs=substring(RNA_CellNames,1,7))
 df_RNA<-data.frame(Names=RNA_CellNames,Index=substring(RNA_CellNames,9,24),IDs=substring(RNA_CellNames,1,7),Indexes= paste(df_RNA$Index,paste(substring(RNA_CellNames,25,26),substring(df_RNA$IDs,7, 8),sep="_"),sep=""))
 
+# Rename cells
+ATAC_objects_combined=RenameCells(ATAC_objects_combined, new.names = df_RNA[which(RNA_CellNames %in% df_RNA$Names),"Indexes"])
+#####################################################################################
 
 
 
 
-x
 
-df_RNA$IDs
 
 
