@@ -149,7 +149,7 @@ for (sample in 1:n_samples)
 	df_RNA$ATAC<-Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA$IDs,"ATAC"]
 	
 	# Create ATAC-RNA
-	df_RNA$RNA_translation<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA$IDs,"RNA"],substring(df_RNA$Names,17,18),sep="")
+	df_RNA$RNA_translation<-paste(paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA$IDs,"ATAC"],substring(df_RNA$Names,17,18),sep=""),sample,sep="_")
 	
 	# S3 method for DimReduc
 	RNA_hypotha<-RenameCells(RNA_hypotha, new.names = df_RNA[Cells(RNA_hypotha) %in% df_RNA$Names,"RNA_translation"])
@@ -163,10 +163,8 @@ save(list_RNA_obj, file =              "./list_RNA_obj.RData")                  
 # Merge samples
 RNA_objects_combined <- merge(
   x = list_RNA_obj[[1]],
-  y = list_RNA_obj[2:length(names(list_RNA_obj))],
-  add.cell.ids = names(list_RNA_obj)
+  y = list_RNA_obj[2:length(names(list_RNA_obj))] 
 )
-
 # Calculate FindVariableFeatures
 RNA_objects_FindVariableFeatures <- FindVariableFeatures(object=RNA_objects_combined , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
 RNA_objects_combined             <- NormalizeData(RNA_objects_combined, normalization.method = "LogNormalize", scale.factor = 10000)
