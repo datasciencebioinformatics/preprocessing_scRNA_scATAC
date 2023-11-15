@@ -1,3 +1,23 @@
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(gridExtra)
+library(ggplot2)
+library(plyr)
+library(SeuratObject)
+library(Seurat)
+library("harmony")
+library(rhdf5)
+library("hdf5r")
+library("Signac")
+library(Seurat)
+options(Seurat.object.assay.version = "v5")
+library(Signac)
+library(EnsDb.Mmusculus.v79)
+library(dplyr)
+library(ggplot2)
+library(loupeR)
+colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 #####################################################################################
 # First, create ATAC and RNA objects for all samples 
 # follow https://github.com/datasciencebioinformatics/preprocessing_scRNA_scATAC/blob/main/SeuratFullMultiomeObject
@@ -32,17 +52,35 @@ Multiome_objects_combined <- subset(
     TSS.enrichment > 1
 )
 #####################################################################################
+# Read CSV into DataFrame
+Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
+
+# Create
+df_ATAC<-data.frame(Names=Cells(ATAC_objects_combined),IDs=substring(Cells(ATAC_objects_combined,1,16))
+df_RNA<-data.frame(Names=Cells(cDNA_M1.hypotha),IDs=substring(Cells(cDNA_M1.hypotha),1,16))
+
+# Create ATAC-RNA
+df_ATAC$RNA<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$ATAC %in% df_ATAC$IDs,"RNA"],substring(df_ATAC$Names,17,18),sep="")
+
 #  Take cell names
 ATAC_CellNames<-Cells(ATAC_objects_combined)
 RNA_CellNames<-Cells(RNA_objects_combined)
 
 # Com
-df_ATAC<-data.frame(Names=ATAC_CellNames,IDs=substring(ATAC_CellNames,1,16),Index=substring(ATAC_CellNames,17,20))
 df_RNA<-data.frame(Names=RNA_CellNames,Index=substring(RNA_CellNames,9,24),IDs=substring(RNA_CellNames,1,7))
 df_RNA<-data.frame(Names=RNA_CellNames,Index=substring(RNA_CellNames,9,24),IDs=substring(RNA_CellNames,1,7),Indexes= paste(df_RNA$Index,paste(substring(RNA_CellNames,25,26),substring(df_RNA$IDs,7, 8),sep="_"),sep=""))
 
+
+
 # Rename cells
-ATAC_objects_combined=RenameCells(ATAC_objects_combined, new.names = df_RNA[which(RNA_CellNames %in% df_RNA$Names),"Indexes"])
+RNA_objects_combined=RenameCells(RNA_objects_combined, new.names = df_RNA[which(RNA_CellNames %in% df_RNA$Names),"Indexes"])
+
+# Create combined multiome object
+combined.cell<-Cells(ATAC_objects_combined)[Cells(ATAC_objects_combined) %in% Cells(RNA_objects_combined)]
+
+# Combine datasets with same cells
+ATAC_objects_combined_same <- ATAC_objects_combined[,combined.cell]
+RNA_objects_combined_same  <-  RNA_objects_combined[,combined.cell]
 #####################################################################################
 
 
