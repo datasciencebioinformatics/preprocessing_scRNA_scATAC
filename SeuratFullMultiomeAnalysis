@@ -1,1 +1,23 @@
-
+#####################################################################################
+# First, create ATAC and RNA objects for all samples 
+# follow https://github.com/datasciencebioinformatics/preprocessing_scRNA_scATAC/blob/main/SeuratFullMultiomeObject
+# it will creante two main objects ATAC_objects_combined e RNA_objects_combined
+#####################################################################################
+load("./ATAC_objects_combined.RData")                                               #
+load("./RNA_objects_combined.RData")                                                #
+#####################################################################################
+#- ATAC filters : paper
+#	- TSS enrichment greater than 1    : TSS.enrichment
+#	- nucleosome signal greater than 2 : nucleosome_signal	
+#	- between 1000 and 30000 peaks with >1 readcount detected in each cell : nFeature_ATAC
+#	- Common cells among samples       : Rscript
+#	- Common cells between RNA+ATAC    : Rscript
+#- RNA filters : paper
+#	- fraction of mitochondrial genes less than 30% : percent.mt
+#	- between 100 and 7500 genes detected in each cell : nFeature_RNA
+#	- Common cells among samples	   : Rscript
+#	- Common cells between RNA+ATAC    : Rscript
+#- Quality control plot Vioilin plot
+#	- TSS/nuclueosome/peaks per cell
+#	- mitocondial/genes per cell
+#####################################################################################
