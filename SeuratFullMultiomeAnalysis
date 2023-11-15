@@ -21,3 +21,14 @@ load("./RNA_objects_combined.RData")                                            
 #	- TSS/nuclueosome/peaks per cell
 #	- mitocondial/genes per cell
 #####################################################################################
+# Filter multiome
+ATAC_objects_combined <- subset(
+  x = ATAC_objects_combined,
+  subset = nFeature_ATAC < 30000 &
+    nFeature_ATAC > 1000 &
+    nFeature_RNA < 7500 &
+    nFeature_RNA > 100 &
+    nucleosome_signal < 2 &
+    TSS.enrichment > 1
+)
+#####################################################################################
