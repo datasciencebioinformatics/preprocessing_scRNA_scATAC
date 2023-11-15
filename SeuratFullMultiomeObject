@@ -183,35 +183,6 @@ dev.off()
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
 save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
 #####################################################################################
-#- ATAC filters : paper
-#	- TSS enrichment greater than 1    : TSS.enrichment
-#	- nucleosome signal greater than 2 : nucleosome_signal	
-#	- between 1000 and 30000 peaks with >1 readcount detected in each cell : nFeature_ATAC
-#	- Common cells among samples       : Rscript
-#	- Common cells between RNA+ATAC    : Rscript
-#- RNA filters : paper
-#	- fraction of mitochondrial genes less than 30% : percent.mt
-#	- between 100 and 7500 genes detected in each cell : nFeature_RNA
-#	- Common cells among samples	   : Rscript
-#	- Common cells between RNA+ATAC    : Rscript
-#- Quality control plot Vioilin plot
-#	- TSS/nuclueosome/peaks per cell
-#	- mitocondial/genes per cell
-#####################################################################################
-pbmc <- subset(
-  x = pbmc,
-  subset = nFeature_ATAC < 30000 &
-    nFeature_ATAC > 1000 &
-    nFeature_RNA < 7500 &
-    nFeature_RNA > 100 &
-    nucleosome_signal < 2 &
-    TSS.enrichment > 1
-)
-# FindClusters_resolution
-png(filename=paste(output_dir,"plot_VlnPlot_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
-	VlnPlot(object = hypotha, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
-dev.off()
-#####################################################################################
 # Create a bar plot with number of cell per sample ATAC
 # Create a bar plot with number of cell per sample RNA
 # Create a bar plot with number of common cell RNA+ATAC
