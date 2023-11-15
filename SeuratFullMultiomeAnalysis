@@ -22,7 +22,7 @@ load("./RNA_objects_combined.RData")                                            
 #	- mitocondial/genes per cell
 #####################################################################################
 # Filter multiome
-ATAC_objects_combined <- subset(
+Multiome_objects_combined <- subset(
   x = ATAC_objects_combined,
   subset = nFeature_ATAC < 30000 &
     nFeature_ATAC > 1000 &
