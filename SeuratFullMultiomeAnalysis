@@ -23,6 +23,9 @@ colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neuro
 # follow https://github.com/datasciencebioinformatics/preprocessing_scRNA_scATAC/blob/main/SeuratFullMultiomeObject
 # it will creante two main objects ATAC_objects_combined e RNA_objects_combined
 #####################################################################################
+output_dir="/home/felipe/results_seurat/"                                           #
+#output_dir="/home/singlecell/results_seurat/"                                      #
+#####################################################################################
 load("./ATAC_objects_combined.RData")                                               #
 load("./RNA_objects_combined.RData")                                                #
 #####################################################################################
@@ -69,7 +72,36 @@ hypotha <- NucleosomeSignal(hypotha)
 hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"plot_VlnPlot_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
-	VlnPlot(object = hypotha, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
+png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
+	VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
 dev.off()
+#####################################################################################
+#save(hypotha, file = "./hypotha.RData")
+#####################################################################################
+# call peaks using MACS2
+peaks <- CallPeaks(hypotha)
+
+# remove peaks on nonstandard chromosomes and in genomic blacklist regions
+peaks <- keepStandardChromosomes(peaks, pruning.mode = "coarse")
+peaks <- subsetByOverlaps(x = peaks, ranges = blacklist_mm10, invert = TRUE)
+
+#####################################################################################
+save(peaks, file = "./peaks.RData")
+#####################################################################################
+# quantify counts in each peak
+macs2_counts <- FeatureMatrix(
+  fragments = Fragments(hypotha[["ATAC"]]),
+  features = peaks,
+  cells = colnames(hypotha)
+)
+annot=annotations
+# create a new assay using the MACS2 peak set and add it to the Seurat object
+hypotha[["peaks"]] <- CreateChromatinAssay(
+  counts = macs2_counts,
+  fragments = Fragments(hypotha[["ATAC"]]),
+  annotation = annot
+)
+#####################################################################################
+save(hypotha, file = "./hypotha.RData") # I stopped here
+#load("./hypotha.RData") # I stopped here
 #####################################################################################
