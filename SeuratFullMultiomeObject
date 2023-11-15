@@ -161,8 +161,6 @@ RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50)
 # For each sample
 n_samples=3
 
-paste("ATAC-M",sample,sep="")
-
 # Rename cells
 RNA_objects_combined$dataset<-paste(substring(Cells(RNA_objects_combined),1,7))
 ATAC_objects_combined$dataset<-paste("ATAC-M",substring(Cells(ATAC_objects_combined),20,20),sep="")
@@ -178,11 +176,10 @@ output_dir="/home/felipe/results_seurat/"
 png(filename=paste(output_dir,"DimPlotsRaw.png",sep=""), width = 24, height = 12, res=600, units = "cm")
 	grid.arrange(DimPlot_ATAC_objects_combined, DimPlot_RNA_objects_combined, nrow = 1)
 dev.off()
-
 #####################################################################################
-save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
 save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
-#####################################################################################
+save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
+######################################################################################
 # Create a bar plot with number of cell per sample ATAC
 # Create a bar plot with number of cell per sample RNA
 # Create a bar plot with number of common cell RNA+ATAC
