@@ -76,7 +76,7 @@ png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), widt
 	VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
 dev.off()
 #####################################################################################
-#save(hypotha, file = "./hypotha.RData")
+save(hypotha, file = "./hypotha.RData")
 #####################################################################################
 # call peaks using MACS2
 peaks <- CallPeaks(hypotha)
