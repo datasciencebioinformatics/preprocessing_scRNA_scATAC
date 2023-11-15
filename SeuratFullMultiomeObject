@@ -152,11 +152,13 @@ for (sample in 1:n_samples)
 	df_RNA$RNA_translation<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA$IDs,"RNA"],substring(df_RNA$Names,17,18),sep="")
 	
 	# S3 method for DimReduc
-	RNA_hypotha<-RenameCells(RNA_hypotha, new.names = v[which(Create$Names %in% Cells(RNA_hypotha),"RNA_translation"])
-		
+	RNA_hypotha<-RenameCells(RNA_hypotha, new.names = df_RNA[Cells(RNA_hypotha) %in% df_RNA$Names,"RNA_translation"])
+
 	# Add object to list
 	list_RNA_obj[[paste("cDNA-M",sample,sep="")]]<-RNA_hypotha
 }
+
+df_RNA[Cells(RNA_hypo	tha) %in% df_RNA$Names,]
 #####################################################################################
 save(list_RNA_obj, file =              "./list_RNA_obj.RData")                      #
 #####################################################################################
