@@ -245,5 +245,9 @@ output_dir="/home/felipe/results_seurat/"
 png(filename=paste(output_dir,"plot_number_of_cells.png",sep=""), width = 14, height = 6, res=600, units = "cm")
 	plot_nCells
 dev.off()
-
+#####################################################################################
+# Normalize samples
+save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
+save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
+######################################################################################
 
