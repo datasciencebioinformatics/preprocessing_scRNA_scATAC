@@ -110,3 +110,40 @@ hypotha[["peaks"]] <- CreateChromatinAssay(
 save(hypotha, file = "./hypotha.RData") # I stopped here
 #load("./hypotha.RData") # I stopped here
 #####################################################################################
+save(hypotha, file = "./hypotha.RData") # I stopped here
+#load("./hypotha.RData") # I stopped here
+#####################################################################################
+# Gene expression data processing 
+DefaultAssay(hypotha) <- "RNA"
+hypotha <- NormalizeData(hypotha, normalization.method = "LogNormalize", scale.factor = 10000)
+hypotha <- SCTransform(hypotha)
+hypotha <- RunPCA(hypotha)
+#####################################################################################
+#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 1
+#####################################################################################
+#DNA accessibility data processing 
+DefaultAssay(hypotha) <- "ATAC"
+hypotha <- FindTopFeatures(hypotha, min.cutoff = 10)
+hypotha <- RunTFIDF(hypotha)
+hypotha <- RunSVD(hypotha)
+#####################################################################################
+#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 2
+#####################################################################################
+# Annotating cell types 
+# build a joint neighbor graph using both assays
+hypotha <- FindMultiModalNeighbors(
+  object = hypotha,
+  reduction.list = list("pca", "lsi"), 
+  dims.list = list(1:20, 2:50),k.nn = 50
+)
+#####################################################################################
+#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 3
+#####################################################################################
+# build a joint UMAP visualization
+hypotha <- RunUMAP(
+  object = hypotha, 
+  nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
+)
+#####################################################################################
+save(hypotha, file = "./hypotha.RData") # Save hypotha Step 4
+#####################################################################################
