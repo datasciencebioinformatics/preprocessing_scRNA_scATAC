@@ -184,10 +184,11 @@ hypotha.rna.merge.samples <- FindNeighbors(hypotha.rna.merge.samples, dims = 1:5
 # Step 1 : Output hypotha.rna.merge.samples
 # Data is being normalized and 3000 variable genes are further considered. Data is then scaled to be used in PCA, UMAP and FindNeighbors.
 # Important to note now, there is only one sample therefore batch correction is commented out.
-#####################################################################################
 # Run FindNeighbors
 # Run FindClusters # Find clusters for only RNA
-hypotha.rna.merge.samples <- FindClusters(hypotha.rna.merge.samples,reduction = "pca",resolution = 0.12)
+#####################################################################################
+save(hypotha.rna.merge.samples, file = "./hypotha.rna.merge.samples.RData") # Save hypotha Step 5
+#####################################################################################
 
 DefaultAssay(hypotha.rna.merge.samples) <- "RNA"
 clustavg<-AverageExpression(hypotha.rna.merge.samples)
