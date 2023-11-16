@@ -232,24 +232,23 @@ ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
 gene.activities <- GeneActivity(ATAC_objects_combined, features = VariableFeatures(hypotha.varialble.rna))
 
 # add gene activities as a new assay
-ATAC_M1.hypotha.combined[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
+ATAC_objects_combined[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
 
 # normalize gene activities
 DefaultAssay(ATAC_M1.hypotha.combined) <- "ACTIVITY"
-ATAC_M1.hypotha.combined <- NormalizeData(ATAC_M1.hypotha.combined)
-ATAC_M1.hypotha.combined <- ScaleData(ATAC_M1.hypotha.combined, features = rownames(ATAC_M1.hypotha.combined))
-ATAC_M1.hypotha.combined <- RunPCA(ATAC_M1.hypotha.combined, features = rownames(ATAC_M1.hypotha.combined))
-ATAC_M1.hypotha.combined <- RunUMAP(ATAC_M1.hypotha.combined, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
-
+ATAC_objects_combined <- NormalizeData(ATAC_objects_combined)
+ATAC_objects_combined <- ScaleData(ATAC_objects_combined, features = rownames(ATAC_objects_combined))
+ATAC_objects_combined <- RunPCA(ATAC_objects_combined, features = rownames(ATAC_objects_combined))
+ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 
 # Identify anchors
-transfer.anchors <- FindTransferAnchors(reference = reference, query = ATAC_M1.hypotha.combined, features = VariableFeatures(hypotha.varialble.rna ),
+transfer.anchors <- FindTransferAnchors(reference = reference, query = ATAC_objects_combined, features = VariableFeatures(hypotha.varialble.rna ),
     reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
     
 celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = reference$group,
-    weight.reduction = ATAC_M1.hypotha.combined[["lsi"]], dims = 2:30)
+    weight.reduction = ATAC_objects_combined[["lsi"]], dims = 2:30)
 
-ATAC_M1_hypotha.combined <- AddMetaData(ATAC_M1.hypotha.combined, metadata = celltype.predictions)    
+ATAC_objects_combined <- AddMetaData(ATAC_objects_combined, metadata = celltype.predictions)    
 #####################################################################################
 # Step 3 : Output hypotha.atac.merge.samples.
 # RunTFIDF, FindTopFeatures and RunSVD are used for RunUMAP.
@@ -257,4 +256,15 @@ ATAC_M1.hypotha.combined$celltype.predictions<-celltype.predictions$predicted.id
 #####################################################################################
 save(hypotha, file = "./hypotha.RData")
 #####################################################################################
+#DNA accessibility data processing 
 
+colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
+DimPlot_Multim_rna_atac <- DimPlot(hypotha, label = TRUE, repel = TRUE, reduction = "wnn.umap",cols=colour) + NoLegend() + ggtitle("Multimodal cDNA-M1/ATAC-M1")
+DimPlot_weighted_nn
+DimPlot_RNA <- DimPlot(hypotha.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1") + NoLegend()
+DimPlot_ATAC <- DimPlot(ATAC_M1.hypotha.combined, group.by = "celltype.predictions", label = TRUE,cols=colour, reduction = "umap") + ggtitle("ATAC ATAC-M1") + NoLegend()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	grid.arrange(DimPlot_RNA,DimPlot_ATAC,DimPlot_Multim_rna_atac,DimPlot_weighted_nn,ncol = 2)
+dev.off()
