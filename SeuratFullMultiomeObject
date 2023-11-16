@@ -66,8 +66,7 @@ for (sample in 1:n_samples)
 	list_ATAC_peaks[[paste("ATAC-M",sample,sep="")]]<-ATAC_peaks
 	list_ATAC_chrom_assay[[paste("ATAC-M",sample,sep="")]]<-ATAC_chrom_assay
 	list_ATAC_gr[[paste("ATAC-M",sample,sep="")]]<-ATAC_gr	
-	list_ATAC_fr[[paste("ATAC-M",sample,sep="")]]<-ATAC_fragment	
-	list_ATAC_list_ATAC_hypotha[[paste("ATAC-M",sample,sep="")]]<-ATAC_hypotha	
+	list_ATAC_fr[[paste("ATAC-M",sample,sep="")]]<-ATAC_fragment		
 }
 #####################################################################################
 save(list_ATAC_gr, file =              "./list_ATAC_gr.RData")                      #
