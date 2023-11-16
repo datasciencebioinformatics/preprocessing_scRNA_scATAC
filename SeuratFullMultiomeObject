@@ -114,8 +114,8 @@ for (sample in 1:n_samples)
 #####################################################################################
 # Second the cell names directly from funcion Cells
 # Combined cells I can use directly from intersect
-combined.cells  <-  intersect(intersect(Cells(list_ATAC_chrom_assay[[1]]), Cells(list_ATAC_chrom_assay[[2]])),Cells(list_ATAC_chrom_assay[[3]]))
-#combined.cells <-  intersect(intersect(intersect(intersect(Cells(list_ATAC_chrom_assay[[1]]), Cells(list_ATAC_chrom_assay[[2]])),Cells(list_ATAC_chrom_assay[[3]])),list_ATAC_chrom_assay[[4]]),list_ATAC_chrom_assay[[5]]),list_ATAC_chrom_assay[[6]])
+#combined.cells <- intersect(intersect(intersect(intersect(intersect(Cells(list_ATAC_peaks[[1]]),Cells(list_ATAC_peaks[[2]])),Cells(list_ATAC_peaks[[3]])),Cells(list_ATAC_peaks[[4]])), Cells(list_ATAC_peaks[[5]])),Cells(list_ATAC_peaks[[6]]))
+combined.cells <-  intersect(intersect(Cells(list_ATAC_peaks[[1]]),Cells(list_ATAC_peaks[[2]])),Cells(list_ATAC_peaks[[3]]))
 #####################################################################################
 save(list_ATAC_peaks, file = "./list_ATAC_peaks.RData")
 load("./list_ATAC_peaks.RData")
