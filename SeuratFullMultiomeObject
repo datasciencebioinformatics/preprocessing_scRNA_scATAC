@@ -151,6 +151,9 @@ n_samples=3
 # Create list to save seurat objects for ATAC
 list_RNA_obj=list() 
 
+# Use the procedure to save unique cell names
+RNA_cell_names=c()
+
 # For each sample
 for (sample in 1:n_samples)
 {
@@ -183,7 +186,13 @@ for (sample in 1:n_samples)
 	
 	# Add object to list
 	list_RNA_obj[[paste("cDNA-M",sample,sep="")]]<-RNA_hypotha
+
+	# Use the procedure to save unique cell names
+	RNA_cell_names=c(RNA_cell_names,Cells(RNA_hypotha))
 }
+#####################################################################################
+# Save unique cell names
+RNA_cell_names=unique(RNA_cell_names)
 #####################################################################################
 # Now I merge the seurat object for each cells
 #####################################################################################
