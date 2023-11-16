@@ -117,6 +117,8 @@ ATAC_objects_combined <- merge(
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
 load("./ATAC_objects_combined.RData")
 #####################################################################################
+# Add batch normalation here 1
+# Fix ATAC UMAP parameters here 2
 ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
 ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
 ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
@@ -154,6 +156,9 @@ for (sample in 1:n_samples)
 	
 	# S3 method for DimReduc
 	RNA_hypotha<-RenameCells(RNA_hypotha, new.names = df_RNA[Cells(RNA_hypotha) %in% df_RNA$Names,"RNA_translation"])
+	
+	# S3 method for DimReduc
+	RNA_hypotha                <- AddMetaData(object = RNA_hypotha,metadata = sample, col.name = 'Sample' )
 
 	# Add object to list
 	list_RNA_obj[[paste("cDNA-M",sample,sep="")]]<-RNA_hypotha
@@ -166,7 +171,10 @@ RNA_objects_combined <- merge(
   x = list_RNA_obj[[1]],
   y = list_RNA_obj[2:length(names(list_RNA_obj))] 
 )
+#####################################################################################
 # Calculate FindVariableFeatures
+# Add batch normalation here 1
+# Fix RNA UMAP parameters here 2
 RNA_objects_FindVariableFeatures <- FindVariableFeatures(object=RNA_objects_combined , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
 RNA_objects_combined             <- NormalizeData(RNA_objects_combined, normalization.method = "LogNormalize", scale.factor = 10000)
 RNA_objects_combined             <- ScaleData(RNA_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_FindVariableFeatures))
@@ -247,22 +255,3 @@ png(filename=paste(output_dir,"plot_number_of_cells.png",sep=""), width = 14, he
 	plot_nCells
 dev.off()
 #####################################################################################
-# Normalize samples
-# First, for each sample 
-
-
-# Get the name of the samples
-cluster_letters <- paste("ATAC-M",as.integer(Idents(object = pbmc.atac.merge.samples)),sep="")
-names(cluster_letters) <- colnames(x = pbmc.atac.merge.samples)
-
-# Replace identities by sex
-cluster_letters[which(cluster_letters==c("ATAC-M1"))]<-"Male"
-
-# Add metadata
-pbmc.atac.merge.samples <- AddMetaData(object = pbmc.atac.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
-pbmc.atac.chrom.samples <- AddMetaData(object = pbmc.atac.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
-
-save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
-save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
-######################################################################################
-
