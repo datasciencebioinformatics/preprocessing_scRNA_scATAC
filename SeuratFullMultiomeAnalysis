@@ -23,6 +23,11 @@ colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neuro
 # follow https://github.com/datasciencebioinformatics/preprocessing_scRNA_scATAC/blob/main/SeuratFullMultiomeObject
 # it will creante two main objects ATAC_objects_combined e RNA_objects_combined
 #####################################################################################
+# ATAC analysis add gene annotation information
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
+seqlevelsStyle(annotations) <- "UCSC"
+genome(annotations) <- "mm10"
+#####################################################################################
 output_dir="/home/felipe/results_seurat/"                                           #
 #output_dir="/home/singlecell/results_seurat/"                                      #
 #####################################################################################
