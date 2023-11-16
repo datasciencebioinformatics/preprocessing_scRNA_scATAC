@@ -87,10 +87,16 @@ load("./list_ATAC_fr.RData")                                                    
 load("./list_ATAC_gr.RData")     						    #
 #####################################################################################
 # Create a unified set of peaks to quantify in each dataset
-combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]]))
+# Here
+# Combined peaks I can use directly from the vector vector_peaks_names 
+#combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]]))
+combined.peaks <- 
 
 # Filter out bad peaks based on length
 peakwidths <- width(combined.peaks)
+#####################################################################################
+# Take too the combined 
+combined.cells <- 
 #####################################################################################
 list_ATAC_peaks=list()
 # For each sample
@@ -128,9 +134,11 @@ load("./ATAC_objects_combined.RData")
 #####################################################################################
 # Add batch normalation here 1
 # Fix ATAC UMAP parameters here 2
+# Run Harmony
 ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
 ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
 ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
+ATAC_objects_combined <- RunHarmony(ATAC_objects_combined, group.by.vars = c('Sample'),reduction = "lsi", assay.use = "ATAC", reduction.save = "harmony")
 ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'lsi')
 #####################################################################################
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
@@ -186,6 +194,7 @@ RNA_objects_combined <- merge(
 # Add batch normalation here 1
 # Fix RNA UMAP parameters here 2
 RNA_objects_FindVariableFeatures <- FindVariableFeatures(object=RNA_objects_combined , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+RNA_objects_combined             <- RunHarmony(RNA_objects_combined, group.by.vars = c('Sample'),reduction = "lsi", assay.use = "ATAC", reduction.save = "harmony")
 RNA_objects_combined             <- NormalizeData(RNA_objects_combined, normalization.method = "LogNormalize", scale.factor = 10000)
 RNA_objects_combined             <- ScaleData(RNA_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_FindVariableFeatures))
 RNA_objects_combined             <- RunPCA(RNA_objects_combined, features = VariableFeatures(object = RNA_objects_FindVariableFeatures))
