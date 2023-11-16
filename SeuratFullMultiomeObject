@@ -128,8 +128,7 @@ save(list_ATAC_peaks, file = "./list_ATAC_peaks.RData")
 ATAC_objects_combined <- merge(
   x = list_ATAC_peaks[[1]],
   y = list_ATAC_peaks[2:length(names(list_ATAC_peaks))],
-  merge.data = TRUE,
-  add.cell.ids = names(list_ATAC_peaks)
+  merge.data = TRUE
 )
 #####################################################################################
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
