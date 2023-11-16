@@ -113,20 +113,6 @@ save(hypotha, file = "./hypotha.RData") # I stopped here
 save(hypotha, file = "./hypotha.RData") # I stopped here
 #load("./hypotha.RData") # I stopped here
 #####################################################################################
-# Gene expression data processing 
-DefaultAssay(hypotha) <- "RNA"
-hypotha <- NormalizeData(hypotha, normalization.method = "LogNormalize", scale.factor = 10000)
-hypotha <- SCTransform(hypotha)
-hypotha <- RunPCA(hypotha)
-#####################################################################################
-#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 1
-#####################################################################################
-#DNA accessibility data processing 
-DefaultAssay(hypotha) <- "ATAC"
-hypotha <- FindTopFeatures(hypotha, min.cutoff = 10)
-hypotha <- RunTFIDF(hypotha)
-hypotha <- RunSVD(hypotha)
-#####################################################################################
 #save(hypotha, file = "./hypotha.RData") # Save hypotha Step 2
 #####################################################################################
 # Annotating cell types 
@@ -173,7 +159,7 @@ hypotha.rna.merge.samples<- ScaleData(hypotha.rna.merge.samples,block.size = 100
 # Run PCA
 hypotha.rna.merge.samples <- RunPCA(hypotha.rna.merge.samples, features = VariableFeatures(object = hypotha.varialble.rna))
 # Run Harmony
-#hypotha.rna.merge.samples <- RunHarmony(hypotha.rna.merge.samples, group.by.vars = c('Sex'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
+hypotha.rna.merge.samples <- RunHarmony(hypotha.rna.merge.samples, group.by.vars = c('Sample'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 # Run UMAP
 #hypotha.rna.merge.samples <- RunUMAP(hypotha.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
 hypotha.rna.merge.samples <- RunUMAP(hypotha.rna.merge.samples, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
