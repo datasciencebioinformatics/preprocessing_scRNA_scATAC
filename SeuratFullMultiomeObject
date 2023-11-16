@@ -42,8 +42,7 @@ list_ATAC_gr=list()
 list_ATAC_fr=list()
 list_ATAC_peaks=list()
 list_ATAC_chrom_assay=list() 
-vector_cell_names=c()
-vector_peaks_names=c()
+list_ATAC_list_ATAC_hypotha=list()
 
 # For each sample
 for (sample in 1:n_samples)
@@ -63,17 +62,12 @@ for (sample in 1:n_samples)
 	ATAC_peaks	    <-  CallPeaks(object = ATAC_hypotha)	
 	ATAC_gr 	    <-  makeGRangesFromDataFrame(ATAC_peaks)
 
-	# take too the name of the cells
-	vector_cell_names=c(vector_cell_names,Cells(ATAC_hypotha))
-
-	# Take too the name of the peaks
-	vector_peaks_names=c(vector_peaks_names,ATAC_gr)
-	
 	# Add object to list
 	list_ATAC_peaks[[paste("ATAC-M",sample,sep="")]]<-ATAC_peaks
 	list_ATAC_chrom_assay[[paste("ATAC-M",sample,sep="")]]<-ATAC_chrom_assay
 	list_ATAC_gr[[paste("ATAC-M",sample,sep="")]]<-ATAC_gr	
 	list_ATAC_fr[[paste("ATAC-M",sample,sep="")]]<-ATAC_fragment	
+	list_ATAC_list_ATAC_hypotha[[paste("ATAC-M",sample,sep="")]]<-ATAC_hypotha	
 }
 #####################################################################################
 save(list_ATAC_gr, file =              "./list_ATAC_gr.RData")                      #
@@ -82,23 +76,31 @@ save(list_ATAC_peaks, file =           "./list_ATAC_peaks.RData")               
 save(list_ATAC_fr, file =              "./list_ATAC_fr.RData")                      #
 save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")             #
 #####################################################################################
-load("./list_ATAC_peaks.RData")                                                     #
-load("./list_ATAC_fr.RData")                                                        # 
-load("./list_ATAC_gr.RData")     						    #
+# load("./list_ATAC_peaks.RData")                                                   #
+# load("./list_ATAC_fr.RData")                                                      # 
+# load("./list_ATAC_gr.RData")     						    #
 #####################################################################################
 # Create a unified set of peaks to quantify in each dataset
-# Here
-# Combined peaks I can use directly from the vector vector_peaks_names 
-#combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]]))
-combined.peaks <- 
+# Combined peaks I can use directly from reduce
+combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]]))
+#combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]],list_ATAC_gr[[4]],list_ATAC_gr[[5]],list_ATAC_gr[[6]]))
+
+# Combined peaks I can use directly from intersect
+combined.cells <-  intersect(intersect(Cells(list_ATAC_chrom_assay[[1]]), Cells(list_ATAC_chrom_assay[[2]])),Cells(list_ATAC_chrom_assay[[3]]))
+#combined.cells <-  intersect(intersect(Cells(list_ATAC_chrom_assay[[1]]), Cells(list_ATAC_chrom_assay[[2]])),Cells(list_ATAC_chrom_assay[[3]]))
+#combined.cells <- 
 
 # Filter out bad peaks based on length
 peakwidths <- width(combined.peaks)
 #####################################################################################
 # Take too the combined 
-combined.cells <- 
+combined.cells <- unique(vector_cell_names)
 #####################################################################################
 list_ATAC_peaks=list()
+
+# Data frame with barcodes and experiment
+df_ATAC_barcode=data.frame(Barcode_ATAC=c(),Sample=c())
+
 # For each sample
 for (sample in 1:n_samples)
 { 
@@ -113,6 +115,9 @@ for (sample in 1:n_samples)
 	ATAC_obje                <- CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
 	ATAC_obje                <- AddMetaData(object = ATAC_obje,metadata = sample, col.name = 'Sample' )
 	list_ATAC_peaks[[sample]]<-ATAC_obje
+
+	# Take barcode
+	df_ATAC_barcode=rbind(df_ATAC_barcode,data.frame(Cells=Cells(ATAC_obje),Barcode=substring(Cells(ATAC_obje),1,16),Sample=sample)) 
 }
 #####################################################################################
 save(list_ATAC_peaks, file = "./list_ATAC_peaks.RData")
@@ -149,6 +154,9 @@ n_samples=3
 # Create list to save seurat objects for ATAC
 list_RNA_obj=list() 
 
+# Data frame with barcodes and experiment
+df_RNA_barcode=data.frame(Barcode_RNA=c(),Sample=c())
+
 # For each sample
 for (sample in 1:n_samples)
 {
@@ -173,10 +181,16 @@ for (sample in 1:n_samples)
 	
 	# S3 method for DimReduc
 	RNA_hypotha<-RenameCells(RNA_hypotha, new.names = df_RNA[Cells(RNA_hypotha) %in% df_RNA$Names,"RNA_translation"])
+
+	# Save dataset
+	RNA_hypotha$dataset<-paste("cDNA-M",sample,sep="")
 	
 	# S3 method for DimReduc
 	RNA_hypotha                <- AddMetaData(object = RNA_hypotha,metadata = sample, col.name = 'Sample' )
 
+        # Take barcode
+        df_RNA_barcode=rbind(df_RNA_barcode,data.frame(Cells=Cells(RNA_hypotha),Barcode=substring(Cells(RNA_hypotha),1,16),Sample=sample)) 
+	
 	# Add object to list
 	list_RNA_obj[[paste("cDNA-M",sample,sep="")]]<-RNA_hypotha
 }
@@ -194,11 +208,11 @@ RNA_objects_combined <- merge(
 # Add batch normalation here 1
 # Fix RNA UMAP parameters here 2
 RNA_objects_FindVariableFeatures <- FindVariableFeatures(object=RNA_objects_combined , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
-RNA_objects_combined             <- RunHarmony(RNA_objects_combined, group.by.vars = c('Sample'),reduction = "lsi", assay.use = "ATAC", reduction.save = "harmony")
 RNA_objects_combined             <- NormalizeData(RNA_objects_combined, normalization.method = "LogNormalize", scale.factor = 10000)
 RNA_objects_combined             <- ScaleData(RNA_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_FindVariableFeatures))
 RNA_objects_combined             <- RunPCA(RNA_objects_combined, features = VariableFeatures(object = RNA_objects_FindVariableFeatures))
-RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50)
+RNA_objects_combined             <- RunHarmony(RNA_objects_combined, group.by.vars = c('Sample'),reduction = "pca", assay.use = "PCA", reduction.save = "harmony")
+RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50,reduction = "harmony")
 #####################################################################################
 # For each sample
 n_samples=3
@@ -221,6 +235,7 @@ dev.off()
 #####################################################################################
 save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
+save(df_RNA_barcode, file = "./df_RNA_barcode.RData")                               #
 ######################################################################################
 # Create a bar plot with number of cell per sample ATAC
 # Create a bar plot with number of cell per sample RNA
