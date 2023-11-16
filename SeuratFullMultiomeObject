@@ -72,27 +72,27 @@ for (sample in 1:n_samples)
 save(list_ATAC_gr, file =              "./list_ATAC_gr.RData")                      #
 save(list_ATAC_fr, file =              "./list_ATAC_fr.RData")                      #
 save(list_ATAC_peaks, file =           "./list_ATAC_peaks.RData")                   #
-save(list_ATAC_fr, file =              "./list_ATAC_fr.RData")                      #
 save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")             #
 #####################################################################################
+# load("./list_ATAC_chrom_assay.RData")                                             #
 # load("./list_ATAC_peaks.RData")                                                   #
 # load("./list_ATAC_fr.RData")                                                      # 
 # load("./list_ATAC_gr.RData")     						    #
 #####################################################################################
+# Here I will take the common set of cells and the common set of peaks
+# First the peaks from the object GRanges
 # Create a unified set of peaks to quantify in each dataset
 # Combined peaks I can use directly from reduce
 combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]]))
 #combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]],list_ATAC_gr[[4]],list_ATAC_gr[[5]],list_ATAC_gr[[6]]))
 
+# Second the cell names directly from funcion Cells
 # Combined peaks I can use directly from intersect
 combined.cells <-  intersect(intersect(Cells(list_ATAC_chrom_assay[[1]]), Cells(list_ATAC_chrom_assay[[2]])),Cells(list_ATAC_chrom_assay[[3]]))
 #combined.cells <-  intersect(intersect(intersect(intersect(Cells(list_ATAC_chrom_assay[[1]]), Cells(list_ATAC_chrom_assay[[2]])),Cells(list_ATAC_chrom_assay[[3]])),list_ATAC_chrom_assay[[4]]),list_ATAC_chrom_assay[[5]]),list_ATAC_chrom_assay[[6]])
 
 # Filter out bad peaks based on length
 peakwidths <- width(combined.peaks)
-#####################################################################################
-# Take too the combined 
-combined.cells <- unique(vector_cell_names)
 #####################################################################################
 list_ATAC_peaks=list()
 
@@ -234,6 +234,7 @@ dev.off()
 save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
 save(df_RNA_barcode, file = "./df_RNA_barcode.RData")                               #
+save(df_ATAC_barcode, file = "./df_ATAC_barcode.RData")                               #
 ######################################################################################
 # Create a bar plot with number of cell per sample ATAC
 # Create a bar plot with number of cell per sample RNA
