@@ -118,7 +118,7 @@ for (sample in 1:n_samples)
 combined.cells <-  intersect(intersect(Cells(list_ATAC_peaks[[1]]),Cells(list_ATAC_peaks[[2]])),Cells(list_ATAC_peaks[[3]]))
 #####################################################################################
 save(list_ATAC_peaks, file = "./list_ATAC_peaks.RData")
-load("./list_ATAC_peaks.RData")
+#load("./list_ATAC_peaks.RData")
 #####################################################################################
 # https://stuartlab.org/signac/articles/merging
 # Change names
@@ -132,7 +132,7 @@ ATAC_objects_combined <- merge(
 )
 #####################################################################################
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
-load("./ATAC_objects_combined.RData")
+#load("./ATAC_objects_combined.RData")
 #####################################################################################
 # Add batch normalation here 1
 # Fix ATAC UMAP parameters here 2
