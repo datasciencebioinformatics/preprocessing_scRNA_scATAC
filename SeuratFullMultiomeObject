@@ -167,21 +167,6 @@ for (sample in 1:n_samples)
 	# Set intput dir ATAC-M1 and seurat objects
 	RNA_hypotha        <- CreateSeuratObject(counts = RNA_h5, project = "cDNA-M1", assay = "RNA")
 
-	# Create
-	df_RNA             <-data.frame(Names=Cells(RNA_hypotha),IDs=substring(Cells(RNA_hypotha),1,16))
-
-	# Trnalte RNA to ATAC
-	df_RNA$ATAC        <-Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA$IDs,"ATAC"]
-		
-	# S3 method for DimReduc
-	RNA_hypotha        <-RenameCells(RNA_hypotha, new.names = df_RNA[Cells(RNA_hypotha) %in% df_RNA$Names,"RNA_translation"])
-
-	# Save dataset
-	RNA_hypotha$dataset<-paste("cDNA-M",sample,sep="")
-	
-	# S3 method for DimReduc
-	RNA_hypotha        <- AddMetaData(object = RNA_hypotha,metadata = sample, col.name = 'Sample' )
-
         # Take barcode
         df_RNA_barcode=rbind(df_RNA_barcode,data.frame(Cells=Cells(RNA_hypotha),Barcode=substring(Cells(RNA_hypotha),1,16),Sample=sample)) 
 
@@ -190,6 +175,12 @@ for (sample in 1:n_samples)
 
 	# Rename cells for each sample
 	RNA_hypotha                  <-RenameCells(RNA_hypotha, new.names = df_ATAC[which(df_RNA_barcode$Names %in% Cells(RNA_hypotha)),"RNA_translation"])
+
+	# Save dataset
+	RNA_hypotha$dataset<-paste("cDNA-M",sample,sep="")
+	
+	# S3 method for DimReduc
+	RNA_hypotha        <- AddMetaData(object = RNA_hypotha,metadata = sample, col.name = 'Sample' )
 	
 	# Add object to list
 	list_RNA_obj[[paste("cDNA-M",sample,sep="")]]<-RNA_hypotha
