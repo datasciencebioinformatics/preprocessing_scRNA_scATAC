@@ -87,8 +87,7 @@ combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[
 
 # Combined peaks I can use directly from intersect
 combined.cells <-  intersect(intersect(Cells(list_ATAC_chrom_assay[[1]]), Cells(list_ATAC_chrom_assay[[2]])),Cells(list_ATAC_chrom_assay[[3]]))
-#combined.cells <-  intersect(intersect(Cells(list_ATAC_chrom_assay[[1]]), Cells(list_ATAC_chrom_assay[[2]])),Cells(list_ATAC_chrom_assay[[3]]))
-#combined.cells <- 
+#combined.cells <-  intersect(intersect(intersect(intersect(Cells(list_ATAC_chrom_assay[[1]]), Cells(list_ATAC_chrom_assay[[2]])),Cells(list_ATAC_chrom_assay[[3]])),list_ATAC_chrom_assay[[4]]),list_ATAC_chrom_assay[[5]]),list_ATAC_chrom_assay[[6]])
 
 # Filter out bad peaks based on length
 peakwidths <- width(combined.peaks)
