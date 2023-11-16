@@ -173,10 +173,7 @@ for (sample in 1:n_samples)
 
 	# Trnalte RNA to ATAC
 	df_RNA$ATAC<-Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA$IDs,"ATAC"]
-	
-	# Create ATAC-RNA
-	df_RNA$RNA_translation<-paste(paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA$IDs,"ATAC"],substring(df_RNA$Names,17,18),sep=""),sample,sep="_")
-	
+		
 	# S3 method for DimReduc
 	RNA_hypotha<-RenameCells(RNA_hypotha, new.names = df_RNA[Cells(RNA_hypotha) %in% df_RNA$Names,"RNA_translation"])
 
@@ -188,6 +185,12 @@ for (sample in 1:n_samples)
 
         # Take barcode
         df_RNA_barcode=rbind(df_RNA_barcode,data.frame(Cells=Cells(RNA_hypotha),Barcode=substring(Cells(RNA_hypotha),1,16),Sample=sample)) 
+
+	# Create ATAC-RNA
+	df_RNA_barcode$RNA_translation<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA_barcode$Cells,"ATAC"]
+
+	# Rename cells for each sample
+	RNA_hypotha<-RenameCells(RNA_hypotha, new.names = df_ATAC[which(df_RNA_barcode$Names %in% Cells(RNA_hypotha)),"RNA_translation"])
 	
 	# Add object to list
 	list_RNA_obj[[paste("cDNA-M",sample,sep="")]]<-RNA_hypotha
