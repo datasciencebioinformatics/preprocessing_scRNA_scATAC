@@ -97,6 +97,7 @@ for (sample in 1:n_samples)
 	# For each sample, cerate chrom_assay and atac obje
 	ATAC_chrom_assay         <-  CreateChromatinAssay(counts = ATAC_counts,fragments =list_ATAC_fr[[sample]])
 	ATAC_obje                <- CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
+	ATAC_obje                <- AddMetaData(object = ATAC_obje,metadata = sample, col.name = 'Sample' )
 	list_ATAC_peaks[[sample]]<-ATAC_obje
 }
 #####################################################################################
@@ -247,6 +248,20 @@ png(filename=paste(output_dir,"plot_number_of_cells.png",sep=""), width = 14, he
 dev.off()
 #####################################################################################
 # Normalize samples
+# First, for each sample 
+
+
+# Get the name of the samples
+cluster_letters <- paste("ATAC-M",as.integer(Idents(object = pbmc.atac.merge.samples)),sep="")
+names(cluster_letters) <- colnames(x = pbmc.atac.merge.samples)
+
+# Replace identities by sex
+cluster_letters[which(cluster_letters==c("ATAC-M1"))]<-"Male"
+
+# Add metadata
+pbmc.atac.merge.samples <- AddMetaData(object = pbmc.atac.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
+pbmc.atac.chrom.samples <- AddMetaData(object = pbmc.atac.merge.samples,metadata = cluster_letters, col.name = 'Sex' )
+
 save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
 ######################################################################################
