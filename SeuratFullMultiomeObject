@@ -142,7 +142,7 @@ ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
 ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)
 ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
 ATAC_objects_combined <- RunHarmony(ATAC_objects_combined, group.by.vars = c('Sample'),reduction = "lsi", assay.use = "ATAC", reduction.save = "harmony")
-ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'lsi')
+ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'harmony')
 #####################################################################################
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
 #####################################################################################
