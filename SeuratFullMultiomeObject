@@ -106,6 +106,7 @@ for (sample in 1:n_samples)
 	ATAC_chrom_assay         <-  CreateChromatinAssay(counts = ATAC_counts,fragments =list_ATAC_fr[[sample]])
 	ATAC_obje                <- CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
 	ATAC_obje                <- AddMetaData(object = ATAC_obje,metadata = sample, col.name = 'Sample' )
+	ATAC_obje$dataset        <- paste("ATAC-M",sample,sep="")
 
 	# Rename cells for each sample
 	ATAC_obje                  <-RenameCells(ATAC_obje, new.names = substring(Cells(ATAC_obje),1,16))
