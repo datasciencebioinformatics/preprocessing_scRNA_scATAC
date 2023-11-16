@@ -31,7 +31,7 @@ genome(annotations) <- "mm10"
 #annotations <- transcripts(TxDb.Mmusculus.UCSC.mm10.knownGene)
 #####################################################################################
 # Read CSV into DataFrame
-Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
+#Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
 Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
 #####################################################################################
 # Set number of samples
