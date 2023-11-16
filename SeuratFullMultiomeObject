@@ -83,20 +83,19 @@ save(list_ATAC_chrom_assay, file =     "./list_ATAC_chrom_assay.RData")         
 # First the peaks from the object GRanges
 # Create a unified set of peaks to quantify in each dataset
 # Combined peaks I can use directly from reduce
-combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]],list_ATAC_gr[[4]],list_ATAC_gr[[5]],list_ATAC_gr[[6]]))
-#combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]]))
+#combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]],list_ATAC_gr[[4]],list_ATAC_gr[[5]],list_ATAC_gr[[6]]))
+combined.peaks <- reduce(x = c(list_ATAC_gr[[1]],list_ATAC_gr[[2]],list_ATAC_gr[[3]]))
 
 # Filter out bad peaks based on length
 peakwidths <- width(combined.peaks)
 #####################################################################################
 list_ATAC_peaks=list()
-
-# Data frame with barcodes and experiment
-df_ATAC_barcode=data.frame(Barcode_ATAC=c(),Sample=c())
-
 # For each sample
 for (sample in 1:n_samples)
 { 
+	# Data frame with barcodes and experiment
+	df_ATAC_barcode=data.frame(Cells=c(),Barcode=c(),Sample=c(),ATAC_translation=c())
+
 	# Quantify peaks in each dataset 
 	ATAC_counts <- FeatureMatrix(
 	  fragments = list_ATAC_fr[[sample]],
@@ -107,10 +106,10 @@ for (sample in 1:n_samples)
 	ATAC_chrom_assay         <-  CreateChromatinAssay(counts = ATAC_counts,fragments =list_ATAC_fr[[sample]])
 	ATAC_obje                <- CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
 	ATAC_obje                <- AddMetaData(object = ATAC_obje,metadata = sample, col.name = 'Sample' )
-	list_ATAC_peaks[[sample]]<-ATAC_obje
 
-	# Take barcode
-	df_ATAC_barcode=rbind(df_ATAC_barcode,data.frame(Cells=Cells(ATAC_obje),Barcode=substring(Cells(ATAC_obje),1,16),Sample=sample)) 
+	# Rename cells for each sample
+	ATAC_obje                  <-RenameCells(ATAC_obje, new.names = substring(Cells(ATAC_obje),1,16))
+	list_ATAC_peaks[[sample]]<-ATAC_obje
 }
 #####################################################################################
 # Second the cell names directly from funcion Cells
@@ -152,12 +151,12 @@ n_samples=3
 # Create list to save seurat objects for ATAC
 list_RNA_obj=list() 
 
-# Data frame with barcodes and experiment
-df_RNA_barcode=data.frame(Barcode_RNA=c(),Sample=c())
-
 # For each sample
 for (sample in 1:n_samples)
 {
+	# Data frame with barcodes and experiment
+	df_RNA_barcode=data.frame(Cells=c(),Barcode=c(),Sample=c(),RNA_translation=c())
+
 	###### First the RNA folder
 	RNA_file_h5        <-  paste("/home/felipe/snRNASeq_output/cDNA-M",sample,"/outs/filtered_feature_bc_matrix.h5",sep="")
 	
@@ -168,13 +167,13 @@ for (sample in 1:n_samples)
 	RNA_hypotha        <- CreateSeuratObject(counts = RNA_h5, project = "cDNA-M1", assay = "RNA")
 
         # Take barcode
-        df_RNA_barcode=rbind(df_RNA_barcode,data.frame(Cells=Cells(RNA_hypotha),Barcode=substring(Cells(RNA_hypotha),1,16),Sample=sample)) 
+        df_RNA_barcode=rbind(df_RNA_barcode,data.frame(Cells=Cells(RNA_hypotha),Barcode=substring(Cells(RNA_hypotha),1,16),Sample=sample,RNA_translation="")) 
 
 	# Create ATAC-RNA
-	df_RNA_barcode$RNA_translation<-paste(Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA_barcode$Cells,"ATAC"]
+	df_RNA_barcode$RNA_translation<-Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA_barcode$Barcode,"ATAC"]
 
 	# Rename cells for each sample
-	RNA_hypotha                  <-RenameCells(RNA_hypotha, new.names = df_ATAC[which(df_RNA_barcode$Names %in% Cells(RNA_hypotha)),"RNA_translation"])
+	RNA_hypotha                  <-RenameCells(RNA_hypotha, new.names = df_RNA_barcode[ df_RNA_barcode$Cells %in% Cells(RNA_hypotha),"RNA_translation"])
 
 	# Save dataset
 	RNA_hypotha$dataset<-paste("cDNA-M",sample,sep="")
@@ -186,7 +185,7 @@ for (sample in 1:n_samples)
 	list_RNA_obj[[paste("cDNA-M",sample,sep="")]]<-RNA_hypotha
 }
 #####################################################################################
-save(list_RNA_obj, file =              "./list_RNA_obj.RData")                      #
+# Now I merge the seurat object for each cells
 #####################################################################################
 # Merge samples
 RNA_objects_combined <- merge(
@@ -194,6 +193,8 @@ RNA_objects_combined <- merge(
   y = list_RNA_obj[2:length(names(list_RNA_obj))],
   merge.data = TRUE
 )
+#####################################################################################
+save(list_RNA_obj, file =              "./list_RNA_obj.RData")                      #
 #####################################################################################
 # Calculate FindVariableFeatures
 # Add batch normalation here 1
