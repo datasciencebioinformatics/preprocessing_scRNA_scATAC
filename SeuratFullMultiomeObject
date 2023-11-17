@@ -133,8 +133,17 @@ for (sample in 1:n_samples)
 # Check merged objects
 # merge
 ATAC_objects_combined <- merge(
+  x = diet_list_ATAC_peaks[[1]],
+  y = diet_list_ATAC_peaks[2:n_samples]
+)
+#####################################################################################
+# https://stuartlab.org/signac/articles/merging
+# Change names
+# Check merged objects
+# merge
+ATAC_objects_combined <- merge(
   x = list_ATAC_peaks[[1]],
-  y = list_ATAC_peaks[2:length(names(list_ATAC_peaks))]
+  y = list_ATAC_peaks[2:n_samples]
 )
 #####################################################################################
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
@@ -200,7 +209,7 @@ combined.cells  <-  intersect(intersect(Cells(list_RNA_obj[[1]]), Cells(list_RNA
 # Merge samples
 RNA_objects_combined <- merge(
   x = list_RNA_obj[[1]],
-  y = list_RNA_obj[2:length(names(list_RNA_obj))]
+  y = list_RNA_obj[2:n_samples]
 )
 #####################################################################################
 save(list_RNA_obj, file =              "./list_RNA_obj.RData")                      #
