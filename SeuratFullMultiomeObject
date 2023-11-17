@@ -93,9 +93,6 @@ list_ATAC_peaks=list()
 # For each sample
 for (sample in 1:n_samples)
 { 
-	# Data frame with barcodes and experiment
-	df_ATAC_barcode=data.frame(Cells=c(),Barcode=c(),Sample=c(),ATAC_translation=c())
-
 	# Quantify peaks in each dataset 
 	ATAC_counts <- FeatureMatrix(
 	  fragments = list_ATAC_fr[[sample]],
@@ -104,9 +101,9 @@ for (sample in 1:n_samples)
 	)
 	# For each sample, cerate chrom_assay and atac obje
 	ATAC_chrom_assay         <-  CreateChromatinAssay(counts = ATAC_counts,fragments =list_ATAC_fr[[sample]])
-	ATAC_obje                <- CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
-	ATAC_obje                <- AddMetaData(object = ATAC_obje,metadata = sample, col.name = 'Sample' )
-	ATAC_obje$dataset        <- paste("ATAC-M",sample,sep="")
+	ATAC_obje                <-  CreateSeuratObject(ATAC_chrom_assay, assay = "ATAC")
+	ATAC_obje                <-  AddMetaData(object = ATAC_obje,metadata = sample, col.name = 'Sample' )
+	ATAC_obje$dataset        <-  paste("ATAC-M",sample,sep="")
 
 	# Rename cells for each sample
 	ATAC_obje                  <-RenameCells(ATAC_obje, new.names = substring(Cells(ATAC_obje),1,16))
