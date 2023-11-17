@@ -127,7 +127,6 @@ for (sample in 1:n_samples)
 	# Diet the peak object  # Here put the diet seurat
 	diet_list_ATAC_peaks[[sample]]<-DietSeurat(list_ATAC_peaks[[sample]],counts = FALSE,data = TRUE,scale.data = FALSE, assays = "ATAC", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)					
 }
-
 #####################################################################################
 # https://stuartlab.org/signac/articles/merging
 # Change names
