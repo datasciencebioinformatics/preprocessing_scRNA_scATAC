@@ -238,7 +238,7 @@ DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, label = FALSE,group.
 
 # FindClusters_resolution
 output_dir="/home/felipe/results_seurat/"
-png(filename=paste(output_dir,"DimPlotsRaw2.png",sep=""), width = 16, height = 8, res=600, units = "cm")
+png(filename=paste(output_dir,"DimPlotsRaw2.png",sep=""), width = 16, height = 8, res=400, units = "cm")
 	grid.arrange(DimPlot_ATAC_objects_combined, DimPlot_RNA_objects_combined, nrow = 1)
 dev.off()
 #####################################################################################
