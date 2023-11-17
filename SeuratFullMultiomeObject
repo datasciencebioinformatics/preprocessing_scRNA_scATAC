@@ -124,8 +124,7 @@ save(list_ATAC_peaks, file = "./list_ATAC_peaks.RData")
 # merge
 ATAC_objects_combined <- merge(
   x = list_ATAC_peaks[[1]],
-  y = list_ATAC_peaks[2:length(names(list_ATAC_peaks))],
-  merge.data = TRUE
+  y = list_ATAC_peaks[2:length(names(list_ATAC_peaks))]
 )
 #####################################################################################
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
@@ -191,8 +190,7 @@ combined.cells  <-  intersect(intersect(Cells(list_RNA_obj[[1]]), Cells(list_RNA
 # Merge samples
 RNA_objects_combined <- merge(
   x = list_RNA_obj[[1]],
-  y = list_RNA_obj[2:length(names(list_RNA_obj))],
-  merge.data = TRUE
+  y = list_RNA_obj[2:length(names(list_RNA_obj))]
 )
 #####################################################################################
 save(list_RNA_obj, file =              "./list_RNA_obj.RData")                      #
