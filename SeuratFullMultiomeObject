@@ -244,8 +244,6 @@ dev.off()
 #####################################################################################
 save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
-save(df_RNA_barcode, file = "./df_RNA_barcode.RData")                               #
-save(df_ATAC_barcode, file = "./df_ATAC_barcode.RData")                               #
 ######################################################################################
 # Create a bar plot with number of cell per sample ATAC
 # Create a bar plot with number of cell per sample RNA
