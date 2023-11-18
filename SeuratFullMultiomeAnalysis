@@ -36,7 +36,7 @@ load("./RNA_objects_combined.RData")                                            
 #####################################################################################
 #- ATAC filters : paper
 #	- TSS enrichment greater than 1    : TSS.enrichment
-#	- nucleosome signal greater than 2 : nucleosome_signal	
+#	- nucleosome signal <2 than 2 : nucleosome_signal	
 #	- between 1000 and 30000 peaks with >1 readcount detected in each cell : nFeature_ATAC
 #	- Common cells among samples       : Rscript
 #	- Common cells between RNA+ATAC    : Rscript
@@ -81,6 +81,20 @@ hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
 png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
 	VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
 dev.off()
+
+#####################################################################################
+# Here it may not work as in the tutorial because I am using three samples per experiment, ATAC or RNA
+# filter out low quality cells
+pbmc <- subset(
+  x = hypotha,
+  subset = nCount_ATAC < 30000 &
+    nCount_RNA < 7500 &
+    nCount_ATAC > 1000 &
+    nCount_RNA > 100 &
+    nucleosome_signal < 2 &
+    TSS.enrichment > 1
+)
+
 #####################################################################################
 save(hypotha, file = "./hypotha.RData")
 #####################################################################################
