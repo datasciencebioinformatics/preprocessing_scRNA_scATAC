@@ -91,6 +91,7 @@ hypotha <- subset(
     TSS.enrichment > 1
 )
 # VlnPlot after filter
+]=
 after_filter<-VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0,cols="black")
 #####################################################################################
 # Plot quality filter
