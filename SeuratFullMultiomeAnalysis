@@ -76,16 +76,12 @@ DefaultAssay(hypotha) <- "ATAC"
 hypotha <- NucleosomeSignal(hypotha)
 hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
 
-# FindClusters_resolution
-# Here change colour for black
-png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
-	VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
-dev.off()
-
+# VlnPlot before filter
+before_filter<-VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0,cols="black")
 #####################################################################################
 # Here it may not work as in the tutorial because I am using three samples per experiment, ATAC or RNA
 # filter out low quality cells
-pbmc <- subset(
+hypotha <- subset(
   x = hypotha,
   subset = nCount_ATAC < 30000 &
     nCount_RNA < 7500 &
@@ -94,7 +90,13 @@ pbmc <- subset(
     nucleosome_signal > 2 &
     TSS.enrichment > 1
 )
-
+# VlnPlot after filter
+after_filter<-VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0,cols="black")
+#####################################################################################
+# Plot quality filter
+png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	grid.arrange(before_filter,after_filter, ncol = 2)
+dev.off()
 #####################################################################################
 save(hypotha, file = "./hypotha.RData")
 #####################################################################################
