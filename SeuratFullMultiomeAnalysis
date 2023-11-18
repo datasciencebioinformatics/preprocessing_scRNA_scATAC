@@ -17,6 +17,7 @@ library(EnsDb.Mmusculus.v79)
 library(dplyr)
 library(ggplot2)
 library(loupeR)
+library(ggbeeswarm)
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 #####################################################################################
 # First, create ATAC and RNA objects for all samples 
@@ -76,14 +77,21 @@ DefaultAssay(hypotha) <- "ATAC"
 hypotha <- NucleosomeSignal(hypotha)
 hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
 
+# Sabe bck-up 
 hypotha_bck<-hypotha
 
 # Add nCount_ATAC and Experiment
 hypotha_bck@meta.data$nCount_ATAC<-ATAC_objects_combined@meta.data$nCount_ATAC
 hypotha_bck@meta.data$Experiment<-"M1/M2/M3"
 
+# Save all data.frames
+hypotha_bck_meta_data=rbind(data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$nCount_RNA,experiment="nCount_RNA",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"),
+data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$nCount_ATAC,experiment="nCount_ATAC",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"),
+data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$TSS.enrichment,experiment="TSS.enrichment",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"),
+data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$nucleosome_signal,experiment="nucleosome_signal",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"))
+
 # VlnPlot before filter
-before_filter<-VlnPlot(object = hypotha_bck, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0.001,alpha=0.25,cols=c("#440154FF","#1F968BFF","#FDE725FF"),split.by = 'dataset')
+before_filter<-ggplot(hypotha_bck_meta_data, aes(x=Sample, y=Value,fill=Sample)) +  geom_violin(trim=TRUE,alpha = 0.25) + facet_wrap(~experiment,scales="free_y",  ncol=4)+ theme_bw()+ scale_fill_manual(values=c("#440154FF","#1F968BFF","#FDE725FF")) + ggtitle("Before filtering")
 #####################################################################################
 # Here it may not work as in the tutorial because I am using three samples per experiment, ATAC or RNA
 # filter out low quality cells
@@ -96,12 +104,21 @@ hypotha_bck <- subset(
     nucleosome_signal > 2 &
     TSS.enrichment > 1
 )
+
+# Save all data.frames
+hypotha_bck_meta_data=rbind(data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$nCount_RNA,experiment="nCount_RNA",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"),
+data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$nCount_ATAC,experiment="nCount_ATAC",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"),
+data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$TSS.enrichment,experiment="TSS.enrichment",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"),
+data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$nucleosome_signal,experiment="nucleosome_signal",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"))
+
+
 # VlnPlot after filter
-after_filter<-VlnPlot(object = hypotha_bck, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0,cols="black")
+after_filter<-ggplot(hypotha_bck_meta_data, aes(x=Sample, y=Value,fill=Sample)) +  geom_violin(trim=TRUE,alpha = 0.25) + facet_wrap(~experiment,scales="free_y",  ncol=4)+ theme_bw()+ scale_fill_manual(values=c("#440154FF","#1F968BFF","#FDE725FF")) + ggtitle("After filtering")
+
 #####################################################################################
 # Plot quality filter
 png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), width = 24, height = 24, res=600, units = "cm")
-	grid.arrange(before_filter,after_filter, ncol = 1)
+	grid.arrange(before_filter,after_filter, nrow = 1)
 dev.off()
 #####################################################################################
 save(hypotha, file = "./hypotha.RData")
