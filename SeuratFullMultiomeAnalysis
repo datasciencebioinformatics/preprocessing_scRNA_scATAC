@@ -83,7 +83,7 @@ hypotha_bck@meta.data$nCount_ATAC<-ATAC_objects_combined@meta.data$nCount_ATAC
 hypotha_bck@meta.data$Experiment<-"M1/M2/M3"
 
 # VlnPlot before filter
-before_filter<-VlnPlot(object = hypotha_bck, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0.1,cols="black",split.by = 'dataset')
+before_filter<-VlnPlot(object = hypotha_bck, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0.001,alpha=0.25,cols=c("#440154FF","#1F968BFF","#FDE725FF"),split.by = 'dataset')
 #####################################################################################
 # Here it may not work as in the tutorial because I am using three samples per experiment, ATAC or RNA
 # filter out low quality cells
