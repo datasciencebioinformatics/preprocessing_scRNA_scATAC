@@ -77,6 +77,7 @@ hypotha <- NucleosomeSignal(hypotha)
 hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
 
 # FindClusters_resolution
+# Here change colour for black
 png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), width = 24, height = 12, res=600, units = "cm")
 	VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0)
 dev.off()
