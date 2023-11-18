@@ -123,7 +123,6 @@ dev.off()
 #####################################################################################
 save(hypotha, file = "./hypotha.RData")
 #####################################################################################
-#####################################################################################
 save(hypotha_bck, file = "./hypotha_bck.RData")
 #####################################################################################
 hypotha=hypotha_bck
@@ -154,6 +153,12 @@ hypotha[["peaks"]] <- CreateChromatinAssay(
 #####################################################################################
 save(hypotha, file = "./hypotha_bck.RData") # I stopped here
 #load("./hypotha.RData") # I stopped here
+#####################################################################################
+# Process seurat on pbmc.atac.merge.samples
+hypotha <- RunTFIDF(hypotha)
+hypotha <- FindTopFeatures(hypotha, min.cutoff = "q0")
+hypotha <- RunSVD(hypotha)
+hypotha <- RunUMAP(hypotha, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
 # Annotating cell types 
 # build a joint neighbor graph using both assays
