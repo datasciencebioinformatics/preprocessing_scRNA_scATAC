@@ -104,6 +104,7 @@ save(hypotha, file = "./hypotha.RData")
 peaks <- CallPeaks(hypotha)
 
 # remove peaks on nonstandard chromosomes and in genomic blacklist regions
+# to ask if makes sense to analyse peaks per sample
 peaks <- keepStandardChromosomes(peaks, pruning.mode = "coarse")
 peaks <- subsetByOverlaps(x = peaks, ranges = blacklist_mm10, invert = TRUE)
 #####################################################################################
