@@ -111,10 +111,8 @@ data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$nCount_AT
 data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$TSS.enrichment,experiment="TSS.enrichment",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"),
 data.frame(rownames(hypotha_bck@meta.data),Value=hypotha_bck@meta.data$nucleosome_signal,experiment="nucleosome_signal",Sample=paste(substring(rownames(hypotha_bck@meta.data),18,20)),Experiment="M1/M2/M3"))
 
-
 # VlnPlot after filter
 after_filter<-ggplot(hypotha_bck_meta_data, aes(x=Sample, y=Value,fill=Sample)) +  geom_violin(trim=TRUE,alpha = 0.25) + facet_wrap(~experiment,scales="free_y",  ncol=4)+ theme_bw()+ scale_fill_manual(values=c("#440154FF","#1F968BFF","#FDE725FF")) + ggtitle("After filtering")
-
 #####################################################################################
 # Plot quality filter
 png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), width = 24, height = 24, res=600, units = "cm")
@@ -154,11 +152,16 @@ hypotha[["peaks"]] <- CreateChromatinAssay(
 save(hypotha, file = "./hypotha_bck.RData") # I stopped here
 #load("./hypotha.RData") # I stopped here
 #####################################################################################
-# Process seurat on pbmc.atac.merge.samples
+#Gene expression data processing 
+DefaultAssay(hypotha) <- "RNA"
+hypotha <- SCTransform(hypotha)
+hypotha <- RunPCA(hypotha)
+
+# DNA accessibility data processing 
+DefaultAssay(hypotha) <- "ATAC"
+hypotha <- FindTopFeatures(hypotha, min.cutoff = 5)
 hypotha <- RunTFIDF(hypotha)
-hypotha <- FindTopFeatures(hypotha, min.cutoff = "q0")
 hypotha <- RunSVD(hypotha)
-hypotha <- RunUMAP(hypotha, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
 # Annotating cell types 
 # build a joint neighbor graph using both assays
@@ -220,7 +223,6 @@ hypotha.rna.merge.samples <- FindNeighbors(hypotha.rna.merge.samples, dims = 1:5
 #####################################################################################
 save(hypotha.rna.merge.samples, file = "./hypotha.rna.merge.samples.RData") # Save hypotha Step 5
 #####################################################################################
-
 DefaultAssay(hypotha.rna.merge.samples) <- "RNA"
 clustavg<-AverageExpression(hypotha.rna.merge.samples)
 clustdf<-as.data.frame(clustavg$RNA)
