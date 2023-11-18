@@ -110,11 +110,6 @@ hypotha[["peaks"]] <- CreateChromatinAssay(
 save(hypotha, file = "./hypotha.RData") # I stopped here
 #load("./hypotha.RData") # I stopped here
 #####################################################################################
-save(hypotha, file = "./hypotha.RData") # I stopped here
-#load("./hypotha.RData") # I stopped here
-#####################################################################################
-#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 2
-#####################################################################################
 # Annotating cell types 
 # build a joint neighbor graph using both assays
 hypotha <- FindMultiModalNeighbors(
