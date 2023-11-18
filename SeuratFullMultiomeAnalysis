@@ -77,7 +77,7 @@ hypotha <- NucleosomeSignal(hypotha)
 hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
 
 # VlnPlot before filter
-before_filter<-VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0,cols="black")
+before_filter<-VlnPlot(object = hypotha, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0,cols="black")
 #####################################################################################
 # Here it may not work as in the tutorial because I am using three samples per experiment, ATAC or RNA
 # filter out low quality cells
@@ -91,8 +91,7 @@ hypotha <- subset(
     TSS.enrichment > 1
 )
 # VlnPlot after filter
-]=
-after_filter<-VlnPlot(object = hypotha, features = c("nCount_RNA", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0,cols="black")
+after_filter<-VlnPlot(object = hypotha, features = c("nCount_RNA", "nCount_ATAC", "TSS.enrichment", "nucleosome_signal"),ncol = 4,pt.size = 0,cols="black")
 #####################################################################################
 # Plot quality filter
 png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), width = 24, height = 24, res=600, units = "cm")
