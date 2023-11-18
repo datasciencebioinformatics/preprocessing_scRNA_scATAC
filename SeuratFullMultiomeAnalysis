@@ -126,6 +126,8 @@ save(hypotha, file = "./hypotha.RData")
 #####################################################################################
 save(hypotha_bck, file = "./hypotha_bck.RData")
 #####################################################################################
+hypotha=hypotha_bck
+
 # call peaks using MACS2
 # to ask if makes sense to analyse peaks per sample
 peaks <- CallPeaks(hypotha)
@@ -150,7 +152,7 @@ hypotha[["peaks"]] <- CreateChromatinAssay(
   annotation = annot
 )
 #####################################################################################
-save(hypotha, file = "./hypotha.RData") # I stopped here
+save(hypotha, file = "./hypotha_bck.RData") # I stopped here
 #load("./hypotha.RData") # I stopped here
 #####################################################################################
 # Annotating cell types 
@@ -161,7 +163,7 @@ hypotha <- FindMultiModalNeighbors(
   dims.list = list(1:20, 2:50),k.nn = 50
 )
 #####################################################################################
-#save(hypotha, file = "./hypotha.RData") # Save hypotha Step 3
+#save(hypotha, file = "./hypotha_bck.RData") # Save hypotha Step 3
 #####################################################################################
 # build a joint UMAP visualization
 hypotha <- RunUMAP(
@@ -169,7 +171,7 @@ hypotha <- RunUMAP(
   nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
 )
 #####################################################################################
-save(hypotha, file = "./hypotha.RData") # Save hypotha Step 4
+save(hypotha, file = "./hypotha_bck.RData") # Save hypotha Step 4
 #####################################################################################
 # FindClusters_resolution
 hypotha.2 <- RunUMAP(hypotha, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
@@ -279,7 +281,7 @@ ATAC_objects_combined <- AddMetaData(ATAC_objects_combined, metadata = celltype.
 # RunTFIDF, FindTopFeatures and RunSVD are used for RunUMAP.
 ATAC_M1.hypotha.combined$celltype.predictions<-celltype.predictions$predicted.id
 #####################################################################################
-save(hypotha, file = "./hypotha.RData")
+save(hypotha, file = "./hypotha_bck.RData")
 #####################################################################################
 #DNA accessibility data processing 
 
