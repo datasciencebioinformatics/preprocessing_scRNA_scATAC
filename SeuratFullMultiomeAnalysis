@@ -151,6 +151,7 @@ hypotha[["peaks"]] <- CreateChromatinAssay(
 #####################################################################################
 #save(hypotha, file = "./hypotha_bck.RData") # I stopped here
 load("./hypotha_bck.RData") # I stopped here
+load("./hypotha.RData") # I stopped here
 #####################################################################################
 #Gene expression data processing 
 DefaultAssay(hypotha) <- "RNA"
