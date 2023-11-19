@@ -143,28 +143,28 @@ macs2_counts <- FeatureMatrix(
 )
 annot=annotations
 # create a new assay using the MACS2 peak set and add it to the Seurat object
-hypotha[["ATAC"]] <- CreateChromatinAssay(
+hypotha[["peaks"]] <- CreateChromatinAssay(
   counts = macs2_counts,
   fragments = Fragments(hypotha[["ATAC"]]),
   annotation = annot
 )
 #####################################################################################
-save(hypotha, file = "./hypotha_bck.RData") # I stopped here
-#load("./hypotha.RData") # I stopped here
+#save(hypotha, file = "./hypotha_bck.RData") # I stopped here
+load("./hypotha_bck.RData") # I stopped here
 #####################################################################################
 #Gene expression data processing 
-hypotha <- NormalizeData(hypotha, normalization.method = "LogNormalize", scale.factor = 10000)
-hypotha <- FindVariableFeatures(object=hypotha, selection.method = "vst",nfeatures = 3000) 
-hypotha <- ScaleData(hypotha,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = pbmc.varialble.rna))
-hypotha <- RunPCA(hypotha, features = VariableFeatures(object = pbmc.varialble.rna))
-hypotha <- RunUMAP(hypotha, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
-hypotha <- FindNeighbors(hypotha, dims = 1:50) # Optmize number of dimensions  ElbowPlot =10,15
+DefaultAssay(hypotha) <- "RNA"
+hypotha               <- NormalizeData(hypotha, normalization.method = "LogNormalize", scale.factor = 10000)
+hypotha.varialble.rna <- FindVariableFeatures(object=hypotha, selection.method = "vst",nfeatures = 3000) 
+hypotha               <- ScaleData(hypotha,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = hypotha.varialble.rna))
+hypotha               <- RunPCA(hypotha, features = VariableFeatures(object = hypotha.varialble.rna))
+hypotha               <- RunUMAP(hypotha, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
 
-# DNA accessibility data processing 
 DefaultAssay(hypotha) <- "ATAC"
-hypotha <- FindTopFeatures(hypotha, min.cutoff = 5)
 hypotha <- RunTFIDF(hypotha)
+hypotha <- FindTopFeatures(hypotha, min.cutoff = "q0")
 hypotha <- RunSVD(hypotha)
+hypotha <- RunUMAP(hypotha, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
 # Annotating cell types 
 # build a joint neighbor graph using both assays
