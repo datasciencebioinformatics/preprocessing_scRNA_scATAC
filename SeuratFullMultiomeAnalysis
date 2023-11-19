@@ -241,13 +241,6 @@ ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 10)
 ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
 ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
 #####################################################################################
-DefaultAssay(hypotha) <- "RNA"
-RNA_objects_combined               <- NormalizeData(RNA_objects_combined, normalization.method = "LogNormalize", scale.factor = 10000)
-Variable.RNA_objects_combined      <- FindVariableFeatures(object=RNA_objects_combined, selection.method = "vst",nfeatures = 3000) 
-RNA_objects_combined               <- ScaleData(RNA_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = Variable.RNA_objects_combined))
-RNA_objects_combined               <- RunPCA(RNA_objects_combined, features = VariableFeatures(object = Variable.RNA_objects_combined))
-RNA_objects_combined               <- RunUMAP(RNA_objects_combined, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
-#####################################################################################
 ## Process seurat on hypotha.atac.merge.samples
 # quantify gene activity
 gene.activities <- GeneActivity(ATAC_objects_combined, features = VariableFeatures(hypotha.varialble.rna))
