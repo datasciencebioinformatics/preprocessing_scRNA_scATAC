@@ -87,7 +87,9 @@ ATAC_objects_combined_merge <- RunUMAP(ATAC_objects_combined_merge, reduction = 
 DimPlot_ATAC_harmony_merge  <- DimPlot(ATAC_objects_combined_merge, group.by = "dataset", label = FALSE,reduction="umap")  + ggtitle("Merge ATAC ATAC-M1/M2/M3") 
 ####################################################################################
 # Process seurat on pbmc.atac.merge.samples
-ATAC_objects_combined_integ <- ATAC_objects_combined_merge
+ATAC_objects_combined_integ <- RunTFIDF(ATAC_objects_combined_integ)
+ATAC_objects_combined_integ <- FindTopFeatures(ATAC_objects_combined_integ, min.cutoff = "q0")
+ATAC_objects_combined_integ <- RunSVD(ATAC_objects_combined_integ)
 ATAC_objects_combined_integ <- RunHarmony(ATAC_objects_combined_integ, group.by.vars = c('dataset'),reduction = "lsi", assay.use = "ATAC", reduction.save = "harmony")
 ATAC_objects_combined_integ <- IntegrateLayers(object = ATAC_objects_combined_integ, method = HarmonyIntegration,orig.reduction = "lsi", new.reduction = "harmony",  verbose = FALSE)  
 ATAC_objects_combined_integ <- RunUMAP(ATAC_objects_combined_integ, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
