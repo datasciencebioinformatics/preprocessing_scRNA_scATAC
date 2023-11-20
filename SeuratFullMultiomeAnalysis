@@ -35,12 +35,12 @@ output_dir="/home/felipe/results_seurat/"                                       
 load("./ATAC_objects_combined.RData")                                               #
 load("./RNA_objects_combined.RData")                                                #
 #####################################################################################
+# Rename cells
+RNA_objects_combined$dataset<-paste("cDNA-M",paste(substring(Cells(RNA_objects_combined),18,18)),sep="")
+
 # Analyse RNA merge and IntegrateLayers  
 RNA_objects_combined_merge<-RNA_objects_combined
 RNA_objects_combined_integ<-RNA_objects_combined
-
-# Rename cells
-RNA_objects_combined$dataset<-paste("cDNA-M",paste(substring(Cells(RNA_objects_combined),18,18)),sep="")
 #####################################################################################
 # Calculate NormalizeData
 RNA_objects_combined_integ <- NormalizeData(RNA_objects_combined_integ, normalization.method = "LogNormalize", scale.factor = 10000)
@@ -48,7 +48,7 @@ RNA_objects_combined_integ.varialble <- FindVariableFeatures(object=RNA_objects_
 RNA_objects_combined_integ <- SCTransform(RNA_objects_combined_integ)
 RNA_objects_combined_integ<- ScaleData(RNA_objects_combined_integ,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_combined_integ.varialble))
 RNA_objects_combined_integ <- RunPCA(RNA_objects_combined_integ, features = VariableFeatures(object = RNA_objects_combined_integ.varialble))
-RNA_objects_combined_integ <- RunHarmony(RNA_objects_combined_integ, group.by.vars = c('Sample'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
+RNA_objects_combined_integ <- RunHarmony(RNA_objects_combined_integ, group.by.vars = c('dataset'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 RNA_objects_combined_integ <- IntegrateLayers(object = RNA_objects_combined_integ, method = HarmonyIntegration,orig.reduction = "pca", new.reduction = "harmony",  verbose = FALSE)
 RNA_objects_combined_integ <- RunUMAP(RNA_objects_combined_integ, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
 DimPlot_RNA_harmony_umap   <- DimPlot(RNA_objects_combined_integ, label = FALSE,cols=colour,reduction="harmony.umap")  + ggtitle("IntegrateLayers RNA cDNA-M1/M2/M3") + NoLegend()
@@ -59,7 +59,7 @@ RNA_objects_combined_merge.varialble <- FindVariableFeatures(object=RNA_objects_
 RNA_objects_combined_merge <- SCTransform(RNA_objects_combined_merge)
 RNA_objects_combined_merge<- ScaleData(RNA_objects_combined_merge,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_combined_merge.varialble))
 RNA_objects_combined_merge <- RunPCA(RNA_objects_combined_merge, features = VariableFeatures(object = RNA_objects_combined_merge.varialble))
-RNA_objects_combined_merge <- RunHarmony(RNA_objects_combined_merge, group.by.vars = c('Sample'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
+RNA_objects_combined_merge <- RunHarmony(RNA_objects_combined_merge, group.by.vars = c('dataset'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 RNA_objects_combined_merge <- RunUMAP(RNA_objects_combined_merge, dims = 1:50,reduction = "pca",reduction.name="pca.umap")         # Optmize number of dimensions
 DimPlot_RNA_harmony_pca  <- DimPlot(RNA_objects_combined_merge, group.by = "dataset", label = FALSE,reduction="pca.umap")  + ggtitle("Merge RNA cDNA-M1/M2/M3") 
 #####################################################################################
