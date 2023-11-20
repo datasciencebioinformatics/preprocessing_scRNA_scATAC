@@ -51,10 +51,7 @@ RNA_objects_combined_integ <- RunPCA(RNA_objects_combined_integ, features = Vari
 RNA_objects_combined_integ <- RunHarmony(RNA_objects_combined_integ, group.by.vars = c('Sample'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 RNA_objects_combined_integ <- IntegrateLayers(object = RNA_objects_combined_integ, method = HarmonyIntegration,orig.reduction = "pca", new.reduction = "harmony",  verbose = FALSE)
 RNA_objects_combined_integ <- RunUMAP(RNA_objects_combined_integ, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
-
-DimPlot_RNA_harmony_umap <- DimPlot(RNA_objects_combined_integ, "Sample", label = FALSE,cols=colour,reduction="harmony.umap")  + ggtitle("IntegrateLayers RNA cDNA-M1/M2/M3") + NoLegend()
-
-DimPlot_RNA_harmony_umap <- DimPlot_RNA_harmony_umap + ggtitle("IntegrateLayers RNA cDNA-M1/M2/M3") + NoLegend()
+DimPlot_RNA_harmony_umap   <- DimPlot(RNA_objects_combined_integ, label = FALSE,cols=colour,reduction="harmony.umap")  + ggtitle("IntegrateLayers RNA cDNA-M1/M2/M3") + NoLegend()
 #####################################################################################
 # Calculate NormalizeData
 RNA_objects_combined_merge <- NormalizeData(RNA_objects_combined_merge, normalization.method = "LogNormalize", scale.factor = 10000)
@@ -64,7 +61,6 @@ RNA_objects_combined_merge<- ScaleData(RNA_objects_combined_merge,block.size = 1
 RNA_objects_combined_merge <- RunPCA(RNA_objects_combined_merge, features = VariableFeatures(object = RNA_objects_combined_merge.varialble))
 RNA_objects_combined_merge <- RunHarmony(RNA_objects_combined_merge, group.by.vars = c('Sample'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 RNA_objects_combined_merge <- RunUMAP(RNA_objects_combined_merge, dims = 1:50,reduction = "pca",reduction.name="pca.umap")         # Optmize number of dimensions
-
 DimPlot_RNA_harmony_pca  <- DimPlot(RNA_objects_combined_merge, group.by = "dataset", label = FALSE,reduction="pca.umap")  + ggtitle("Merge RNA cDNA-M1/M2/M3") 
 #####################################################################################
 # FindClusters_resolution
