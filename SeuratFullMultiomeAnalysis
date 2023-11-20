@@ -50,7 +50,7 @@ RNA_objects_combined_integ<- ScaleData(RNA_objects_combined_integ,block.size = 1
 RNA_objects_combined_integ <- RunPCA(RNA_objects_combined_integ, features = VariableFeatures(object = RNA_objects_combined_integ.varialble))
 RNA_objects_combined_integ <- RunHarmony(RNA_objects_combined_integ, group.by.vars = c('Sample'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 RNA_objects_combined_integ <- IntegrateLayers(object = RNA_objects_combined_integ, method = HarmonyIntegration,orig.reduction = "pca", new.reduction = "harmony",  verbose = FALSE)
-RNA_objects_combined <- RunUMAP(RNA_objects_combined_integ, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
+RNA_objects_combined_integ <- RunUMAP(RNA_objects_combined_integ, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
 
 DimPlot_RNA_harmony_umap <- DimPlot(RNA_objects_combined_integ, "Sample", label = FALSE,cols=colour,reduction="harmony.umap")  + ggtitle("IntegrateLayers RNA cDNA-M1/M2/M3") + NoLegend()
 
