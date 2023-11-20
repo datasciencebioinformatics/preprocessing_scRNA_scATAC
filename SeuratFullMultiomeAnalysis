@@ -55,7 +55,7 @@ DimPlot_RNA_harmony_umap   <- DimPlot(RNA_objects_combined_integ, label = FALSE,
 #####################################################################################
 # Calculate NormalizeData
 RNA_objects_combined_merge <- NormalizeData(RNA_objects_combined_merge, normalization.method = "LogNormalize", scale.factor = 10000)
-RNA_objects_combined_merge.varialble <- FindVariableFeatures(object=RNA_objects_combined , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+RNA_objects_combined_merge.varialble <- FindVariableFeatures(object=RNA_objects_combined_merge , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
 RNA_objects_combined_merge <- SCTransform(RNA_objects_combined_merge)
 RNA_objects_combined_merge<- ScaleData(RNA_objects_combined_merge,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_combined_merge.varialble))
 RNA_objects_combined_merge <- RunPCA(RNA_objects_combined_merge, features = VariableFeatures(object = RNA_objects_combined_merge.varialble))
