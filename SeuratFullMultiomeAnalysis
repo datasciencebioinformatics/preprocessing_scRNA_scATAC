@@ -90,7 +90,6 @@ DimPlot_ATAC_harmony_merge  <- DimPlot(ATAC_objects_combined_merge, group.by = "
 # Process seurat on ATAC_objects_combined_integ
 ATAC_objects_combined_integ = ATAC_objects_combined_merge
 ATAC_objects_combined_integ <- RunHarmony(ATAC_objects_combined_integ, group.by.vars = c('dataset'),reduction = "umap", assay.use = "ATAC", reduction.save = "harmony")
-ATAC_objects_combined_integ <- IntegrateLayers(object = ATAC_objects_combined_integ, method = FastMNNIntegration,new.reduction = "integrated.mnn",  verbose = FALSE)
 ATAC_objects_combined_integ <- RunUMAP(ATAC_objects_combined_integ, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 # Dimplot
 DimPlot_ATAC_harmony_umap   <- DimPlot(ATAC_objects_combined_merge, label = FALSE,cols=colour,reduction="harmony.umap")  + ggtitle("IntegrateLayers ATAC cDNA-M1/M2/M3") + NoLegend()
