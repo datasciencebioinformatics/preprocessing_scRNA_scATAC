@@ -92,7 +92,7 @@ save(ATAC_objects_combined_merge, file = "./ATAC_objects_combined_merge.RData")
 #####################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"ATAC_UMAP_visualization_Harmony_PCA.png",sep=""), width = 30, height = 12, res=600, units = "cm")
-	grid.arrange(DimPlot_ATAC_harmony_merge_1,DimPlot_ATAC_harmony_merge_2,ncol = 2)
+	grid.arrange(DimPlot_ATAC_harmony_merge_2,DimPlot_ATAC_harmony_merge_1,ncol = 2)
 dev.off()
 #####################################################################################
 #- ATAC filters : paper
@@ -195,6 +195,7 @@ hypotha               <- ScaleData(hypotha,block.size = 1000,do.scale = TRUE,do.
 hypotha               <- RunPCA(hypotha, features = VariableFeatures(object = hypotha.varialble.rna))
 hypotha               <- RunUMAP(hypotha, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
 
+#####################################################################################
 DefaultAssay(hypotha) <- "ATAC"
 hypotha <- RunTFIDF(hypotha)
 hypotha <- FindTopFeatures(hypotha, min.cutoff = "q0")
