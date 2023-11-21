@@ -89,7 +89,7 @@ DimPlot_ATAC_harmony_merge  <- DimPlot(ATAC_objects_combined_merge, group.by = "
 ####################################################################################
 # Process seurat on ATAC_objects_combined_integ
 ATAC_objects_combined_integ = ATAC_objects_combined_merge
-ATAC_objects_combined_integ <- RunHarmony(ATAC_objects_combined_integ, group.by.vars = c('dataset'),reduction = "umap", assay.use = "ATAC", reduction.save = "harmony")
+ATAC_objects_combined_integ <- RunHarmony(ATAC_objects_combined_integ, group.by.vars = c('dataset'),reduction = "umap", assay.use = "SCT", reduction.save = "harmony")
 ATAC_objects_combined_integ <- RunUMAP(ATAC_objects_combined_integ, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 # Dimplot
 DimPlot_ATAC_harmony_umap   <- DimPlot(ATAC_objects_combined_merge, label = FALSE,cols=colour,reduction="harmony.umap")  + ggtitle("IntegrateLayers ATAC cDNA-M1/M2/M3") + NoLegend()
@@ -97,7 +97,6 @@ DimPlot_ATAC_harmony_umap   <- DimPlot(ATAC_objects_combined_merge, label = FALS
 save(ATAC_objects_combined_integ, file = "./ATAC_objects_combined_integ.RData")
 save(ATAC_objects_combined_merge, file = "./ATAC_objects_combined_merge.RData")
 #####################################################################################
-
 # FindClusters_resolution
 png(filename=paste(output_dir,"ATAC_UMAP_visualization_Harmony_PCA.png",sep=""), width = 30, height = 12, res=600, units = "cm")
 	grid.arrange(DimPlot_ATAC_harmony_umap,DimPlot_ATAC_harmony_pca,ncol = 2)
