@@ -213,6 +213,7 @@ RNA_objects_combined <- merge(
 )
 #####################################################################################
 save(list_RNA_obj, file =              "./list_RNA_obj.RData")                      #
+load("./RNA_objects_combined.RData")
 #####################################################################################
 # Calculate FindVariableFeatures
 # Add batch normalation here 1
@@ -222,6 +223,8 @@ RNA_objects_combined             <- NormalizeData(RNA_objects_combined, normaliz
 RNA_objects_combined             <- ScaleData(RNA_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_FindVariableFeatures))
 RNA_objects_combined             <- RunPCA(RNA_objects_combined, features = VariableFeatures(object = RNA_objects_FindVariableFeatures))
 RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50,reduction = "pca")
+#####################################################################################
+save(RNA_objects_combined, file =              "./RNA_objects_combined.RData")      #
 #####################################################################################
 # For each sample
 n_samples=3
