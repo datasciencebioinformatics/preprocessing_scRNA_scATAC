@@ -32,7 +32,6 @@ genome(annotations) <- "mm10"
 output_dir="/home/felipe/results_seurat/"                                           #
 #output_dir="/home/singlecell/results_seurat/"                                      #
 #####################################################################################
-load("./ATAC_objects_combined.RData")                                               #
 load("./RNA_objects_combined.RData")                                                #
 #####################################################################################
 # Rename cells
@@ -71,6 +70,8 @@ dev.off()
 save(RNA_objects_combined_merge, file = "./RNA_objects_combined_merge.RData")
 save(RNA_objects_combined_integ, file = "./RNA_objects_combined_integ.RData")
 ####################################################################################
+load("./ATAC_objects_combined.RData")                                               #
+
 # Rename cells
 ATAC_objects_combined$dataset<-paste("ATAC-M",paste(substring(Cells(ATAC_objects_combined),18,18)),sep="")
 
