@@ -152,7 +152,7 @@ hypotha_bck<-hypotha
 save(hypotha, file = "./hypotha2.RData") # Step 2
 #####################################################################################
 # Add nCount_ATAC and Experiment
-hypotha_bck@meta.data$nCount_ATAC<-ATAC_objects_combined@meta.data$nCount_ATAC
+hypotha_bck@meta.data$nCount_ATAC<-ATAC_objects_combined_merge@meta.data[rownames(hypotha_bck@meta.data),"nCount_ATAC"]
 hypotha_bck@meta.data$Experiment<-"M1/M2/M3"
 
 # Save all data.frames
@@ -190,9 +190,7 @@ png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), widt
 	grid.arrange(before_filter,after_filter, nrow = 2)
 dev.off()
 #####################################################################################
-save(hypotha, file = "./hypotha.RData")
-#####################################################################################
-save(hypotha_bck, file = "./hypotha_bck.RData")
+save(hypotha, file = "./hypotha3.RData")
 #####################################################################################
 #save(hypotha, file = "./hypotha_bck.RData") # I stopped here
 load("./hypotha_bck.RData") # I stopped here
