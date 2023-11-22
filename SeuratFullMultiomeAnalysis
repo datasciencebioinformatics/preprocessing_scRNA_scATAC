@@ -250,27 +250,12 @@ dev.off()
 #####################################################################################
 # Annotating cell types 
 # Create reference 
-hypotha.rna.merge.samples=RNA_objects_combined
+load("RNA_objects_combined_integ.RData")
+hypotha.rna.merge.samples=RNA_objects_combined_integ
+Idents(hypotha.rna.merge.samples)<-paste("cDNA-M",substring(Cells(hypotha.rna.merge.samples),18,18),sep="")
 #####################################################################################
 # Calculate NormalizeData
-hypotha.rna.merge.samples <- NormalizeData(hypotha.rna.merge.samples, normalization.method = "LogNormalize", scale.factor = 10000)
-# Calculate FindVariableFeatures
-hypotha.varialble.rna <- FindVariableFeatures(object=hypotha.rna.merge.samples , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
-# Diet Seurat - keep only data on the seurat object
-#hypotha.rna.merge.samples<-DietSeurat(hypotha.rna.merge.samples,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "RNA", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
-# Scale data
-hypotha.rna.merge.samples <- SCTransform(hypotha.rna.merge.samples)
-hypotha.rna.merge.samples<- ScaleData(hypotha.rna.merge.samples,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = hypotha.varialble.rna))
-# Run PCA
-hypotha.rna.merge.samples <- RunPCA(hypotha.rna.merge.samples, features = VariableFeatures(object = hypotha.varialble.rna))
-# Run Harmony
-hypotha.rna.merge.samples <- RunHarmony(hypotha.rna.merge.samples, group.by.vars = c('Sample'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
-# Run UMAP
-#hypotha.rna.merge.samples <- RunUMAP(hypotha.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
-hypotha.rna.merge.samples <- RunUMAP(hypotha.rna.merge.samples, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
-# Run FindNeighbors
-#hypotha.rna.merge.samples <- FindNeighbors(hypotha.rna.merge.samples, dims = 1:50,reduction = "harmony") # Optmize number of dimensions  ElbowPlot =10,15
-hypotha.rna.merge.samples <- FindNeighbors(hypotha.rna.merge.samples, dims = 1:50) # Optmize number of dimensions  ElbowPlot =10,15
+hypotha.rna.merge.samples <- FindNeighbors(RNA_objects_combined_integ, dims = 1:50,reduction="harmony")
 #####################################################################################
 # Step 1 : Output hypotha.rna.merge.samples
 # Data is being normalized and 3000 variable genes are further considered. Data is then scaled to be used in PCA, UMAP and FindNeighbors.
@@ -281,7 +266,7 @@ hypotha.rna.merge.samples <- FindNeighbors(hypotha.rna.merge.samples, dims = 1:5
 save(hypotha.rna.merge.samples, file = "./hypotha.rna.merge.samples.RData") # Save hypotha Step 5
 #####################################################################################
 DefaultAssay(hypotha.rna.merge.samples) <- "RNA"
-clustavg<-AverageExpression(hypotha.rna.merge.samples)
+clustavg<-AverageExpression(hypotha.rna.merge.samples,layer="scale.data")
 clustdf<-as.data.frame(clustavg$RNA)
 clustdf<-t(clustdf)
 clustdf<-as_tibble(clustdf, rownames = "cluster")
