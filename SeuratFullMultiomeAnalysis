@@ -70,7 +70,7 @@ dev.off()
 save(RNA_objects_combined_merge, file = "./RNA_objects_combined_merge.RData")
 save(RNA_objects_combined_integ, file = "./RNA_objects_combined_integ.RData")
 ####################################################################################
-load("./ATAC_objects_combined.RData")                                              #
+#load("./ATAC_objects_combined.RData")                                              #
 ####################################################################################
 # Rename cells
 ATAC_objects_combined$dataset<-paste("ATAC-M",paste(substring(Cells(ATAC_objects_combined),18,18)),sep="")
@@ -94,6 +94,13 @@ save(ATAC_objects_combined_merge, file = "./ATAC_objects_combined_merge.RData")
 png(filename=paste(output_dir,"ATAC_UMAP_visualization_Harmony_PCA.png",sep=""), width = 30, height = 12, res=600, units = "cm")
 	grid.arrange(DimPlot_ATAC_harmony_merge_2,DimPlot_ATAC_harmony_merge_1,ncol = 2)
 dev.off()
+#####################################################################################
+# I stopped here
+load("./RNA_objects_combined_integ.RData")
+load("./ATAC_objects_combined_merge.RData")
+
+ATAC_objects_combined=ATAC_objects_combined_merge
+RNA_objects_combined=RNA_objects_combined_integ
 #####################################################################################
 #- ATAC filters : paper
 #	- TSS enrichment greater than 1    : TSS.enrichment
