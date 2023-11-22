@@ -138,7 +138,7 @@ hypotha <- RNA_objects_combined
 # create ATAC assay and add it to the object
 hypotha[["ATAC"]] <- ATAC_objects_combined[["ATAC"]]
 #####################################################################################
-save(hypotha, file = "./hypotha.RData")
+save(hypotha, file = "./hypotha.RData") # Step 1
 #####################################################################################
 # Quality control 
 DefaultAssay(hypotha) <- "ATAC"
@@ -148,7 +148,9 @@ hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
 
 # Sabe bck-up 
 hypotha_bck<-hypotha
-
+#####################################################################################
+save(hypotha, file = "./hypotha2.RData") # Step 2
+#####################################################################################
 # Add nCount_ATAC and Experiment
 hypotha_bck@meta.data$nCount_ATAC<-ATAC_objects_combined@meta.data$nCount_ATAC
 hypotha_bck@meta.data$Experiment<-"M1/M2/M3"
