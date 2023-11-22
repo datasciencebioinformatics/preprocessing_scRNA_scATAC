@@ -256,6 +256,7 @@ Idents(hypotha.rna.merge.samples)<-paste("cDNA-M",substring(Cells(hypotha.rna.me
 #####################################################################################
 # Calculate NormalizeData
 hypotha.rna.merge.samples <- FindNeighbors(RNA_objects_combined_integ, dims = 1:50,reduction="harmony")
+hypotha.rna.merge.samples <- FindClusters(hypotha.rna.merge.samples,reduction = "pca",resolution = 0.12)
 #####################################################################################
 # Step 1 : Output hypotha.rna.merge.samples
 # Data is being normalized and 3000 variable genes are further considered. Data is then scaled to be used in PCA, UMAP and FindNeighbors.
