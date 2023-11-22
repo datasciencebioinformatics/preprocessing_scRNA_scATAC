@@ -213,6 +213,8 @@ hypotha <- FindTopFeatures(hypotha, min.cutoff = "q0")
 hypotha <- RunSVD(hypotha)
 hypotha <- RunUMAP(hypotha, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
+save(hypotha, file = "./hypotha4.RData") # Save hypotha Step 3
+#####################################################################################
 # Annotating cell types 
 # build a joint neighbor graph using both assays
 hypotha <- FindMultiModalNeighbors(
