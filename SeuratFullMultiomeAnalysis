@@ -231,17 +231,22 @@ hypotha <- RunUMAP(
   nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"
 )
 #####################################################################################
-save(hypotha, file = "./hypotha_bck.RData") # Save hypotha Step 4
+save(hypotha, file = "./hypotha4.RData") # Save hypotha Step 4
 #####################################################################################
 # FindClusters_resolution
 hypotha.2 <- RunUMAP(hypotha, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
 hypotha.2 <- FindClusters(hypotha.2, graph.name = "wsnn", algorithm = 1, resolution = 0.1, verbose = FALSE)
 #####################################################################################
 # Create DimMap
-DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1/M2/M3")+ NoLegend()
+DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "dataset", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1/M2/M3")+ NoLegend()
 
 # Find DimPlot_weighted_nn
-DimPlot_weighted_nn <- DimPlot(hypotha.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5,cols=colour) + ggtitle("WNN RNA+ATC M1/M2/M3")+ NoLegend()
+DimPlot_weighted_nn <- DimPlot(hypotha.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5) + ggtitle("WNN RNA+ATC M1/M2/M3")+ NoLegend()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"joint_Dimplot_visualization.png",sep=""), width = 12, height = 24, res=600, units = "cm")
+	grid.arrange(DimPlot_Multim_rna_atac,DimPlot_weighted_nn,ncol = 2)
+dev.off()
 #####################################################################################
 # Annotating cell types 
 # Create reference 
