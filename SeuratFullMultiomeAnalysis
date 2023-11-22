@@ -146,10 +146,10 @@ DefaultAssay(hypotha) <- "ATAC"
 hypotha <- NucleosomeSignal(hypotha)
 hypotha <- TSSEnrichment(hypotha,assay ="ATAC", tss.positions =grange.counts)
 
-# Sabe bck-up 
-hypotha_bck<-hypotha
 #####################################################################################
 save(hypotha, file = "./hypotha2.RData") # Step 2
+#####################################################################################
+hypotha_bck=hypotha
 #####################################################################################
 # Add nCount_ATAC and Experiment
 hypotha_bck@meta.data$nCount_ATAC<-ATAC_objects_combined_merge@meta.data[rownames(hypotha_bck@meta.data),"nCount_ATAC"]
@@ -190,6 +190,7 @@ png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), widt
 	grid.arrange(before_filter,after_filter, nrow = 2)
 dev.off()
 #####################################################################################
+hypotha_bck=hypotha
 save(hypotha, file = "./hypotha3.RData")
 #####################################################################################
 #save(hypotha, file = "./hypotha_bck.RData") # I stopped here
