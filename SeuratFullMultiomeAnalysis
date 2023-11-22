@@ -207,10 +207,10 @@ hypotha <- IntegrateLayers(object = hypotha, method = HarmonyIntegration,orig.re
 hypotha <- RunUMAP(hypotha, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
 
 DefaultAssay(hypotha) <- "ATAC"
-ATAC_objects_combined_merge <- RunTFIDF(ATAC_objects_combined_merge)
-ATAC_objects_combined_merge <- FindTopFeatures(ATAC_objects_combined_merge, min.cutoff = "q0")
-ATAC_objects_combined_merge <- RunSVD(ATAC_objects_combined_merge)
-ATAC_objects_combined_merge <- RunUMAP(ATAC_objects_combined_merge, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
+hypotha <- RunTFIDF(hypotha)
+hypotha <- FindTopFeatures(hypotha, min.cutoff = "q0")
+hypotha <- RunSVD(hypotha)
+hypotha <- RunUMAP(hypotha, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
 # Annotating cell types 
 # build a joint neighbor graph using both assays
