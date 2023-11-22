@@ -196,20 +196,21 @@ save(hypotha, file = "./hypotha3.RData")
 load("./hypotha_bck.RData") # I stopped here
 load("./hypotha.RData") # I stopped here
 #####################################################################################
-#Gene expression data processing 
 DefaultAssay(hypotha) <- "RNA"
-hypotha               <- NormalizeData(hypotha, normalization.method = "LogNormalize", scale.factor = 10000)
-hypotha.varialble.rna <- FindVariableFeatures(object=hypotha, selection.method = "vst",nfeatures = 3000) 
-hypotha               <- ScaleData(hypotha,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = hypotha.varialble.rna))
-hypotha               <- RunPCA(hypotha, features = VariableFeatures(object = hypotha.varialble.rna))
-hypotha               <- RunUMAP(hypotha, dims = 1:50,reduction = "pca") # Optmize number of dimensions  ElbowPlot =10,15
+hypotha <- NormalizeData(hypotha, normalization.method = "LogNormalize", scale.factor = 10000)
+hypotha.varialble <- FindVariableFeatures(object=hypotha , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+hypotha <- SCTransform(hypotha)
+hypotha<- ScaleData(hypotha,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = hypotha.varialble))
+hypotha <- RunPCA(hypotha, features = VariableFeatures(object = hypotha.varialble))
+hypotha <- RunHarmony(hypotha, group.by.vars = c('dataset'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
+hypotha <- IntegrateLayers(object = hypotha, method = HarmonyIntegration,orig.reduction = "pca", new.reduction = "harmony",  verbose = FALSE)
+hypotha <- RunUMAP(hypotha, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
 
-#####################################################################################
 DefaultAssay(hypotha) <- "ATAC"
-hypotha <- RunTFIDF(hypotha)
-hypotha <- FindTopFeatures(hypotha, min.cutoff = "q0")
-hypotha <- RunSVD(hypotha)
-hypotha <- RunUMAP(hypotha, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
+ATAC_objects_combined_merge <- RunTFIDF(ATAC_objects_combined_merge)
+ATAC_objects_combined_merge <- FindTopFeatures(ATAC_objects_combined_merge, min.cutoff = "q0")
+ATAC_objects_combined_merge <- RunSVD(ATAC_objects_combined_merge)
+ATAC_objects_combined_merge <- RunUMAP(ATAC_objects_combined_merge, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
 #####################################################################################
 # Annotating cell types 
 # build a joint neighbor graph using both assays
