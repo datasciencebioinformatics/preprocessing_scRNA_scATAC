@@ -138,6 +138,8 @@ hypotha <- RNA_objects_combined
 # create ATAC assay and add it to the object
 hypotha[["ATAC"]] <- ATAC_objects_combined[["ATAC"]]
 #####################################################################################
+save(hypotha, file = "./hypotha.RData")
+#####################################################################################
 # Quality control 
 DefaultAssay(hypotha) <- "ATAC"
 
