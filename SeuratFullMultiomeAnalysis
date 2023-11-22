@@ -206,7 +206,7 @@ hypotha <- RunPCA(hypotha, features = VariableFeatures(object = hypotha.varialbl
 hypotha <- RunHarmony(hypotha, group.by.vars = c('dataset'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
 hypotha <- IntegrateLayers(object = hypotha, method = HarmonyIntegration,orig.reduction = "pca", new.reduction = "harmony",  verbose = FALSE)
 hypotha <- RunUMAP(hypotha, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
-
+#####################################################################################
 DefaultAssay(hypotha) <- "ATAC"
 hypotha <- RunTFIDF(hypotha)
 hypotha <- FindTopFeatures(hypotha, min.cutoff = "q0")
