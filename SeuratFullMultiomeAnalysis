@@ -312,7 +312,7 @@ DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by =
 DimPlot_weighted_nn <- DimPlot(hypotha.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5) + ggtitle("WNN RNA+ATC M1/M2/M3")+ NoLegend()
 DimPlot_RNA <- DimPlot(reference, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1/M2/M3") + NoLegend()
 #DimPlot_ATAC <- DimPlot(ATAC_objects_combined_merge, group.by = "celltype.predictions", label = TRUE,cols=colour, reduction = "umap") + ggtitle("ATAC ATAC-M1") + NoLegend()
-DimPlot_ATAC <- DimPlot(ATAC_objects_combined_merge, group.by = "dataset", label = TRUE, reduction = "umap") + ggtitle("ATAC ATAC-M1/M2/M3") + NoLegend()
+DimPlot_ATAC <- DimPlot(ATAC_objects_combined_merge, group.by = "dataset", label = TRUE, reduction = "umap") + ggtitle("ATAC-M1/M2/M3") + NoLegend()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
