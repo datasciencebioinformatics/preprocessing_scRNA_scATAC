@@ -264,10 +264,10 @@ hypotha.rna.merge.samples <- FindClusters(hypotha.rna.merge.samples,reduction = 
 # Run FindNeighbors
 # Run FindClusters # Find clusters for only RNA
 #####################################################################################
-save(hypotha.rna.merge.samples, file = "./hypotha.rna.merge.samples.RData") # Save hypotha Step 5
+#save(hypotha.rna.merge.samples, file = "./hypotha.rna.merge.samples.RData") # Save hypotha Step 5
 #####################################################################################
 DefaultAssay(hypotha.rna.merge.samples) <- "RNA"
-clustavg<-AverageExpression(hypotha.rna.merge.samples,layer="scale.data")
+clustavg<-AverageExpression(hypotha.rna.merge.samples)
 clustdf<-as.data.frame(clustavg$RNA)
 clustdf<-t(clustdf)
 clustdf<-as_tibble(clustdf, rownames = "cluster")
@@ -279,18 +279,16 @@ df2$orig_cluster<-df2$cluster
 df2$ID<-NA
 	
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
-df2<- df2 %>% mutate(ID = ifelse(Snap25 > 1, "Neurons", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Snap25 > 0.5, "Neurons", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 2, "Astrocytes", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Ctss > 1, "Microglia", df2$ID)) # Ok
 df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 2, "OPCs", df2$ID))    # Ok
-df2<- df2 %>% mutate(ID = ifelse(Mbp > 6 & Mobp > 6, "Oligodendrocytes", df2$ID))
+df2<- df2 %>% mutate(ID = ifelse(Mbp > 2 & Mobp > 2, "Oligodendrocytes", df2$ID))
 
 y<-dplyr::select(df2,cluster)
 Idents(hypotha.rna.merge.samples)<-plyr::mapvalues(Idents(hypotha.rna.merge.samples), from = df2$cluster, to = df2$ID)
 hypotha.rna.merge.samples$group<-Idents(hypotha.rna.merge.samples)
 reference=hypotha.rna.merge.samples
-DimPlot(hypotha.rna.merge.samples, label = TRUE, repel = TRUE, group.by = "ident", reduction = "umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1/M2/M3")+ NoLegend()
-
 #####################################################################################
 save(reference, file = "./reference.RData") # Save hypotha Step 5
 #####################################################################################
@@ -300,48 +298,19 @@ Idents(hypotha) <- Idents(reference)
 # Step 2 : Output hypotha.rna.merge.samples.
 # Markers and markers limits were previously defined here used to calculate the celltypes.
 #####################################################################################
-#DNA accessibility data processing 
-DefaultAssay(ATAC_objects_combined) <- "ATAC"
-ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 10)
-ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
-ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
+# FindClusters_resolution
+hypotha.2 <- RunUMAP(hypotha, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
+hypotha.2 <- FindClusters(hypotha.2, graph.name = "wsnn", algorithm = 1, resolution = 0.1, verbose = FALSE)
 #####################################################################################
-## Process seurat on hypotha.atac.merge.samples
-# quantify gene activity
-gene.activities <- GeneActivity(ATAC_objects_combined, features = VariableFeatures(hypotha.varialble.rna))
-
-# add gene activities as a new assay
-ATAC_objects_combined[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
-
-# normalize gene activities
-DefaultAssay(ATAC_M1.hypotha.combined) <- "ACTIVITY"
-ATAC_objects_combined <- NormalizeData(ATAC_objects_combined)
-ATAC_objects_combined <- ScaleData(ATAC_objects_combined, features = rownames(ATAC_objects_combined))
-ATAC_objects_combined <- RunPCA(ATAC_objects_combined, features = rownames(ATAC_objects_combined))
-ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
-
-# Identify anchors
-transfer.anchors <- FindTransferAnchors(reference = reference, query = ATAC_objects_combined, features = VariableFeatures(hypotha.varialble.rna ),
-    reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
-    
-celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = reference$group,
-    weight.reduction = ATAC_objects_combined[["lsi"]], dims = 2:30)
-
-ATAC_objects_combined <- AddMetaData(ATAC_objects_combined, metadata = celltype.predictions)    
+load("./ATAC_objects_combined_merge.RData")
 #####################################################################################
-# Step 3 : Output hypotha.atac.merge.samples.
-# RunTFIDF, FindTopFeatures and RunSVD are used for RunUMAP.
-ATAC_M1.hypotha.combined$celltype.predictions<-celltype.predictions$predicted.id
-#####################################################################################
-save(hypotha, file = "./hypotha_bck.RData")
-#####################################################################################
-#DNA accessibility data processing 
-
+# Create DimMap
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
-DimPlot_Multim_rna_atac <- DimPlot(hypotha, label = TRUE, repel = TRUE, reduction = "wnn.umap",cols=colour) + NoLegend() + ggtitle("Multimodal cDNA-M1/ATAC-M1")
-DimPlot_weighted_nn
-DimPlot_RNA <- DimPlot(hypotha.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1") + NoLegend()
-DimPlot_ATAC <- DimPlot(ATAC_M1.hypotha.combined, group.by = "celltype.predictions", label = TRUE,cols=colour, reduction = "umap") + ggtitle("ATAC ATAC-M1") + NoLegend()
+DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "dataset", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1/M2/M3")+ NoLegend()
+DimPlot_weighted_nn <- DimPlot(hypotha.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5) + ggtitle("WNN RNA+ATC M1/M2/M3")+ NoLegend()
+DimPlot_RNA <- DimPlot(hypotha.rna.merge.samples, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1/M2/M3") + NoLegend()
+#DimPlot_ATAC <- DimPlot(ATAC_objects_combined_merge, group.by = "celltype.predictions", label = TRUE,cols=colour, reduction = "umap") + ggtitle("ATAC ATAC-M1") + NoLegend()
+DimPlot_ATAC <- DimPlot(ATAC_objects_combined_merge, group.by = "dataset", label = TRUE, reduction = "umap") + ggtitle("ATAC ATAC-M1/M2/M3") + NoLegend()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
