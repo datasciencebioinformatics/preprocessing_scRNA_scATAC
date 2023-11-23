@@ -301,14 +301,16 @@ Idents(hypotha) <- Idents(reference)
 load("./ATAC_objects_combined_merge.RData")
 load("./reference.RData")
 load("./hypotha4.RData")
+load("./RNA_objects_combined_integ.RData")
 #####################################################################################
 # FindClusters_resolution
 hypotha.2 <- RunUMAP(hypotha, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
 hypotha.2 <- FindClusters(hypotha.2, graph.name = "wsnn", algorithm = 1, resolution = 0.1, verbose = FALSE)
 #####################################################################################
 # normalize gene activities
-#ATAC_objects_combined_merge <- NormalizeData(ATAC_objects_combined_merge)
-#ATAC_objects_combined_merge <- ScaleData(ATAC_objects_combined_merge, features = rownames(ATAC_objects_combined_merge))
+ATAC_objects_combined_merge <- FindTopFeatures(ATAC_objects_combined_merge, min.cutoff = 10)
+ATAC_objects_combined_merge <- NormalizeData(ATAC_objects_combined_merge)
+ATAC_objects_combined_merge <- ScaleData(ATAC_objects_combined_merge, features = rownames(ATAC_objects_combined_merge))
 #####################################################################################
 # Create DimMap
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
