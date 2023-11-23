@@ -250,7 +250,6 @@ dev.off()
 #####################################################################################
 # Annotating cell types 
 # Create reference
-DefaultAssay(hypotha) <- "SCT"
 load("RNA_objects_combined_integ.RData")
 hypotha.rna.merge.samples=RNA_objects_combined_integ
 Idents(hypotha.rna.merge.samples)<-paste("cDNA-M",substring(Cells(hypotha.rna.merge.samples),18,18),sep="")
