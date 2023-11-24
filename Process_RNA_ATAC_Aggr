@@ -13,9 +13,9 @@ annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)                 
 seqlevelsStyle(annotations) <- "UCSC"                                                                                              #                                                         
 genome(annotations) <- "mm10"                                                                                                      #
 ####################################################################################################################################
-# Read CSV into DataFrame                                                                                 
-#Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")                                       #
-Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
+# Read CSV into DataFrame                                                                                                          #
+#Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")                                        #
+Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")                                             #
 ####################################################################################################################################
 # Cellranger ATAC Aggr output                                                                                                      #
 # I must load the file output from Cellranger. First, the atac output files will be loaded.                                        #
