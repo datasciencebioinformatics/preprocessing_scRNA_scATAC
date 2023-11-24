@@ -7,6 +7,16 @@
 # Script to generate the cellranger agg output is found at :                                        #
 # https://github.com/datasciencebioinformatics/preprocessing_scRNA_scATAC/blob/main/CellRanger_Agrr #
 ####################################################################################################################################
+# Load the annotations and the barcodes
+# ATAC analysis add gene annotation information
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
+seqlevelsStyle(annotations) <- "UCSC"
+genome(annotations) <- "mm10"
+#####################################################################################
+# Read CSV into DataFrame
+#Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
+Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
+####################################################################################################################################
 # Cellranger ATAC Aggr output                                                                                                      #
 # I must load the file output from Cellranger. First, the atac output files will be loaded.                                        #
 ATAC_aggr_file_h5           <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample,"/filtered_peak_bc_matrix.h5",sep="")             #
@@ -17,18 +27,19 @@ ATAC_aggr_fragment_file     <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample
 RNA_aggr_file_h5            <-  paste("/home/felipe/snRNASeq_output/cDNA-M",sample,"/outs/filtered_feature_bc_matrix.h5",sep="")   #                                                                           #
 ####################################################################################################################################
 # Process ATAC files                                                                                                               #       
-ATAC_h5             <-  Read10X_h5(ATAC_aggr_file_h5)                                                                              #
-ATAC_singlecell     <-  read.csv(file = ATAC_aggr_singlecell_file,header = TRUE,row.names = 1)                                     #
-ATAC_fragment       <-  CreateFragmentObject(ATAC_aggr_fragment_file)                                                              #
-ATAC_chrom_assay    <-  CreateChromatinAssay(counts = RNA_aggr_file_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_aggr_fragment_file)
-ATAC_hypotha        <-  CreateSeuratObject(counts = ATAC_chrom_assay,assay = "peaks")                                              #
-ATAC_peaks	        <-  CallPeaks(object = ATAC_hypotha)	                                                                         #
-ATAC_gr 	          <-  makeGRangesFromDataFrame(ATAC_peaks)                                                                       #
+ATAC_aggr_h5             <-  Read10X_h5(ATAC_aggr_file_h5)                                                                         #
+ATAC_aggr_singlecell     <-  read.csv(file = ATAC_aggr_singlecell_file,header = TRUE,row.names = 1)                                #
+ATAC_aggr_fragment       <-  CreateFragmentObject(ATAC_aggr_fragment_file)                                                         #
+ATAC_aggr_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_aggr_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_aggr_fragment)
+ATAC_aggr_hypotha        <-  CreateSeuratObject(counts = ATAC_aggr_chrom_assay,assay = "peaks")                                    #
+ATAC_aggr_peaks	         <-  CallPeaks(object = ATAC_aggr_hypotha)	                                                               #
+ATAC_gr 	               <-  makeGRangesFromDataFrame(ATAC_aggr_peaks)                                                             #
                                                                                                                                    #
 # Second, RNA files                                                                                                                #
 RNA_aggr_h5         <-  Read10X_h5(RNA_aggr_file_h5)                                                                               #
-RNA_aggr_file_h5    <- CreateSeuratObject(counts = RNA_aggr_h5,assay = "RNA")                                                      #
-#################################################################################################################################### 
+RNA_aggr            <- CreateSeuratObject(counts = RNA_aggr_h5,assay = "RNA")                                                      #
+####################################################################################################################################
+# Now, I have the two objects, I must then translate the barcodes 
 
 
 
