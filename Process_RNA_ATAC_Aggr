@@ -10,9 +10,9 @@
 # Load the annotations and the barcodes
 # ATAC analysis add gene annotation information
 annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
-seqlevelsStyle(annotations) <- "UCSC"
-genome(annotations) <- "mm10"
-#####################################################################################
+seqlevelsStyle(annotations) <- "UCSC"                                                                 
+genome(annotations) <- "mm10"                                                                                                     #
+###################################################################################################################################
 # Read CSV into DataFrame
 #Barcode_arc_RNA_ATAC = read.csv('/home/singlecell/database/Barcode_arc_RNA_ATAC',sep="\t")
 Barcode_arc_RNA_ATAC = read.csv('/home/felipe/database/Barcode_arc_RNA_ATAC',sep="\t")
@@ -39,7 +39,9 @@ ATAC_gr 	               <-  makeGRangesFromDataFrame(ATAC_aggr_peaks)           
 RNA_aggr_h5         <-  Read10X_h5(RNA_aggr_file_h5)                                                                               #
 RNA_aggr            <- CreateSeuratObject(counts = RNA_aggr_h5,assay = "RNA")                                                      #
 ####################################################################################################################################
-# Now, I have the two objects, I must then translate the barcodes 
+# Now, I have the two objects, I must then translate the barcodes of the RNA object to have Seurat object
+
+
 
 
 
