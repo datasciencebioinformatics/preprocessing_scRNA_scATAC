@@ -1,1 +1,15 @@
+library_id,fragments,cells
+ATAC-M1,/home/felipe/snATACSeq_out/ATAC-M1/fragments.tsv.gz,/home/felipe/snATACSeq_out/ATAC-M1/singlecell.csv
+ATAC-M2,/home/felipe/snATACSeq_out/ATAC-M2/fragments.tsv.gz,/home/felipe/snATACSeq_out/ATAC-M2/singlecell.csv
+ATAC-M3,/home/felipe/snATACSeq_out/ATAC-M3/fragments.tsv.gz,/home/felipe/snATACSeq_out/ATAC-M3/singlecell.csv	
 
+sample_id,molecule_h5	
+cDNA-M1,/home/felipe/snRNASeq_output/cDNA-M1/outs/molecule_info.h5
+cDNA-M2,/home/felipe/snRNASeq_output/cDNA-M2/outs/molecule_info.h5
+cDNA-M3,/home/felipe/snRNASeq_output/cDNA-M3/outs/molecule_info.h5
+                      
+# Call cellranger                      
+sudo /home/felipe/cellranger/RNA/cellranger-7.2.0/bin/cellranger aggr --id=RNA_M_hypothalamus --csv /home/felipe/cellranger/RNA/database/RNAM_samples.csv --nopreflight
+
+# Call cellranger
+sudo /home/felipe/cellranger/ATAC/cellranger-atac-2.1.0/bin/cellranger-atac aggr --id=ATAC_M_hypothalamus --csv=/home/felipe/cellranger/ATAC/database/ATACM_samples.csv --normalize=depth --reference=/home/felipe/cellranger/ATAC/refdata-cellranger-arc-mm10-2020-A-2.0.0/ --nopreflight
