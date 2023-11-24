@@ -55,6 +55,10 @@ RNA_aggr                  <-RenameCells(RNA_aggr, new.names = df_RNA_barcode[ df
 # This way, RNA_aggr and ATAC_aggr must have same cell names                                                                                        #
 #####################################################################################################################################################
 # Once the object is translated, I can calculate the common cells between RNA_aggr nad and_aggr
+# Create combined multiome object
+combined.cell<-Cells(ATAC_aggr)[Cells(ATAC_aggr) %in% Cells(RNA_aggr)]
+#####################################################################################
+
 
 
 
