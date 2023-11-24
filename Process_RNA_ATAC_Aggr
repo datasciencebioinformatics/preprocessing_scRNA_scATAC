@@ -63,11 +63,11 @@ ATAC_aggr <- ATAC_aggr[,combined.cell]                                          
 RNA_aggr  <- RNA_aggr[,combined.cell]                                                                                                               #
 #####################################################################################################################################################
 # Then,  I join the two objects in a multimodal object RNA+ATAC.                                                                                    #
-# create a Seurat object containing the RNA adata                                                                                            #
-hypotha <- RNA_objects_combined
-
-# create ATAC assay and add it to the object
-hypotha[["ATAC"]] <- ATAC_objects_combined[["ATAC"]]
+# create a Seurat object containing the RNA adata                                                                                                   #
+hypotha <- RNA_objects_combined                                                                                                                     #
+                                                                                                                                                    #
+# create ATAC assay and add it to the object                                                                                                        #
+hypotha[["ATAC"]] <- ATAC_objects_combined[["ATAC"]]                                                                                                #
 #####################################################################################################################################################
 
 
