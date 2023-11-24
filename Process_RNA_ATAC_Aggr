@@ -6,7 +6,19 @@
 # The cells used in both experiments must be correspondent.                                         #
 # Script to generate the cellranger agg output is found at :                                        #
 # https://github.com/datasciencebioinformatics/preprocessing_scRNA_scATAC/blob/main/CellRanger_Agrr #
-#####################################################################################################
+####################################################################################################################################
+# CELLRANGER ATAC AGG OUTPUT                                                                                                       #
+# I must load the file output from Cellranger. First, the atac output files will be loaded.                                        #
+ATAC_aggr_file_h5           <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample,"/filtered_peak_bc_matrix.h5",sep="")             #
+ATAC_aggr_singlecell_file   <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample,"/singlecell.csv",sep="")                         #
+ATAC_aggr_fragment_file     <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample,"/fragments.tsv.gz",sep="")                       #
+                                                                                                                                   #
+# CELLRANGER RNA AGG OUTPUT                                                                                                        #
+# Second, the RNA output files will be loaded.                                                                                     #
+RNA_aggr_file_h5            <-  paste("/home/felipe/snRNASeq_output/cDNA-M",sample,"/outs/filtered_feature_bc_matrix.h5",sep="")   #
+RNA__aggrh5                 <-  Read10X_h5(RNA_file_h5)                                                                            #
+####################################################################################################################################                              
+
 
 
 
