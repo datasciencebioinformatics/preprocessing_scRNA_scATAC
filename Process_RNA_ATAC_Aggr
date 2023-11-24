@@ -57,8 +57,21 @@ RNA_aggr                  <-RenameCells(RNA_aggr, new.names = df_RNA_barcode[ df
 # Once the object is translated, I can calculate the common cells between RNA_aggr nad and_aggr                                                     #
 # Create combined multiome object                                                                                                                   #
 combined.cell<-Cells(ATAC_aggr)[Cells(ATAC_aggr) %in% Cells(RNA_aggr)]                                                                              #
-#####################################################################################################################################################
 
+# Combine datasets with same cells
+ATAC_objects_combined <- ATAC_objects_combined[,combined.cell]
+RNA_objects_combined  <- RNA_objects_combined[,combined.cell]
+#####################################################################################
+# I stopped here 
+# try to do this https://stuartlab.org/signac/articles/hypotha_multiomic
+# create a Seurat object containing the RNA adata
+hypotha <- RNA_objects_combined
+
+# create ATAC assay and add it to the object
+hypotha[["ATAC"]] <- ATAC_objects_combined[["ATAC"]]
+
+#####################################################################################################################################################
+# Then,  I join the two objects in a multimodal object RNA+ATAC.
 
 
 
