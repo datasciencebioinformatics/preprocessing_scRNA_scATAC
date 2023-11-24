@@ -1,7 +1,10 @@
-# This script will process cellranger aggr output of both, RNA and ATAC data.
-# Output : 1) a Seurat object for RNA
-#          2) a Seurat object for ATAC
-#          3) a multiome object RNA+ATAC
-# The cells used in both experiments must be correspondent.
-# Script to generate the cellranger agg output is found at :
-##########################################################################################
+#####################################################################################################
+# This script will process cellranger aggr output of both, RNA and ATAC data.                       #
+# Output : 1) a Seurat object for RNA                                                               #
+#          2) a Seurat object for ATAC                                                              #
+#          3) a multiome object RNA+ATAC                                                            #
+# The cells used in both experiments must be correspondent.                                         #
+# Script to generate the cellranger agg output is found at :                                        #
+# https://github.com/datasciencebioinformatics/preprocessing_scRNA_scATAC/blob/main/CellRanger_Agrr #
+######################################################################################################
+
