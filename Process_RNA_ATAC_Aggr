@@ -31,16 +31,29 @@ ATAC_aggr_h5             <-  Read10X_h5(ATAC_aggr_file_h5)                      
 ATAC_aggr_singlecell     <-  read.csv(file = ATAC_aggr_singlecell_file,header = TRUE,row.names = 1)                                #
 ATAC_aggr_fragment       <-  CreateFragmentObject(ATAC_aggr_fragment_file)                                                         #
 ATAC_aggr_chrom_assay    <-  CreateChromatinAssay(counts = ATAC_aggr_h5,sep = c(":", "-"), annotation = annotations,fragments =ATAC_aggr_fragment)
-ATAC_aggr_hypotha        <-  CreateSeuratObject(counts = ATAC_aggr_chrom_assay,assay = "peaks")                                    #
-ATAC_aggr_peaks	         <-  CallPeaks(object = ATAC_aggr_hypotha)	                                                               #
+ATAC_aggr                <-  CreateSeuratObject(counts = ATAC_aggr_chrom_assay,assay = "peaks")                                    #
+ATAC_aggr_peaks	         <-  CallPeaks(object = ATAC_aggr)	                                                                       #
 ATAC_gr 	               <-  makeGRangesFromDataFrame(ATAC_aggr_peaks)                                                             #
                                                                                                                                    #
 # Second, RNA files                                                                                                                #
 RNA_aggr_h5         <-  Read10X_h5(RNA_aggr_file_h5)                                                                               #
 RNA_aggr            <- CreateSeuratObject(counts = RNA_aggr_h5,assay = "RNA")                                                      #
 ####################################################################################################################################
-# Now, I have the two objects, I must then translate the barcodes of the RNA object to have Seurat object
+# Now, I have the two objects, I must then translate the barcodes of the RNA object to have Seurat object                
 
+# Data frame with barcodes and experiment
+df_RNA_barcode=data.frame(Cells=c(),Barcode=c(),Sample=c(),RNA_translation=c())
+
+# Take barcode
+df_RNA_barcode=rbind(df_RNA_barcode,data.frame(Cells=Cells(RNA_aggr),Barcode=substring(Cells(RNA_aggr),1,16),Sample=sample,RNA_translation="")) 
+
+# Create ATAC-RNA
+df_RNA_barcode$RNA_translation<-Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA_barcode$Barcode,"ATAC"]
+
+# Rename cells for each sample
+RNA_aggr                  <-RenameCells(RNA_aggr, new.names = df_RNA_barcode[ df_RNA_barcode$Cells %in% Cells(RNA_aggr),"RNA_translation"])
+# This way, RNA_aggr and ATAC_aggr must have same cell names
+####################################################################################################################################
 
 
 
