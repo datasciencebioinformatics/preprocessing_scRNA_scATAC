@@ -98,7 +98,18 @@ hypotha <- RNA_objects_combined                                                 
 # create ATAC assay and add it to the object                                                                                                        #
 hypotha[["ATAC"]] <- ATAC_objects_combined[["ATAC"]]                                                                                                #
 #####################################################################################################################################################
+DimPlot_Multim_rna_atac<-DimPlot(RNA_aggr, label = TRUE, repel = TRUE) + ggtitle("Multimodal RNA+ATC M1/M2/M3")+ NoLegend()
 
+# Calculate NormalizeData
+RNA_aggr <- NormalizeData(RNA_aggr, normalization.method = "LogNormalize", scale.factor = 10000)
+RNA_aggr.varialble <- FindVariableFeatures(object=RNA_aggr , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+RNA_aggr <- SCTransform(RNA_aggr)
+RNA_aggr<- ScaleData(RNA_aggr,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_aggr.varialble))
+RNA_aggr <- RunPCA(RNA_aggr, features = VariableFeatures(object = RNA_aggr.varialble))
+RNA_aggr <- RunHarmony(RNA_aggr, group.by.vars = c('dataset'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
+RNA_aggr <- IntegrateLayers(object = RNA_aggr, method = HarmonyIntegration,orig.reduction = "pca", new.reduction = "harmony",  verbose = FALSE)
+RNA_aggr <- RunUMAP(RNA_aggr, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
+RNA_aggr   <- DimPlot(RNA_aggr, label = FALSE,cols=colour,reduction="harmony.umap")  + ggtitle("IntegrateLayers RNA cDNA-M1/M2/M3") + NoLegend()
 
 
 
