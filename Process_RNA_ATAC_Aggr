@@ -74,10 +74,11 @@ Barcode_arc_RNA_ATAC <- Barcode_arc_RNA_ATAC[!duplicated(Barcode_arc_RNA_ATAC), 
 # Set rownames
 rownames(Barcode_arc_RNA_ATAC)<-Barcode_arc_RNA_ATAC$RNA
 
-Barcode_arc_RNA_ATAC
+# Translaed values
+RNA_translation=Barcode_arc_RNA_ATAC[df_RNA_barcode$RNA,"ATAC"]
                                                                                                                                                     #
 # Create ATAC-RNA                                                                                                                                   #
-df_RNA_barcode<-cbind(df_RNA_barcode,)                                 #
+df_RNA_barcode$RNA_translation<-paste(RNA_translation,
                                                                                                                                                     #
 # Rename cells for each sample                                                                                                                      #
 RNA_aggr                  <-RenameCells(RNA_aggr, new.names = df_RNA_barcode[ df_RNA_barcode$Cells %in% Cells(RNA_aggr),"RNA_translation"])         #    
