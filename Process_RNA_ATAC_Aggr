@@ -1,3 +1,24 @@
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(gridExtra)
+library(ggplot2)
+library(plyr)
+library(SeuratObject)
+library(Seurat)
+library("harmony")
+library(rhdf5)
+library("hdf5r")
+library("Signac")
+library(Seurat)
+options(Seurat.object.assay.version = "v5")
+library(Signac)
+library(EnsDb.Mmusculus.v79)
+library(dplyr)
+library(ggplot2)
+library(loupeR)
+library(ggbeeswarm)
+colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 #####################################################################################################
 # This script will process cellranger aggr output of both, RNA and ATAC data.                       #
 # Output : 1) a Seurat object for RNA                                                               #
@@ -24,7 +45,7 @@ ATAC_aggr_singlecell_file   <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample
 ATAC_aggr_fragment_file     <-  paste("/home/felipe/snATACSeq_out/ATAC-M",sample,"/fragments.tsv.gz",sep="")                       #
                                                                                                                                    #
 # Second, the RNA output files will be loaded.                                                                                     #
-RNA_aggr_file_h5            <-  paste("/home/felipe/snRNASeq_output/cDNA-M",sample,"/outs/filtered_feature_bc_matrix.h5",sep="")   #                                                                           #
+RNA_aggr_file_h5            <-  "/home/felipe/snRNASeq_output/aggr/filtered_feature_bc_matrix.h5"                                  #                                                                           #
 ####################################################################################################################################
 # Process ATAC files                                                                                                               #       
 ATAC_aggr_h5             <-  Read10X_h5(ATAC_aggr_file_h5)                                                                         #
@@ -45,14 +66,18 @@ RNA_aggr            <- CreateSeuratObject(counts = RNA_aggr_h5,assay = "RNA")   
 df_RNA_barcode=data.frame(Cells=c(),Barcode=c(),Sample=c(),RNA_translation=c())                                                                     #
                                                                                                                                                     #
 # Take barcode                                                                                                                                      #
-df_RNA_barcode=rbind(df_RNA_barcode,data.frame(Cells=Cells(RNA_aggr),Barcode=substring(Cells(RNA_aggr),1,16),Sample=sample,RNA_translation=""))     #
+df_RNA_barcode=data.frame(Cells=Cells(RNA_aggr),RNA=substring(Cells(RNA_aggr),1,16),RNA_translation="")                                             #
+
+# Set rownames
+rownames(Barcode_arc_RNA_ATAC)<-Barcode_arc_RNA_ATAC$RNA
+
+Barcode_arc_RNA_ATAC[df_RNA_barcode$RNA,"ATAC"]
                                                                                                                                                     #
 # Create ATAC-RNA                                                                                                                                   #
-df_RNA_barcode$RNA_translation<-Barcode_arc_RNA_ATAC[Barcode_arc_RNA_ATAC$RNA %in% df_RNA_barcode$Barcode,"ATAC"]                                   #
+df_RNA_barcode<-cbind(df_RNA_barcode,)                                 #
                                                                                                                                                     #
 # Rename cells for each sample                                                                                                                      #
 RNA_aggr                  <-RenameCells(RNA_aggr, new.names = df_RNA_barcode[ df_RNA_barcode$Cells %in% Cells(RNA_aggr),"RNA_translation"])         #    
-# This way, RNA_aggr and ATAC_aggr must have same cell names                                                                                        #
 #####################################################################################################################################################
 # Once the object is translated, I can calculate the common cells between RNA_aggr nad and_aggr                                                     #
 # Create combined multiome object                                                                                                                   #
