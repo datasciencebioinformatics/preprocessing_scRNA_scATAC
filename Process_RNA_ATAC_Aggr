@@ -68,10 +68,13 @@ df_RNA_barcode=data.frame(Cells=c(),Barcode=c(),Sample=c(),RNA_translation=c()) 
 # Take barcode                                                                                                                                      #
 df_RNA_barcode=data.frame(Cells=Cells(RNA_aggr),RNA=substring(Cells(RNA_aggr),1,16),RNA_translation="")                                             #
 
+# Remove duplcites
+Barcode_arc_RNA_ATAC <- Barcode_arc_RNA_ATAC[!duplicated(Barcode_arc_RNA_ATAC), ]
+
 # Set rownames
 rownames(Barcode_arc_RNA_ATAC)<-Barcode_arc_RNA_ATAC$RNA
 
-Barcode_arc_RNA_ATAC[df_RNA_barcode$RNA,"ATAC"]
+Barcode_arc_RNA_ATAC
                                                                                                                                                     #
 # Create ATAC-RNA                                                                                                                                   #
 df_RNA_barcode<-cbind(df_RNA_barcode,)                                 #
