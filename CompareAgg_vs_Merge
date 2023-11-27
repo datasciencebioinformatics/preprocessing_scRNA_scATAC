@@ -1,0 +1,33 @@
+save(RNA_aggr, file = "./RNA_aggr.RData")
+save(RNA_objects_combined, file = "./RNA_objects_combined.RData")
+
+# Rename cells
+RNA_aggr$dataset            <-paste("cDNA-M",paste(substring(Cells(RNA_aggr),18,18)),sep="")
+RNA_objects_combined$dataset<-paste("cDNA-M",substring(Cells(RNA_objects_combined),18,18),sep="")
+
+
+# Calculate UMAP - RNA_objects
+RNA_objects_FindVariableFeatures <- FindVariableFeatures(object=RNA_objects_combined , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+RNA_objects_combined             <- NormalizeData(RNA_objects_combined, normalization.method = "LogNormalize", scale.factor = 10000)
+RNA_objects_combined             <- ScaleData(RNA_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_objects_FindVariableFeatures))
+RNA_objects_combined             <- RunPCA(RNA_objects_combined, features = VariableFeatures(object = RNA_objects_FindVariableFeatures))
+RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50,reduction = "pca")
+
+
+# Calculate UMAP - RNA_aggr
+RNA_aggr_FindVariableFeatures <- FindVariableFeatures(object=RNA_aggr , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+RNA_aggr                      <- NormalizeData(RNA_aggr, normalization.method = "LogNormalize", scale.factor = 10000)
+RNA_aggr                      <- ScaleData(RNA_aggr,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = RNA_aggr_FindVariableFeatures))
+RNA_aggr                      <- RunPCA(RNA_aggr, features = VariableFeatures(object = RNA_aggr_FindVariableFeatures))
+RNA_aggr                      <- RunUMAP(RNA_aggr, dims = 1:50,reduction = "pca")
+
+
+# Calculate dimplots
+DimPlot_RNA_aggr     <-DimPlot(RNA_aggr, label = FALSE,group.by = 'dataset',raster=FALSE, pt.size = 0.1) + ggtitle("cDNA-M1/M2/M3") + theme(legend.position = "none") 
+DimPlot_RNA_combined <-DimPlot(RNA_objects_combined, label = FALSE,group.by = 'dataset', pt.size = 0.1)  + ggtitle("cDNA-M1/M2/M3") + theme(legend.position = "none") 
+
+# FindClusters_resolution
+output_dir="/home/felipe/results_seurat/"
+png(filename=paste(output_dir,"DimPlot_comparisson_aggr_combined.png",sep=""), width = 16, height = 8, res=400, units = "cm")
+	grid.arrange(DimPlot_RNA_aggr, DimPlot_RNA_combined, nrow = 1)
+dev.off()
