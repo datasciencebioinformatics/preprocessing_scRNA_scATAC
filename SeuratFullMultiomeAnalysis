@@ -80,6 +80,7 @@ ATAC_objects_combined_merge<-ATAC_objects_combined
 ATAC_objects_combined_integ<-ATAC_objects_combined
 ####################################################################################
 # Calculate NormalizeData
+ATAC_objects_combined_integ <- DietSeurat(ATAC_objects_combined_integ,counts = FALSE,data = TRUE,scale.data = FALSE, assays = "ATAC", dimreducs = FALSE,   graphs = FALSE, misc = FALSE)
 ATAC_objects_combined_integ <- NormalizeData(ATAC_objects_combined_integ, normalization.method = "LogNormalize", scale.factor = 10000)
 ATAC_objects_combined_integ.varialble <- FindVariableFeatures(object=ATAC_objects_combined_integ , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
 ATAC_objects_combined_integ <- SCTransform(ATAC_objects_combined_integ)
