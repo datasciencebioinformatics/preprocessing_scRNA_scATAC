@@ -23,11 +23,11 @@ RNA_aggr                      <- RunUMAP(RNA_aggr, dims = 1:50,reduction = "pca"
 
 
 # Calculate dimplots
-DimPlot_RNA_aggr     <-DimPlot(RNA_aggr, label = FALSE,group.by = 'dataset',raster=FALSE, pt.size = 0.1) + ggtitle("cDNA-M1/M2/M3") + theme(legend.position = "none") 
-DimPlot_RNA_combined <-DimPlot(RNA_objects_combined, label = FALSE,group.by = 'dataset', pt.size = 0.1)  + ggtitle("cDNA-M1/M2/M3") + theme(legend.position = "none") 
+DimPlot_RNA_aggr     <-DimPlot(RNA_aggr, label = FALSE,group.by = 'dataset',raster=FALSE, pt.size = 0.1) + ggtitle("Cellranger-atac agg cDNA-M1/M2/M3")+ theme(legend.position = "none") 
+DimPlot_RNA_combined <-DimPlot(RNA_objects_combined, label = FALSE,group.by = 'dataset', pt.size = 0.1)  + ggtitle("Seurat merge cDNA-M1/M2/M3") 
 
 # FindClusters_resolution
 output_dir="/home/felipe/results_seurat/"
-png(filename=paste(output_dir,"DimPlot_comparisson_aggr_combined.png",sep=""), width = 16, height = 8, res=400, units = "cm")
+png(filename=paste(output_dir,"DimPlot_comparisson_aggr_combined.png",sep=""), width = 20, height = 8, res=400, units = "cm")
 	grid.arrange(DimPlot_RNA_aggr, DimPlot_RNA_combined, nrow = 1)
 dev.off()
