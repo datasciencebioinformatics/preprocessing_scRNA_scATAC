@@ -28,6 +28,6 @@ DimPlot_RNA_combined <-DimPlot(RNA_objects_combined, label = FALSE,group.by = 'd
 
 # FindClusters_resolution
 output_dir="/home/felipe/results_seurat/"
-png(filename=paste(output_dir,"DimPlot_comparisson_aggr_combined.png",sep=""), width = 20, height = 8, res=400, units = "cm")
+png(filename=paste(output_dir,"DimPlot_comparisson_aggr_combined.png",sep=""), width = 24, height = 12, res=400, units = "cm")
 	grid.arrange(DimPlot_RNA_aggr, DimPlot_RNA_combined, nrow = 1)
 dev.off()
