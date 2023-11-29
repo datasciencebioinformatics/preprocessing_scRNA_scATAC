@@ -156,6 +156,13 @@ ATAC_objects_combined$orig.ident<-paste("ATAC-M",substring(Cells(ATAC_objects_co
 ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined) # Ok
 ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)  # Ok
 ATAC_objects_combined <- RunSVD(ATAC_objects_combined)  # Ok
+ATAC_objects_combined <- NormalizeData(ATAC_objects_combined, normalization.method = "LogNormalize", scale.factor = 10000)
+ATAC_objects_combined.varialble <- FindVariableFeatures(object=ATAC_objects_combined , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
+ATAC_objects_combined <- SCTransform(ATAC_objects_combined)
+ATAC_objects_combined <- ScaleData(ATAC_objects_combined,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = ATAC_objects_combined.varialble))
+ATAC_objects_combined <- RunPCA(ATAC_objects_combined, features = VariableFeatures(object = ATAC_objects_combined.varialble))
+ATAC_objects_combined <- RunHarmony(ATAC_objects_combined, group.by.vars = c('dataset'),reduction = "pca", assay.use = "ATAC", reduction.save = "harmony")
+ATAC_objects_combined <- IntegrateLayers(object = ATAC_objects_combined, method = HarmonyIntegration,orig.reduction = "pca", new.reduction = "harmony",  verbose = FALSE)
 ATAC_objects_combined <- RunUMAP(ATAC_objects_combined, dims = 2:50, reduction = 'lsi')
 #####################################################################################
 #save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
