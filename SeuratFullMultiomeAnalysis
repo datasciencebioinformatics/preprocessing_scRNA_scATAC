@@ -76,10 +76,12 @@ load("./ATAC_objects_combined.RData")                                           
 ATAC_objects_combined$dataset<-paste("ATAC-M",paste(substring(Cells(ATAC_objects_combined),18,18)),sep="")
 
 # RunTFIDF and RunTFIDF
-ATAC_objects_combined_merge <- RunTFIDF(ATAC_objects_combined)
-ATAC_objects_combined_merge <- RunSVD(ATAC_objects_combined)
-ATAC_objects_combined_merge <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)  # Ok
-
+ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined)
+ATAC_objects_combined <- RunSVD(ATAC_objects_combined)
+ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)  # Ok
+####################################################################################
+save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
+####################################################################################
 # Analyse ATAC merge and IntegrateLayers  
 ATAC_objects_combined_merge<-ATAC_objects_combined
 ATAC_objects_combined_integ<-ATAC_objects_combined
@@ -101,7 +103,6 @@ DimPlot_ATAC_harmony_merge_2  <- DimPlot(ATAC_objects_combined_merge,cols=colour
 save(ATAC_objects_combined_merge, file = "./ATAC_objects_combined_merge.RData")
 save(ATAC_objects_combined_integ, file = "./ATAC_objects_combined_merge.RData")
 #####################################################################################
-
 # FindClusters_resolution
 png(filename=paste(output_dir,"ATAC_UMAP_visualization_Harmony_PCA.png",sep=""), width = 30, height = 12, res=600, units = "cm")
 	grid.arrange(DimPlot_ATAC_harmony_merge_2,DimPlot_ATAC_harmony_merge_1,ncol = 2)
