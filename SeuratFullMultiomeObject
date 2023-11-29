@@ -190,7 +190,7 @@ RNA_objects_combined <- merge(
   y = list_RNA_obj[2:n_samples]
 )
 #####################################################################################
-save(list_RNA_obj, file =              "/home/felipe/list_RNA_obj.RData")           #
+save(RNA_objects_combined, file =              "RNA_objects_combined.RData")        #
 load("./RNA_objects_combined.RData")
 #####################################################################################
 # Calculate FindVariableFeatures
