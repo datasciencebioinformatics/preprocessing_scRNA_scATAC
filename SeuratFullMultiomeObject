@@ -240,3 +240,6 @@ combined.cell<-sample(combined.cell, length(combined.cell)*0.5, replace = FALSE,
 ATAC_objects_combined <- ATAC_objects_combined[,combined.cell]
 RNA_objects_combined  <- RNA_objects_combined[,combined.cell]
 #####################################################################################
+save(RNA_objects_combined, file = "./RNA_objects_combined_sub.RData")               #
+save(ATAC_objects_combined, file = "./ATAC_objects_combined_sub.RData")             #
+#####################################################################################
