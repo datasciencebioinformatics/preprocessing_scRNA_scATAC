@@ -77,7 +77,8 @@ ATAC_objects_combined$dataset<-paste("ATAC-M",paste(substring(Cells(ATAC_objects
 
 # RunTFIDF and RunTFIDF
 ATAC_objects_combined_merge <- RunTFIDF(ATAC_objects_combined)
-ATAC_objects_combined_merge <- RunTFIDF(ATAC_objects_combined, min.cutoff = "q0")
+ATAC_objects_combined_merge <- RunSVD(ATAC_objects_combined)
+ATAC_objects_combined_merge <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)  # Ok
 
 # Analyse ATAC merge and IntegrateLayers  
 ATAC_objects_combined_merge<-ATAC_objects_combined
