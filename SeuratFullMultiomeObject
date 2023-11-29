@@ -128,7 +128,8 @@ ATAC_objects_combined <- merge(
 )
 #####################################################################################
 #save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")
-#load("./ATAC_objects_combined.RData")
+load("./ATAC_objects_combined.RData")
+load("./ATAC_objects_combined2.RData")
 #####################################################################################
 # Add batch normalation here 1
 # Fix ATAC UMAP parameters here 2
