@@ -234,7 +234,7 @@ load("./RNA_objects_combined.RData")
 combined.cell<-Cells(ATAC_objects_combined)[Cells(ATAC_objects_combined) %in% Cells(RNA_objects_combined)]
 
 # Subsample cells
-combined.cell<-sample(combined.cell, length(combined.cell)*0.8, replace = FALSE, prob = NULL)
+combined.cell<-sample(combined.cell, length(combined.cell)*0.5, replace = FALSE, prob = NULL)
 
 # Combine datasets with same cells
 ATAC_objects_combined <- ATAC_objects_combined[,combined.cell]
