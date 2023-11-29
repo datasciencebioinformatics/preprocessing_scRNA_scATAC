@@ -137,6 +137,7 @@ ATAC_objects_combined$orig.ident<-paste("ATAC-M",substring(Cells(ATAC_objects_co
 ATAC_objects_combined <- RunTFIDF(ATAC_objects_combined) # Ok
 ATAC_objects_combined <- FindTopFeatures(ATAC_objects_combined, min.cutoff = 20)  # Ok
 ATAC_objects_combined <- RunSVD(ATAC_objects_combined)  # Ok
+
 ATAC_objects_combined <- NormalizeData(ATAC_objects_combined, normalization.method = "LogNormalize", scale.factor = 10000)
 ATAC_objects_combined.varialble <- FindVariableFeatures(object=ATAC_objects_combined , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
 ATAC_objects_combined <- SCTransform(ATAC_objects_combined)
