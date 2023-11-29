@@ -227,3 +227,13 @@ dev.off()
 save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
 #####################################################################################
+# Create combined multiome object
+combined.cell<-Cells(ATAC_objects_combined)[Cells(ATAC_objects_combined) %in% Cells(RNA_objects_combined)]
+
+# Subsample cells
+combined.cell<-sample(combined.cell, length(combined.cell)*0.5, replace = FALSE, prob = NULL)
+
+# Combine datasets with same cells
+ATAC_objects_combined <- ATAC_objects_combined[,combined.cell]
+RNA_objects_combined  <- RNA_objects_combined[,combined.cell]
+#####################################################################################
