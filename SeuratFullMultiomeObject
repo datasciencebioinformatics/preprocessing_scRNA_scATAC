@@ -206,7 +206,7 @@ RNA_objects_combined             <- RunUMAP(RNA_objects_combined, dims = 1:50,re
 #save(RNA_objects_combined, file =              "./RNA_objects_combined.RData")      #
 #####################################################################################
 # For each sample
-n_samples=3
+n_samples=2
 
 # Rename cells
 RNA_objects_combined$dataset<-paste("cDNA-M",paste(substring(Cells(RNA_objects_combined),18,18)),sep="")
@@ -215,8 +215,8 @@ ATAC_objects_combined$dataset<-paste("ATAC-M",substring(Cells(ATAC_objects_combi
 # Quality control - add  too mitocondrial percentage to quality control plot
 #DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, pt.size = 0.1,raster=FALSE) + ggtitle("ATAC-M1/M2/M3") + theme(legend.position = "none") 
 #DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, pt.size = 0.1, raster=FALSE) + ggtitle("cDNA-M1/M2/M3") + theme(legend.position = "none") 
-DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, label = FALSE,group.by = 'dataset',raster=FALSE, pt.size = 0.1) + ggtitle("ATAC-M1/M2/M3") + theme(legend.position = "none") 
-DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, label = FALSE,group.by = 'dataset', pt.size = 0.1) + ggtitle("cDNA-M1/M2/M3") + theme(legend.position = "none") 
+DimPlot_ATAC_objects_combined<-DimPlot(ATAC_objects_combined, label = FALSE,group.by = 'dataset',raster=FALSE, pt.size = 0.1) + ggtitle("ATAC-M1/M2") + theme(legend.position = "none") 
+DimPlot_RNA_objects_combined<-DimPlot(RNA_objects_combined, label = FALSE,group.by = 'dataset', pt.size = 0.1) + ggtitle("cDNA-M1/M2") + theme(legend.position = "none") 
 
 # FindClusters_resolution
 output_dir="/home/felipe/results_seurat/"
@@ -227,11 +227,14 @@ dev.off()
 save(RNA_objects_combined, file = "./RNA_objects_combined.RData")                   #
 save(ATAC_objects_combined, file = "./ATAC_objects_combined.RData")                 #
 #####################################################################################
+load("./ATAC_objects_combined.RData")
+load("./RNA_objects_combined.RData")
+
 # Create combined multiome object
 combined.cell<-Cells(ATAC_objects_combined)[Cells(ATAC_objects_combined) %in% Cells(RNA_objects_combined)]
 
 # Subsample cells
-combined.cell<-sample(combined.cell, length(combined.cell)*0.5, replace = FALSE, prob = NULL)
+combined.cell<-sample(combined.cell, length(combined.cell)*0.8, replace = FALSE, prob = NULL)
 
 # Combine datasets with same cells
 ATAC_objects_combined <- ATAC_objects_combined[,combined.cell]
