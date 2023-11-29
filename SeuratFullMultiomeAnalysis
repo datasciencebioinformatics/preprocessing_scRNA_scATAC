@@ -85,8 +85,8 @@ ATAC_objects_combined_merge<-ATAC_objects_combined
 ATAC_objects_combined_integ<-ATAC_objects_combined
 ####################################################################################
 # Calculate NormalizeData
-ATAC_objects_combined_integ <- ScaleData(ATAC_objects_combined_integ,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = ATAC_objects_combined_integ.varialble))
-ATAC_objects_combined_integ <- RunPCA(ATAC_objects_combined_integ, features = VariableFeatures(object = ATAC_objects_combined_integ.varialble))
+ATAC_objects_combined_integ <- ScaleData(ATAC_objects_combined_integ,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(object = ATAC_objects_combined_integ))
+ATAC_objects_combined_integ <- RunPCA(ATAC_objects_combined_integ, features = VariableFeatures(object = VariableFeatures(object = ATAC_objects_combined_integ)))
 ATAC_objects_combined_integ <- RunHarmony(ATAC_objects_combined_integ, group.by.vars = c('dataset'),reduction = "pca", assay.use = "ATAC", reduction.save = "harmony")
 ATAC_objects_combined_integ <- IntegrateLayers(object = ATAC_objects_combined_integ, method = HarmonyIntegration,orig.reduction = "pca", new.reduction = "harmony",  verbose = FALSE)
 ATAC_objects_combined_integ <- RunUMAP(ATAC_objects_combined_integ, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
