@@ -263,12 +263,12 @@ dev.off()
 #####################################################################################
 # Annotating cell types 
 # Create reference
-load("RNA_objects_combined_integ.RData")
-hypotha.rna.merge.samples=RNA_objects_combined_integ
+load("RNA_objects_combined_merge.RData")
+hypotha.rna.merge.samples=RNA_objects_combined_merge
 Idents(hypotha.rna.merge.samples)<-paste("cDNA-M",substring(Cells(hypotha.rna.merge.samples),18,18),sep="")
 #####################################################################################
 # Calculate NormalizeData
-hypotha.rna.merge.samples <- FindNeighbors(RNA_objects_combined_integ, dims = 1:50,reduction="harmony")
+hypotha.rna.merge.samples <- FindNeighbors(hypotha.rna.merge.samples, dims = 1:50,reduction="harmony")
 hypotha.rna.merge.samples <- FindClusters(hypotha.rna.merge.samples,reduction = "pca",resolution = 0.12)
 #####################################################################################
 # Step 1 : Output hypotha.rna.merge.samples
