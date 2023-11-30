@@ -406,3 +406,4 @@ DimPlot_ATAC <- DimPlot(pbmc.atac.chrom.samples.predicted, group.by = "ident", l
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	grid.arrange(DimPlot_RNA,DimPlot_ATAC,DimPlot_Multim_rna_atac,DimPlot_weighted_nn,ncol = 2)
 dev.off()
+
