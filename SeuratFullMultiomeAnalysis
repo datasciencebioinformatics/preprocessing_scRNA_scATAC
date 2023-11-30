@@ -407,3 +407,9 @@ png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24
 	grid.arrange(DimPlot_RNA,DimPlot_ATAC,DimPlot_Multim_rna_atac,DimPlot_weighted_nn,ncol = 2)
 dev.off()
 
+#####################################################################################
+## to make the visualization easier, subset Neuron clusters
+https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis
+celltype.names <- levels(hypotha_wnn)
+neurons        <- subset(hypotha_wnn, idents = "Neurons")
+CoveragePlot(neurons, region = 'Snap25', features = 'Snap25', assay = 'ATAC', expression.assay = 'SCT', peaks = FALSE,)
