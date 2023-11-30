@@ -362,6 +362,24 @@ Idents(pbmc.atac.chrom.samples.predicted)<-celltype.predictions$predicted.id
 #####################################################################################
 save(pbmc.atac.chrom.samples.predicted, file = "./pbmc.atac.chrom.samples.predicted.RData") # Save hypotha Step 5
 #####################################################################################
+# Create an object with annotated RNA and ATAC                                      #
+# I stopped here                                                                    #
+# try to do this https://stuartlab.org/signac/articles/hypotha_multiomic            #
+# create a Seurat object containing the RNA adata                                   #
+hypotha_wnn <- reference                                                            #
+                                                                                    #
+# create ATAC assay and add it to the object                                        #
+hypotha_wnn[["ATAC"]] <- pbmc.atac.chrom.samples.predicted                          #
+                                                                                    #
+# Annotating cell types                                                             #
+# build a joint neighbor graph using both assays                                    #
+hypotha_wnn <- FindMultiModalNeighbors(                                             #
+  object = hypotha_wnn,                                                             #
+  reduction.list = list("pca", "lsi"),                                              #
+  dims.list = list(1:20, 2:50),k.nn = 50, modality.weight.name = "RNA.weight"       #
+)                                                                                   #
+#####################################################################################
+
 # Create DimMap
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
 DimPlot_Multim_rna_atac<-DimPlot(hypotha.samples.predicted, label = TRUE, repel = FALSE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1/M2")#+ NoLegend()
