@@ -339,7 +339,7 @@ Annotation(pbmc.atac.chrom.samples.predicted) <- annotations
 
 # Identifying anchors between scRNA-seq and scATAC-seq dataset
 # quantify gene activity
-gene.activities <- GeneActivity(pbmc.atac.chrom.samples.predicted, features = VariableFeatures(RNA_objects_combined_integ))
+gene.activities <- GeneActivity(pbmc.atac.chrom.samples.predicted, features = VariableFeatures(reference))
 
 # add gene activities as a new assay
 pbmc.atac.chrom.samples.predicted[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
