@@ -350,22 +350,25 @@ pbmc.atac.chrom.samples.predicted <- NormalizeData(pbmc.atac.chrom.samples.predi
 pbmc.atac.chrom.samples.predicted <- ScaleData(pbmc.atac.chrom.samples.predicted, features = rownames(pbmc.atac.chrom.samples.predicted))
 	
 # Identify anchors
-transfer.anchors <- FindTransferAnchors(reference = pbmc.rna.merge.samples, query = pbmc.atac.chrom.samples.predicted, features = VariableFeatures(RNA_objects_combined_integ),
+transfer.anchors <- FindTransferAnchors(reference = reference, query = pbmc.atac.chrom.samples.predicted, features = VariableFeatures(RNA_objects_combined_integ),
     reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
 
 # Annotate scATAC-seq cells via label transfer
-celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = Idents(pbmc.rna.merge.samples), weight.reduction = pbmc.atac.chrom.samples.predicted[["lsi"]], dims = 2:30)
+celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = Idents(reference), weight.reduction = pbmc.atac.chrom.samples.predicted[["lsi"]], dims = 2:30)
 
 # Add celltype predictions
 pbmc.atac.chrom.samples.predicted <- AddMetaData(pbmc.atac.chrom.samples.predicted, metadata = celltype.predictions)
+Idents(pbmc.atac.chrom.samples.predicted)<-celltype.predictions$predicted.id
+#####################################################################################
+save(pbmc.atac.chrom.samples.predicted, file = "./pbmc.atac.chrom.samples.predicted.RData") # Save hypotha Step 5
 #####################################################################################
 # Create DimMap
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
-DimPlot_Multim_rna_atac<-DimPlot(hypotha, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1/M2")#+ NoLegend()
+DimPlot_Multim_rna_atac<-DimPlot(hypotha.samples.predicted, label = TRUE, repel = FALSE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1/M2")#+ NoLegend()
 DimPlot_weighted_nn <- DimPlot(hypotha.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5) + ggtitle("WNN RNA+ATC M1/M2")#+ NoLegend()
 DimPlot_RNA <- DimPlot(reference, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1/M2") #+ NoLegend()
 #DimPlot_ATAC <- DimPlot(ATAC_objects_combined_merge, group.by = "celltype.predictions", label = TRUE,cols=colour, reduction = "umap") + ggtitle("ATAC ATAC-M1") #+ NoLegend()
-DimPlot_ATAC <- DimPlot(ATAC_objects_combined_merge, group.by = "ident", label = TRUE, reduction = "umap",cols=colour) + ggtitle("ATAC-M1/M2") #+ NoLegend()
+DimPlot_ATAC <- DimPlot(pbmc.atac.chrom.samples.predicted, group.by = "ident", label = TRUE, reduction = "umap",cols=colour) + ggtitle("ATAC-M1/M2") #+ NoLegend()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24, height = 24, res=600, units = "cm")
