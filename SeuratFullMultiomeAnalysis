@@ -329,13 +329,6 @@ ATAC_objects_combined_merge <- NormalizeData(ATAC_objects_combined_merge)
 ATAC_objects_combined_merge <- ScaleData(ATAC_objects_combined_merge, features = rownames(ATAC_objects_combined_merge))
 #####################################################################################
 # Transfer annotation from RNA to ATAC
-# Calculate NormalizeData
-pbmc.rna.merge.samples <- NormalizeData(RNA_objects_combined_integ, normalization.method = "LogNormalize", scale.factor = 10000)
-pbmc.rna.merge.samples <- SCTransform(pbmc.rna.merge.samples)
-bmc.rna.merge.samples.varialble <- FindVariableFeatures(object=RNA_objects_combined_integ , selection.method = "vst",nfeatures = 3000) # Consider the 2000 genes
-pbmc.rna.merge.samples <- ScaleData(pbmc.rna.merge.samples,block.size = 1000,do.scale = TRUE,do.center = TRUE,features=VariableFeatures(RNA_objects_combined_integ))
-pbmc.rna.merge.samples <- RunPCA(pbmc.rna.merge.samples, features = VariableFeatures(RNA_objects_combined_integ))
-
 # Make a copy of the seurat objectp
 pbmc.atac.chrom.samples.predicted=ATAC_objects_combined_merge
 
@@ -344,19 +337,14 @@ annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
 seqlevelsStyle(annotations) <- "UCSC"
 Annotation(pbmc.atac.chrom.samples.predicted) <- annotations
 
-# Convert IDS
-annotations_cols <- select(EnsDb.Mmusculus.v79, keys=VariableFeatures(RNA_objects_combined_integ), columns=c("GENEID","SYMBOL","GENENAME","ENTREZID","UNIPROTID","PROTEINID","TXID"),keytype="GENENAME")
-
 # Identifying anchors between scRNA-seq and scATAC-seq dataset
 # quantify gene activity
 gene.activities <- GeneActivity(pbmc.atac.chrom.samples.predicted, features = VariableFeatures(RNA_objects_combined_integ))
 
-head(Annotation(pbmc.atac.chrom.samples.predicted))
-
 # add gene activities as a new assay
 pbmc.atac.chrom.samples.predicted[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
 
-# normalize gene activities
+# normalize and scale gene activities
 DefaultAssay(pbmc.atac.chrom.samples.predicted) <- "ACTIVITY"
 pbmc.atac.chrom.samples.predicted <- NormalizeData(pbmc.atac.chrom.samples.predicted)
 pbmc.atac.chrom.samples.predicted <- ScaleData(pbmc.atac.chrom.samples.predicted, features = rownames(pbmc.atac.chrom.samples.predicted))
@@ -364,7 +352,7 @@ pbmc.atac.chrom.samples.predicted <- ScaleData(pbmc.atac.chrom.samples.predicted
 # Identify anchors
 transfer.anchors <- FindTransferAnchors(reference = pbmc.rna.merge.samples, query = pbmc.atac.chrom.samples.predicted, features = VariableFeatures(RNA_objects_combined_integ),
     reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
-#####################################################################################
+
 # Annotate scATAC-seq cells via label transfer
 celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = Idents(pbmc.rna.merge.samples), weight.reduction = pbmc.atac.chrom.samples.predicted[["lsi"]], dims = 2:30)
 
