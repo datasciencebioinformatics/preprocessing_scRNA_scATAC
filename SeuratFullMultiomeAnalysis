@@ -295,7 +295,7 @@ df2$ID<-NA
 # Neurônios, astrocitos, oligodendrocitos, OPCs e células imune/micróglia
 df2<- df2 %>% mutate(ID = ifelse(Snap25 > 0.5, "Neurons", df2$ID))
 df2<- df2 %>% mutate(ID = ifelse(Agt > 2, "Astrocytes", df2$ID))
-df2<- df2 %>% mutate(ID = ifelse(Ctss > 1, "Microglia", df2$ID)) # Ok
+df2<- df2 %>% mutate(ID = ifelse(Ctss > 0.5, "Microglia", df2$ID)) # Ok
 df2<- df2 %>% mutate(ID = ifelse(Pdgfra > 0.1, "OPCs", df2$ID))    # Ok
 df2<- df2 %>% mutate(ID = ifelse(Mbp > 0.5 & Mobp > 0.5, "Oligodendrocytes", df2$ID))
 
@@ -369,7 +369,14 @@ save(pbmc.atac.chrom.samples.predicted, file = "./pbmc.atac.chrom.samples.predic
 hypotha_wnn <- reference                                                            #
                                                                                     #
 # create ATAC assay and add it to the object                                        #
-hypotha_wnn[["ATAC"]] <- pbmc.atac.chrom.samples.predicted                          #
+hypotha_wnn[["ATAC"]] <-  pbmc.atac.chrom.samples.predicted[["ATAC"]]               #
+                                                                                    #
+# Calculate UMAP                                                                    #
+DefaultAssay(hypotha_wnn) <- "ATAC"                                                 #  
+hypotha_wnn <- RunTFIDF(hypotha_wnn)                                                #
+hypotha_wnn <- FindTopFeatures(hypotha_wnn, min.cutoff = "q0")                      #
+hypotha_wnn <- RunSVD(hypotha_wnn)                                                  #
+hypotha_wnn <- RunUMAP(hypotha_wnn, reduction = "lsi", dims = 2:30, reduction.name = "umap", reduction.key = "UMAP_1")
                                                                                     #
 # Annotating cell types                                                             #
 # build a joint neighbor graph using both assays                                    #
@@ -378,14 +385,21 @@ hypotha_wnn <- FindMultiModalNeighbors(                                         
   reduction.list = list("pca", "lsi"),                                              #
   dims.list = list(1:20, 2:50),k.nn = 50, modality.weight.name = "RNA.weight"       #
 )                                                                                   #
+# build a joint UMAP visualization                                                  #
+hypotha_wnn <- RunUMAP(                                                             #
+  object = hypotha_wnn,                                                             #
+  nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"  #
+)                                                                                   #
 #####################################################################################
-
+# FindClusters_resolution
+hypotha.2 <- RunUMAP(hypotha_wnn, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
+hypotha.2 <- FindClusters(hypotha.2, graph.name = "wsnn", algorithm = 1, resolution = 0.1, verbose = FALSE)
+#####################################################################################
 # Create DimMap
 colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154')
-DimPlot_Multim_rna_atac<-DimPlot(hypotha.samples.predicted, label = TRUE, repel = FALSE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1/M2")#+ NoLegend()
+DimPlot_Multim_rna_atac<-DimPlot(hypotha_wnn, label = TRUE, repel = FALSE, group.by = "ident", reduction = "wnn.umap",cols=colour) + ggtitle("Multimodal RNA+ATC M1/M2")#+ NoLegend()
 DimPlot_weighted_nn <- DimPlot(hypotha.2, reduction = 'wnn.umap', label = TRUE, repel = TRUE, label.size = 2.5) + ggtitle("WNN RNA+ATC M1/M2")#+ NoLegend()
 DimPlot_RNA <- DimPlot(reference, group.by = "ident", label = TRUE,cols=colour)  + ggtitle("RNA cDNA-M1/M2") #+ NoLegend()
-#DimPlot_ATAC <- DimPlot(ATAC_objects_combined_merge, group.by = "celltype.predictions", label = TRUE,cols=colour, reduction = "umap") + ggtitle("ATAC ATAC-M1") #+ NoLegend()
 DimPlot_ATAC <- DimPlot(pbmc.atac.chrom.samples.predicted, group.by = "ident", label = TRUE, reduction = "umap",cols=colour) + ggtitle("ATAC-M1/M2") #+ NoLegend()
 
 # FindClusters_resolution
