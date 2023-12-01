@@ -429,6 +429,13 @@ hypotha_wnn@meta.data$nCount_ATAC<-pbmc.atac.chrom.samples.predicted@meta.data[r
 # Create plot
 p1 <- p1(object = hypotha_wnn,region = "Snap25", features = "Snap25", expression.assay = "SCT",  window = 50,extend.upstream = 500,  extend.downstream = 10000)
 
+hypotha_bck<-hypotha_wnn
+# Calculate NormalizeData
+DefaultAssay(hypotha_bck) <- "RNA"
+hypotha_bck <- RunHarmony(hypotha_bck, group.by.vars = c('dataset'),reduction = "pca", assay.use = "RNA", reduction.save = "harmony")
+hypotha_bck <- IntegrateLayers(object = hypotha_bck, method = HarmonyIntegration,orig.reduction = "pca", new.reduction = "harmony",  verbose = FALSE)
+hypotha_bck <- RunUMAP(hypotha_bck, dims = 1:50,reduction = "harmony",reduction.name="harmony.umap") # Optmize number of dimensions
+DimPlot_RNA_harmony_umap   <- DimPlot(RNA_objects_combined_integ, group.by = "dataset", label = FALSE,reduction="harmony.umap")  + ggtitle("IntegrateLayers RNA cDNA-M1/M2/M3") + NoLegend()
 
 
 
