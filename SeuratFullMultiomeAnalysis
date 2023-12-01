@@ -429,6 +429,6 @@ hypotha_wnn@meta.data$nCount_ATAC<-pbmc.atac.chrom.samples.predicted@meta.data[r
 p1 <- CoveragePlot(object = hypotha_wnn,region = "Pdgfra", features = "Pdgfra", expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
 #####################################################################################
 # FindClusters_resolution
-png(filename=paste(output_dir,"coveragePlot.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+png(filename=paste(output_dir,"coveragePlot_OPC.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	p1
 dev.off()
