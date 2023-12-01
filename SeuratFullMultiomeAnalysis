@@ -101,7 +101,7 @@ DimPlot_ATAC_harmony_merge_1  <- DimPlot(ATAC_objects_combined_merge, group.by =
 DimPlot_ATAC_harmony_merge_2  <- DimPlot(ATAC_objects_combined_merge,cols=colour, label = FALSE,reduction="umap")  + ggtitle("Merge ATAC ATAC-M1/M2/M3") + NoLegend()
 ####################################################################################
 save(ATAC_objects_combined_merge, file = "./ATAC_objects_combined_merge.RData")
-save(ATAC_objects_combined_integ, file = "./ATAC_objects_combined_merge.RData")
+save(ATAC_objects_combined_integ, file = "./ATAC_objects_combined_integ.RData")
 #####################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"ATAC_UMAP_visualization_Harmony_PCA.png",sep=""), width = 30, height = 12, res=600, units = "cm")
