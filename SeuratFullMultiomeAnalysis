@@ -204,7 +204,8 @@ png(filename=paste(output_dir,"plot_VlnPlot_multiome_rna_atac.png",sep=""), widt
 dev.off()
 #####################################################################################
 hypotha_bck=hypotha
-save(hypotha, file = "./hypotha3.RData")
+#hypotha=hypotha_bck
+save(hypotha_bck, file = "./hypotha3.RData")
 #####################################################################################
 #save(hypotha, file = "./hypotha_bck.RData") # I stopped here
 load("./hypotha_bck.RData") # I stopped here
@@ -411,7 +412,7 @@ dev.off()
 ## First, process Neurons.
 ## to make the visualization easier, subset Neuron clusters
 https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis
-celltype.names <- levels(hypotha)
+celltype.names <- levels(hypotha_bck)
 neurons        <- subset(hypotha_wnn, idents = "Neurons")
 
 # Quality control 
@@ -421,5 +422,5 @@ neurons <- TSSEnrichment(neurons,assay ="ATAC", tss.positions =grange.counts)
 
 # Create plot
 p1 <- CoveragePlot(object = neurons,region = "Snap25", features = "Snap25", expression.assay = "SCT", idents = "Neurons", extend.upstream = 500,  extend.downstream = 10000)
-p1 <- CoveragePlot(hypotha,region = "Snap25", features = "Snap25", expression.assay = "SCT", idents = celltype.names, extend.upstream = 500,  extend.downstream = 10000)
+p1 <- CoveragePlot(hypotha_bck,region = "Snap25", features = "Snap25", expression.assay = "SCT", idents = celltype.names, extend.upstream = 500,  extend.downstream = 10000)
 #####################################################################################
