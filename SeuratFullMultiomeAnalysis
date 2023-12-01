@@ -411,7 +411,7 @@ dev.off()
 ## First, process Neurons.
 ## to make the visualization easier, subset Neuron clusters
 https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis
-celltype.names <- levels(hypotha_wnn)
+celltype.names <- levels(hypotha)
 neurons        <- subset(hypotha_wnn, idents = "Neurons")
 
 # Quality control 
@@ -420,5 +420,6 @@ neurons <- NucleosomeSignal(neurons)
 neurons <- TSSEnrichment(neurons,assay ="ATAC", tss.positions =grange.counts)
 
 # Create plot
-p1 <- CoveragePlot(object = hypotha_wnn,region = "Snap25", features = "Snap25", expression.assay = "SCT", idents = celltype.names, extend.upstream = 500,  extend.downstream = 10000)
+p1 <- CoveragePlot(object = neurons,region = "Snap25", features = "Snap25", expression.assay = "SCT", idents = "Neurons", extend.upstream = 500,  extend.downstream = 10000)
+p1 <- CoveragePlot(hypotha,region = "Snap25", features = "Snap25", expression.assay = "SCT", idents = celltype.names, extend.upstream = 500,  extend.downstream = 10000)
 #####################################################################################
