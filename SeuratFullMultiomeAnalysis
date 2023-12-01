@@ -392,6 +392,9 @@ hypotha_wnn <- RunUMAP(                                                         
   nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_"  #
 )                                                                                   #
 #####################################################################################
+save(hypotha_wnn, file = "./hypotha_wnn.RData") # Save hypotha_wnn Step 5
+save(hypotha, file = "./hypotha.RData")         # Save hypotha Step 
+#####################################################################################
 # FindClusters_resolution
 hypotha.2 <- RunUMAP(hypotha_wnn, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
 hypotha.2 <- FindClusters(hypotha.2, graph.name = "wsnn", algorithm = 1, resolution = 0.1, verbose = FALSE)
@@ -411,8 +414,8 @@ dev.off()
 #####################################################################################
 ## First, process Neurons.
 ## to make the visualization easier, subset Neuron clusters
-https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis
-celltype.names <- levels(hypotha_bck)
+# https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis
+celltype.names <- levels(hypotha_wnn)
 neurons        <- subset(hypotha_wnn, idents = "Neurons")
 
 # Quality control 
@@ -420,7 +423,13 @@ DefaultAssay(neurons) <- "ATAC"
 neurons <- NucleosomeSignal(neurons)
 neurons <- TSSEnrichment(neurons,assay ="ATAC", tss.positions =grange.counts)
 
+# Get back the ATAC counts
+hypotha_wnn@meta.data$nCount_ATAC<-pbmc.atac.chrom.samples.predicted@meta.data[rownames(hypotha_wnn@meta.data),"nCount_ATAC"]
+
 # Create plot
-p1 <- CoveragePlot(object = neurons,region = "Snap25", features = "Snap25", expression.assay = "SCT", idents = "Neurons", extend.upstream = 500,  extend.downstream = 10000)
-p1 <- CoveragePlot(hypotha_bck,region = "Snap25", features = "Snap25", expression.assay = "SCT", idents = celltype.names, extend.upstream = 500,  extend.downstream = 10000)
+p1 <- p1(object = hypotha_wnn,region = "Snap25", features = "Snap25", expression.assay = "SCT",  window = 50,extend.upstream = 500,  extend.downstream = 10000)
+
+
+
+
 #####################################################################################
