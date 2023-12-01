@@ -408,8 +408,29 @@ png(filename=paste(output_dir,"joint_UMAP_visualization.png",sep=""), width = 24
 dev.off()
 
 #####################################################################################
+## First, process Neurons.
 ## to make the visualization easier, subset Neuron clusters
 https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis
 celltype.names <- levels(hypotha_wnn)
 neurons        <- subset(hypotha_wnn, idents = "Neurons")
-CoveragePlot(neurons, region = 'Snap25', features = 'Snap25', assay = 'ATAC', expression.assay = 'SCT', peaks = FALSE,)
+
+# Quality control 
+DefaultAssay(neurons) <- "ATAC"
+neurons <- NucleosomeSignal(neurons)
+neurons <- TSSEnrichment(neurons,assay ="ATAC", tss.positions =grange.counts)
+
+
+CoveragePlot(neurons, region = 'Snap25', features = 'Snap25', assay = 'ATAC', expression.assay = 'SCT', peaks = FALSE)
+
+CoveragePlot(neurons, region = 'neurons', features = 'Snap25', assay = 'ATAC', expression.assay = 'SCT', peaks = FALSE)
+
+p1 <- CoveragePlot(
+  object = hypotha_wnn,
+  region = "Snap25",
+  features = "Snap25",
+  expression.assay = "SCT",
+  idents = celltype.names,
+  extend.upstream = 500,
+  extend.downstream = 10000
+)
+#####################################################################################
