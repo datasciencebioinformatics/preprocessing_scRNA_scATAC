@@ -419,18 +419,6 @@ DefaultAssay(neurons) <- "ATAC"
 neurons <- NucleosomeSignal(neurons)
 neurons <- TSSEnrichment(neurons,assay ="ATAC", tss.positions =grange.counts)
 
-
-CoveragePlot(neurons, region = 'Snap25', features = 'Snap25', assay = 'ATAC', expression.assay = 'SCT', peaks = FALSE)
-
-CoveragePlot(neurons, region = 'neurons', features = 'Snap25', assay = 'ATAC', expression.assay = 'SCT', peaks = FALSE)
-
-p1 <- CoveragePlot(
-  object = hypotha_wnn,
-  region = "Snap25",
-  features = "Snap25",
-  expression.assay = "SCT",
-  idents = celltype.names,
-  extend.upstream = 500,
-  extend.downstream = 10000
-)
+# Create plot
+p1 <- CoveragePlot(object = hypotha_wnn,region = "Snap25", features = "Snap25", expression.assay = "SCT", idents = celltype.names, extend.upstream = 500,  extend.downstream = 10000)
 #####################################################################################
