@@ -451,9 +451,10 @@ DimPlot_nonNeuroral <- DimPlot(hypotha_wnn, group.by = "ident", label = TRUE, re
 #####################################################################################
 # Calculate NormalizeData
 output_dir="/home/felipe/results_seurat/"  
+markers=c("Caprin2","Sim1","Avp","Oxt")
 # FindClusters_resolution
 png(filename=paste(output_dir,"coveragePlot_OPC.png",sep=""), width = 24, height = 24, res=600, units = "cm")
-	FeaturePlot(hypotha_wnn, features=c("Caprin2","Sim1","Avp","Oxt"))
+	FeaturePlot(hypotha_wnn, features=markers)
 dev.off()
 #####################################################################################
 
