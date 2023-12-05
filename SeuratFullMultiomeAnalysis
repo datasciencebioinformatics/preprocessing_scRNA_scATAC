@@ -470,4 +470,46 @@ png(filename=paste(output_dir,"FeaturePlot.png",sep=""), width = 24, height = 24
 	FeaturePlot(hypotha_wnn, features=markers)
 dev.off()
 #####################################################################################
-all.markers <- FindAllMarkers(object = hypotha.2)
+# Run FindNeighbors
+hypotha.0 <- RunUMAP(hypotha_wnn, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
+hypotha.0 <- FindClusters(hypotha.0, graph.name = "wsnn", algorithm = 1, resolution = 0.7, verbose = FALSE)
+
+# Rename clusters for markers
+hypotha.3=JoinLayers(hypotha.0, assay = "RNA")
+all.markers <- FindAllMarkers(object = hypotha.3)
+
+# Third, identify neurons and non-neurons
+hypotha.3$Cluster=as.vector(Idents(hypotha.3))
+hypotha.3$Cluster[which((names(hypotha.3$Cluster) %in% non_neurons_id))]<-"Non-neurons"
+hypotha.3$Cluster=c(sort(as.numeric(unique(hypotha.3$Cluster))),"Non-neurons")
+
+# Calculate allmarkers
+all.markers[which(rownames(all.markers)=="Caprin2"),]
+all.markers[which(rownames(all.markers)=="Sim1"),]
+all.markers[which(rownames(all.markers)=="Avp"),]
+all.markers[which(rownames(all.markers)=="Oxt"),]
+
+# Cluster names
+cluster_names=as.vector(hypotha.3$Cluster)
+
+# Set name of the markers
+cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Caprin2"),"cluster"])]<-"Caprin2"
+cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Sim1"),"cluster"])]<-"Sim1"
+cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Avp"),"cluster"])]<-"Avp-Oxt"
+cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Oxt"),"cluster"])]<-"Avp-Oxt"
+
+# Set names
+names(cluster_names)<-names(hypotha.3$Cluster)
+
+# Rename clusters
+hypotha.3$Cluster<-factor(cluster_names)
+
+# Create the plots
+DimPlot_clusters<-DimPlot(hypotha_wnn, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap") + scale_fill_manual(values=colours) + ggtitle("Multimodal RNA+ATC M1/M2") 
+DimPlot_neuronal_clusters<-DimPlot(hypotha.2, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap")  + ggtitle("Multimodal RNA+ATC M1/M2 Neuronal clusters") 
+DimPlot_cluster_names<-DimPlot(hypotha.3, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap")  + ggtitle("Multimodal RNA+ATC M1/M2 markers") 
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"DimPlot_cluster_names.png",sep=""), width = 12, height = 12, res=600, units = "cm")
+	DimPlot_cluster_names
+dev.off()
