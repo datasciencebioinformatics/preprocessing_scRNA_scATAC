@@ -432,3 +432,4 @@ p1 <- CoveragePlot(object = hypotha_wnn,region = "Pdgfra", features = "Pdgfra", 
 png(filename=paste(output_dir,"coveragePlot_OPC.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	p1
 dev.off()
+#####################################################################################
