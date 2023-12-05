@@ -458,7 +458,7 @@ DimPlot_clusters<-DimPlot(hypotha_wnn, label = TRUE, repel = TRUE, group.by = "i
 DimPlot_neuronal_clusters<-DimPlot(hypotha.2, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap")  + ggtitle("Multimodal RNA+ATC M1/M2 Neuronal clusters") 
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"joint_Dimplos_visualization.png",sep=""), width = 32, height = 16, res=600, units = "cm")
+png(filename=paste(output_dir,"joint_Dimplots_visualization.png",sep=""), width = 32, height = 16, res=600, units = "cm")
 	grid.arrange(DimPlot_clusters,DimPlot_neuronal_clusters,ncol = 2)
 dev.off()
 
@@ -466,8 +466,8 @@ dev.off()
 markers=c("Caprin2","Sim1","Avp","Oxt")
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"coveragePlot_OPC.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+png(filename=paste(output_dir,"FeaturePlot.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	FeaturePlot(hypotha_wnn, features=markers)
 dev.off()
 #####################################################################################
-
+all.markers <- FindAllMarkers(object = hypotha.2)
