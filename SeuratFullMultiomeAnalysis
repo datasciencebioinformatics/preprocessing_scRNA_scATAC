@@ -481,13 +481,6 @@ all.markers <- FindAllMarkers(object = hypotha.3)
 # Third, identify neurons and non-neurons
 hypotha.3$Cluster=as.vector(Idents(hypotha.3))
 hypotha.3$Cluster[which((names(hypotha.3$Cluster) %in% non_neurons_id))]<-"Non-neurons"
-hypotha.3$Cluster=c(sort(as.numeric(unique(hypotha.3$Cluster))),"Non-neurons")
-
-# Calculate allmarkers
-all.markers[which(rownames(all.markers)=="Caprin2"),]
-all.markers[which(rownames(all.markers)=="Sim1"),]
-all.markers[which(rownames(all.markers)=="Avp"),]
-all.markers[which(rownames(all.markers)=="Oxt"),]
 
 # Cluster names
 cluster_names=as.vector(hypotha.3$Cluster)
@@ -501,7 +494,7 @@ cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)
 # Set names
 names(cluster_names)<-names(hypotha.3$Cluster)
 
-# Rename clusters
+# Set names
 hypotha.3$Cluster<-factor(cluster_names)
 
 # Create the plots
