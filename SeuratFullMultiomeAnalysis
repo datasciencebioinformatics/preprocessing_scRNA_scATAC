@@ -439,21 +439,21 @@ dev.off()
 
 
 #####################################################################################
+DefaultAssay(hypotha_wnn)<-"RNA"
 ident_sub_population=as.vector(Idents(hypotha_wnn))
 ident_sub_population[ident_sub_population!="Neurons"]<-"Non-neurons"
 names(ident_sub_population)<-names(Idents(hypotha_wnn))
 Idents(hypotha_wnn)<-ident_sub_population
 
-#####################################################################################
+Cells(hypotha.2)[which(Cells(hypotha.2) %in% neurons_id)]
+####################################################################################
 DimPlot_nonNeuroral <- DimPlot(hypotha_wnn, group.by = "ident", label = TRUE, reduction = "wnn.umap",cols=colour) + ggtitle("WNN M1/M2") #+ NoLegend()
 #####################################################################################
 # Calculate NormalizeData
-
-
-DefaultAssay(hypotha_wnn)<-"RNA"
 output_dir="/home/felipe/results_seurat/"  
 # FindClusters_resolution
 png(filename=paste(output_dir,"coveragePlot_OPC.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	FeaturePlot(hypotha_wnn, features=c("Caprin2","Sim1","Avp","Oxt"))
 dev.off()
 #####################################################################################
+
