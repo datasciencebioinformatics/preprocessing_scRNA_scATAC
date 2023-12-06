@@ -525,10 +525,20 @@ neurons$Cluster<-as.vector(Idents(neurons))
 neurons=JoinLayers(neurons, assay = "RNA")
 all.markers <- FindAllMarkers(object = neurons,test.use="t")
 
+# Third, identify neurons and non-neurons
+hypotha.2<-hypotha_wnn
+hypotha.2$Cluster=as.vector(Idents(hypotha.2))
+# Second, identify neurons and non-neurons
+ident_sub_population=hypotha.2$Cluster
+neurons_id=names(ident_sub_population[ident_sub_population=="Neurons"])
+non_neurons_id=names(ident_sub_population[ident_sub_population!="Neurons"])
+hypotha.2$Cluster[which((names(hypotha.2$Cluster) %in% non_neurons_id))]<-"Non-neurons"
+
+DimPlot_cluster<-DimPlot(hypotha.2, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap") + scale_fill_manual(values=colours) + ggtitle("Multimodal RNA+ATC M1/M2") 
 DimPlot_neuronal<-DimPlot(neurons, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap") + scale_fill_manual(values=colours) + ggtitle("Multimodal RNA+ATC M1/M2") 
 
 # Cluster names
-cluster_names=as.vector(neuronsCluster)
+cluster_names=as.vector(neurons$Cluster)
 
 # Set name of the markers
 cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Caprin2"),"cluster"])]<-"Caprin2"
@@ -537,9 +547,55 @@ cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)
 cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Oxt"),"cluster"])]<-"Avp-Oxt"
 
 # Set names
-names(cluster_names)<-names(hypotha.3$Cluster)
+names(cluster_names)<-names(neurons$Cluster)
 
 # Set names
-hypotha.3$Cluster<-factor(cluster_names)
+neurons$Cluster<-factor(cluster_names)
+
+DimPlot_markers<-DimPlot(neurons, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap") + scale_fill_manual(values=colours) + ggtitle("Multimodal RNA+ATC M1/M2") 
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"joint_Dimplots_visualization.png",sep=""), width = 45, height = 15, res=600, units = "cm")
+	grid.arrange(DimPlot_cluster,DimPlot_neuronal,DimPlot_markers ,ncol = 3)
+dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#####################################################################################
+# Analyse neurons
+#####################################################################################
+# add the ATAC-seq assay
+grange.counts <- StringToGRanges(rownames(neurons), sep = c(":", "-"))
+
+# Use grange
+grange.use <- seqnames(neurons) %in% standardChromosomes(neurons)
+
+# Quality control 
+DefaultAssay(neurons) <- "ATAC"
+neurons <- NucleosomeSignal(neurons)
+neurons <- TSSEnrichment(neurons,assay ="ATAC", tss.positions =grange.counts)
+
+# Get back the ATAC counts
+neurons@meta.data$nCount_ATAC<-neurons@meta.data[rownames(neurons@meta.data),"nCount_ATAC"]
+
+# Create plot
+p1 <- CoveragePlot(object = hypotha_wnn,region = "Pdgfra", features = "Pdgfra", expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
+#####################################################################################
+# FindClusters_resolution
+png(filename=paste(output_dir,"coveragePlot_OPC.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	p1
+dev.off()
 
 
