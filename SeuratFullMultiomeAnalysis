@@ -506,3 +506,10 @@ DimPlot_cluster_names<-DimPlot(hypotha.3, label = TRUE, repel = TRUE, group.by =
 png(filename=paste(output_dir,"DimPlot_cluster_names.png",sep=""), width = 12, height = 12, res=600, units = "cm")
 	DimPlot_cluster_names
 dev.off()
+
+#####################################################################################
+## First, process Neurons.
+## to make the visualization easier, subset Neuron clusters
+# https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis
+celltype.names <- levels(hypotha_wnn)
+neurons        <- subset(hypotha_wnn, idents = "Neurons")
