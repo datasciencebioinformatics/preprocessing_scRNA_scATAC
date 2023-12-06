@@ -523,7 +523,7 @@ neurons$Cluster<-as.vector(Idents(neurons))
 
 # Rename clusters for markers
 neurons=JoinLayers(neurons, assay = "RNA")
-all.markers <- FindAllMarkers(object = neurons)
+all.markers <- FindAllMarkers(object = neurons,test.use="t")
 
 DimPlot_neuronal<-DimPlot(neurons, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap") + scale_fill_manual(values=colours) + ggtitle("Multimodal RNA+ATC M1/M2") 
 
