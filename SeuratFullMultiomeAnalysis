@@ -560,11 +560,6 @@ png(filename=paste(output_dir,"joint_Dimplots_visualization.png",sep=""), width 
 dev.off()
 
 
-# FindClusters_resolution
-png(filename=paste(output_dir,"DimPlot_neuronal.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	DimPlot_neuronal
-dev.off()
-
 
 
 
