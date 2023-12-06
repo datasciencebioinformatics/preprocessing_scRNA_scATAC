@@ -525,10 +525,6 @@ neurons$Cluster<-as.vector(Idents(neurons))
 neurons=JoinLayers(neurons, assay = "RNA")
 all.markers <- FindAllMarkers(object = neurons)
 
-# Third, identify neurons and non-neurons
-neurons$Cluster=as.vector(Idents(neurons))
-neurons$Cluster[which((names(neurons$Cluster) %in% non_neurons_id))]<-"Non-neurons"
-
 DimPlot_neuronal<-DimPlot(neurons, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap") + scale_fill_manual(values=colours) + ggtitle("Multimodal RNA+ATC M1/M2") 
 
 # Cluster names
