@@ -590,8 +590,20 @@ neurons <- TSSEnrichment(neurons,assay ="ATAC", tss.positions =grange.counts)
 # Get back the ATAC counts
 neurons@meta.data$nCount_ATAC<-neurons@meta.data[rownames(neurons@meta.data),"nCount_ATAC"]
 
+# build a joint neighbor graph using both assays
+neurons <- FindMultiModalNeighbors(object = neurons, reduction.list = list("pca", "lsi"), dims.list = list(1:20, 2:50),k.nn = 50)
+
+# Run Umap
+neurons <- RunUMAP(neurons, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
+
+# Find clusters
+neurons <- FindClusters(neurons, graph.name = "wsnn", algorithm = 1, resolution = 0.7, verbose = FALSE)
+
+# Save clusters
+neurons$Cluster<-as.vector(Idents(neurons))
+
 # Create plot
-p1 <- CoveragePlot(object = hypotha_wnn,region = "Pdgfra", features = "Pdgfra", expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
+p1 <- CoveragePlot(object = hypotha_wnn,region = c("Caprin2","Sim1","Avp","Oxt"), features = neurons$Cluster, expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
 #####################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"coveragePlot_OPC.png",sep=""), width = 24, height = 24, res=600, units = "cm")
