@@ -513,3 +513,37 @@ dev.off()
 # https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis
 celltype.names <- levels(hypotha_wnn)
 neurons        <- subset(hypotha_wnn, idents = "Neurons")
+
+# Run FindNeighbors
+# build a joint neighbor graph using both assays
+neurons <- FindMultiModalNeighbors(object = neurons, reduction.list = list("pca", "lsi"), dims.list = list(1:20, 2:50),k.nn = 50)
+neurons <- RunUMAP(neurons, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_")
+neurons <- FindClusters(neurons, graph.name = "wsnn", algorithm = 1, resolution = 0.7, verbose = FALSE)
+neurons$Cluster<-as.vector(Idents(neurons))
+
+# Rename clusters for markers
+neurons=JoinLayers(neurons, assay = "RNA")
+all.markers <- FindAllMarkers(object = neurons)
+
+# Third, identify neurons and non-neurons
+neurons$Cluster=as.vector(Idents(neurons))
+neurons$Cluster[which((names(neurons$Cluster) %in% non_neurons_id))]<-"Non-neurons"
+
+DimPlot_neuronal<-DimPlot(neurons, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap") + scale_fill_manual(values=colours) + ggtitle("Multimodal RNA+ATC M1/M2") 
+
+# Cluster names
+cluster_names=as.vector(neuronsCluster)
+
+# Set name of the markers
+cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Caprin2"),"cluster"])]<-"Caprin2"
+cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Sim1"),"cluster"])]<-"Sim1"
+cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Avp"),"cluster"])]<-"Avp-Oxt"
+cluster_names[cluster_names == as.vector(all.markers[which(rownames(all.markers)=="Oxt"),"cluster"])]<-"Avp-Oxt"
+
+# Set names
+names(cluster_names)<-names(hypotha.3$Cluster)
+
+# Set names
+hypotha.3$Cluster<-factor(cluster_names)
+
+
