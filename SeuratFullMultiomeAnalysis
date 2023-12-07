@@ -581,6 +581,12 @@ dev.off()
 #####################################################################################
 # Analyse neurons
 #####################################################################################
+## First, process Neurons.
+## to make the visualization easier, subset Neuron clusters
+# https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis
+celltype.names <- levels(hypotha_wnn)
+neurons        <- subset(hypotha_wnn, idents = "Neurons")
+
 # add the ATAC-seq assay
 grange.counts <- StringToGRanges(rownames(neurons), sep = c(":", "-"))
 
