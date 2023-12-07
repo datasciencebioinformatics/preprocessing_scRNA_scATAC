@@ -580,6 +580,7 @@ dev.off()
 
 #####################################################################################
 # Analyse neurons
+load("./hypotha_wnn.RData")
 #####################################################################################
 ## First, process Neurons.
 ## to make the visualization easier, subset Neuron clusters
@@ -636,5 +637,8 @@ dev.off()
 png(filename=paste(output_dir,"coveragePlot_Caprin2.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	p2
 dev.off()
+#####################################################################################
+# Vou usar o dataset independente para anotar os clusters 9 e 10 de forma automática e ver se conseguimos magno celulares : 
+#Campbell, J. N., E. Z. Macosko, H. Fenselau, T. H. Pers, A. Lyubetskaya, D. Tenen, M. Goldman, et al. 2017. “A molecular census of arcuate hypothalamus and median eminence cell types.” Nat. Neurosci. 20 (3): 484–96.
 
 
