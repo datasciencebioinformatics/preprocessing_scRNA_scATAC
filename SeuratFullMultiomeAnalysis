@@ -622,6 +622,7 @@ cluster=sort(unique(as.numeric(as.vector(neurons$Cluster))))
 p1 <- CoveragePlot(object = neurons,region = "Oxt", features ="Oxt", expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
 p2 <- CoveragePlot(object = neurons,region = "Caprin2", features ="Caprin2", expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
 p3 <- CoveragePlot(object = neurons,region = "Avp", features ="Avp", expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
+p4 <- CoveragePlot(object = neurons,region = c("Avp","Caprin2","Oxt"), features =c("Avp","Caprin2","Oxt"), expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
 #####################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"coveragePlot_Oxt.png",sep=""), width = 24, height = 24, res=600, units = "cm")
@@ -637,14 +638,25 @@ dev.off()
 png(filename=paste(output_dir,"coveragePlot_Caprin2.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	p2
 dev.off()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"coveragePlot_all.png",sep=""), width = 60, height = 40, res=600, units = "cm")
+	p4
+dev.off()
 #####################################################################################
 # Vou usar o dataset independente para anotar os clusters 9 e 10 de forma automática e ver se conseguimos magno celulares : 
 output_dir="/home/felipe/results_seurat/"       
 # FindClusters_resolution
 DefaultAssay(neurons) <- "RNA"
 png(filename=paste(output_dir,"FeaturePlot_neurons.png",sep=""), width = 36, height = 18, res=600, units = "cm")
-	FeaturePlot(neurons, features=c("Avp","Caprin2"),label = TRUE, blend=TRUE)
+	FeaturePlot(neurons, features=c("Avp","Caprin2"),label = TRUE, blend=TRUE,reduction = "wnn.umap")
 dev.off()
+# feature plot neurons
+dimplot_neurons<-DimPlot(neurons, label = TRUE, repel = TRUE, group.by = "Cluster", reduction = "wnn.umap") + scale_fill_manual(values=colours) + ggtitle("Nueronal cells wnn M1/M2") 
+png(filename=paste(output_dir,"Dimplot_neurons.png",sep=""), width = 14, height = 14, res=600, units = "cm")
+	dimplot_neurons
+dev.off()
+
 
 
 
