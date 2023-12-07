@@ -639,10 +639,14 @@ png(filename=paste(output_dir,"coveragePlot_Caprin2.png",sep=""), width = 24, he
 dev.off()
 #####################################################################################
 # Vou usar o dataset independente para anotar os clusters 9 e 10 de forma automática e ver se conseguimos magno celulares : 
+output_dir="/home/felipe/results_seurat/"       
 # FindClusters_resolution
-png(filename=paste(output_dir,"FeaturePlot_neurons.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+DefaultAssay(neurons) <- "RNA"
+png(filename=paste(output_dir,"FeaturePlot_neurons.png",sep=""), width = 36, height = 18, res=600, units = "cm")
 	FeaturePlot(neurons, features=c("Avp","Caprin2"),label = TRUE, blend=TRUE)
 dev.off()
+
+
 
 
 
