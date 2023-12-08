@@ -1,0 +1,38 @@
+<!-- GETTING STARTED -->
+
+# Introduction
+A multiome analysis of sn-RNA and sn-ATAC of hypothalamus cells.
+
+# Test data
+Two hypotlamus samples from mouse [1] were used as test data, each contaning both RNA and ATAC.
+
+# Goals
+The main goal is to identify hypothalamus celltypes and investigate sub-population. The bioinformatics goal is to adapt Seurat [2] piepeline to be used in samples of hypothalamus.
+
+#  Analysis
+### Quality control
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgscA9dYsOLuoRLlwRgy_UotYX6TgAjv0TAgS4jbXBi0Qa01Ybnt_fpQGKA9Mh7neWJodtCm8nVrr3SW8qv3yl53jC4FcNrGxJ3STtC3cZazpoA948amr5d_eV1vH0GoHRkevw-QXTokzgTWaTggwaisbK13lj3sP3KVOZKqbqsunN5MYGNS9bYamkTDRc/s5669/plot_VlnPlot_multiome_rna_atac.png)
+
+### Number of cases per age group and per sex (male/female)
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhgv7y0jBPg2idRTlitSnGjzQf7WO-xOg66QlnvOa8wBRi0PuTyekqSpjQEHr7ze4ra03N3g2t-6N7X2Q8MGJfjtgEepL6NTlUh-UhFkmLMY_XQz634SryUaEw7TkTaEiutdZb1NWv1PdJ5qYFrZ1vJMOdgRmtN7D0J-5w5Xnt0zeFeiFaTNXvqQfFR/s2400/plot_number_of_cases_per_age_group.png)
+
+### Number of cases per city and per sex (male/female)
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjK2oxEZS-3TTyXxXCkobNhZD7FkA9CyBCZrD1vuZquiSw-Mak3BjJaTir2rjR4zbV_jBrNpxC_KJR5CwT8akWkz1YlPaMVAt6XoJxADPWJMbIkgUBXWUdpmM9LsvEqaqhnkzulq7-04EBNKtbhPtcwVjSPfykHx9ZfKtlDlYLWIQTWoUuQbFkl4zPy/s2400/plot_Numero%20de_casos_por_cidade.png)
+
+### Temporal distribution of lineages
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEja2vS2rgCdAnwyOgzDPt1vPkGv2cwVJVXPHRFhInu5GNx7he02_VVQ6jcgnu8ZgOaxbZo_lPQut3-JKq46JZbobGasSyuBqnjPZsqdMt5EQ8dEd_RcD7e0gQtx98RByNXbAtTpNvJ6EN0La400vOpSfeFnMgU-uE1ERSwz8P0Xwvv_798PA0-atrpL/s3000/plot_temporal_frequency_of_lineages.png)
+
+### Scheme for frequency of lineages
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjhSFf6-usViD9su19Fmpu0h1kj-f-ZuZ_JCpodF3DaMFea4VQr_4Nen9TuUY57TEARLYg8sIS6amWQzvCyO0rxwJ5Zft6OYmpf1oN7_qJtLXNvn4A7oTjzStW9nHrmoHlGN8Fn-XjXdwiws4JS0jkg1ayokqpu5TVsvATl5hlQciBybu6a7zGNCkWQ/s3000/plot_scheme_of_lineage_distribution.png)
+
+### Principal component of samples per lineage
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiwOwkFtnVUK5QNCzPX_kOlf_p50Xv1sMwOTdOykSHcu0W6Fd8_iyBVk5qVGNPKH5bVGwXMAZZwGoFtHyvB_gYGDIpoBPCWcwe-XGY5b4plW7KJJXMMyYCJngZq1RDLKr5wOfbtKD7RDr7Qv0ZtRu6ZoiPQs4TkeI-kwbY-hJ39K_FeJGx3HI3yWsKg/s2400/PCA_lineages.png)
+
+### Outlier analyses
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgk5kpxFmwYklOj-nrhCM14cGBZsR1hDfbuR8bkz3wFsXmcjSEDOyzGyUx7imVB2BqmHeIreAOSmoAoBdlY6HipS_KQLjP0qR7xM4HX9EXqa56jBZ8FVLFK4fa-SOVPdnVlauxnHSXk_IaAjI15obAU6_0NH0C5JW-haTSC356Xw-546asFB3naoW1O/s2400/PCA_outliners.png)
