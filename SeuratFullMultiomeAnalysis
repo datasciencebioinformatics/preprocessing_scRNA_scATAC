@@ -432,16 +432,20 @@ png(filename=paste(output_dir,"coveragePlot_OPC.png",sep=""), width = 24, height
 dev.off()
 #####################################################################################
 p1 <- CoveragePlot(object = hypotha_wnn,region = "Pdgfra", features = "Pdgfra", expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
-
 p2 <- CoveragePlot(object = hypotha_wnn,region = "Oxt", features = "Oxt", expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
-
 p3 <- CoveragePlot(object = hypotha_wnn,region = "Caprin2", features = "Caprin2", expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
-
 p4 <- CoveragePlot(object = hypotha_wnn,region = c("Caprin2","Oxt","Caprin2"), features = c("Caprin2","Oxt","Caprin2"), expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"coveragePlot_all.png",sep=""), width = 60, height = 15, res=600, units = "cm")
 	p4
+dev.off()
+#####################################################################################
+pall <- CoveragePlot(object = hypotha_wnn,region = c("Snap25","Agt","Ctss","Pdgfra","Mbp","Mobp"), features = c("Snap25","Agt","Ctss","Pdgfra","Mbp","Mobp"), expression.assay = "SCT",  window = 100,extend.upstream = 500,  extend.downstream = 10000, show.bulk=TRUE)
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"coveragePlot_tipo_celular.png",sep=""), width = 60, height = 40, res=600, units = "cm")
+	pall
 dev.off()
 #####################################################################################
 # Analyse sub-clusters.
