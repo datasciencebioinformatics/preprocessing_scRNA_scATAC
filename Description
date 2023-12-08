@@ -14,13 +14,16 @@ The main goal is to identify hypothalamus celltypes and investigate sub-populati
 
 ![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgscA9dYsOLuoRLlwRgy_UotYX6TgAjv0TAgS4jbXBi0Qa01Ybnt_fpQGKA9Mh7neWJodtCm8nVrr3SW8qv3yl53jC4FcNrGxJ3STtC3cZazpoA948amr5d_eV1vH0GoHRkevw-QXTokzgTWaTggwaisbK13lj3sP3KVOZKqbqsunN5MYGNS9bYamkTDRc/s5669/plot_VlnPlot_multiome_rna_atac.png)
 
-### Number of cases per age group and per sex (male/female)
+### Merging samples
+Computational performance of two ways for merging the samples were analysed, the first aggregating sample with cellranger aggr. The second using Serat function merge.
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhgv7y0jBPg2idRTlitSnGjzQf7WO-xOg66QlnvOa8wBRi0PuTyekqSpjQEHr7ze4ra03N3g2t-6N7X2Q8MGJfjtgEepL6NTlUh-UhFkmLMY_XQz634SryUaEw7TkTaEiutdZb1NWv1PdJ5qYFrZ1vJMOdgRmtN7D0J-5w5Xnt0zeFeiFaTNXvqQfFR/s2400/plot_number_of_cases_per_age_group.png)
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiRRiUq-rF_ePp4cU2obk5zRtZ6b0RFbBrtvtnFeq_DLuzZ1gFOUEFBpYTrlEya9wPWfl7dcNtPgM2trXw9SnJeQl6flGU4cSekk2zo9IMaJ-qSAz-WH9DjuvItnVGg540B8nbL5fs37NAH_JFaxedc4-TPOLOCmLUYPqqtzw0lnCeOWe02p9lBmRjTyhQ/s3779/DimPlot_comparisson_aggr_combined.png)
 
-### Number of cases per city and per sex (male/female)
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjK2oxEZS-3TTyXxXCkobNhZD7FkA9CyBCZrD1vuZquiSw-Mak3BjJaTir2rjR4zbV_jBrNpxC_KJR5CwT8akWkz1YlPaMVAt6XoJxADPWJMbIkgUBXWUdpmM9LsvEqaqhnkzulq7-04EBNKtbhPtcwVjSPfykHx9ZfKtlDlYLWIQTWoUuQbFkl4zPy/s2400/plot_Numero%20de_casos_por_cidade.png)
+### Analysis of RNA, ATAC and multimoda RNA+ATAC samples
+A reference RNA expression map was used (top left figure) to identify the celltypes. Anchor cells were used to annotate ATAC map and to transfer annotation to multimodal RNA+ATAC map.
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj7ZjmkAGlaVnro5rji3ynMWDHu8B28bdrcMmrV42YLuAEADUWC4yqxlx8GCivVDFWZYYA5DkxycIjnLwVZWBiZc73dz0cSl4LWfsqFcIp3m1PtytUqE_Vn_6Pi7IlUlEmW22d2NmJLglDWd_6-CUO-4TBcLwKHSMR8c7IVzlHsdRnTXfWJFSG4L5Ll73s/s1600/WhatsApp%20Image%202023-11-30%20at%2005.39.52.jpeg)
 
 ### Temporal distribution of lineages
 
