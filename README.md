@@ -40,3 +40,7 @@ Neuronal sub-poppulations were investigated for magnocellular population using m
 ### Investigating magnocellular population among neuronal cells
 Noteworthy, clusters 9 and 10 can be considered for further investigation for magnocellular populations.
 ![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXiMA9LU7fJzyhbbaiexFzwh2pv2SKeC2PsBLLXuWrCcMOgYn9yXAhk3dV3nwHbxuQ5iuMf8ZYtPgic2AYTK3n0Ah-3fJ6kpLrEgCxPmHReUqrTcPySmWj1GbVt89FEzfPLTtUufzNLZGVg7lmba9Y7rkJnuUufKAUhh9MR3YzsULhB7rcRrzyyd4IwCw/s1600/WhatsApp%20Image%202023-12-07%20at%2011.03.33.jpeg)
+
+### References 
+[1] Integrative single-cell characterization of hypothalamus sex-differential and obesity-associated genes and regulatory elements HP Nguyen, CSY Chan, DL Cintron, R Sheng, L Harshman, M Nobuhara, A Ushiki, C Biellak… bioRxiv, 2022•biorxiv.org
+[2] Seurat. Integrated analysis of multimodal single-cell data. Cell. Yuhan Hao et. al.
