@@ -1,43 +1,114 @@
-<!-- GETTING STARTED -->
+##########################################################################################
+# preprocessing_scRNA_scATAC
+    Workflow for pre-processing sequencing files for Integrative sc-RNA and sc-ATAC. This step focuses on the installation, preparation and execution of Cellranger.
+    
+#### Step 1 - Installation of samtools and python packages
+    sudo apt install python3-docopt
+    sudo apt install python3-numpy
+    sudo apt-get install samtools
+    sudo apt-get install biobambam2
 
-# Introduction
-A multiome analysis of sn-RNA and sn-ATAC of hypothalamus cells.
+# Step 2 - CellRanger Installation
+# Download CellRanger follozing instructions from :
+    https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest#cr-wget
+    https://support.10xgenomics.com/single-cell-atac/software/downloads/latest
+    
+# Download reference gene data and corresponding genome
+    wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf.gz
+    wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/gencode.v43.annotation.gtf.gz
+    wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/GRCh38.p13.genome.fa.gz
+    wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M32/GRCm39.genome.fa.gz
+    wget https://cf.10xgenomics.com/supp/cell-atac/refdata-cellranger-arc-GRCh38-2020-A-2.0.0.tar.gz
+    wget https://cf.10xgenomics.com/supp/cell-atac/refdata-cellranger-arc-mm10-2020-A-2.0.0.tar.gz
 
-# Test data
-Two hypotlamus samples from mouse [1] were used as test data, each contaning both RNA and ATAC.
+# Step 3 - Prepare database and tool directory
+## Create dir
 
-# Goals
-The main goal is to identify hypothalamus celltypes and investigate sub-population. The bioinformatics goal is to adapt Seurat [2] piepeline to be used in samples of hypothalamus.
+    mkdir /home/cellranger/ #### create cellranger folder
+    mkdir /home/cellranger/database/ #### create cellranger database
 
-#  Analysis
-### Quality control
+## Go to cellranger folder
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgscA9dYsOLuoRLlwRgy_UotYX6TgAjv0TAgS4jbXBi0Qa01Ybnt_fpQGKA9Mh7neWJodtCm8nVrr3SW8qv3yl53jC4FcNrGxJ3STtC3cZazpoA948amr5d_eV1vH0GoHRkevw-QXTokzgTWaTggwaisbK13lj3sP3KVOZKqbqsunN5MYGNS9bYamkTDRc/s5669/plot_VlnPlot_multiome_rna_atac.png)
+    cd /home/cellranger/ #### go to cellranger folder
+    chmod a+x -R /home/cellranger/ #### grant sudo permissiom folder-
 
-### Merging samples
-Computational performance of two ways for merging the samples were analysed, the first aggregating sample with cellranger aggr. The second using Serat function merge.
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiRRiUq-rF_ePp4cU2obk5zRtZ6b0RFbBrtvtnFeq_DLuzZ1gFOUEFBpYTrlEya9wPWfl7dcNtPgM2trXw9SnJeQl6flGU4cSekk2zo9IMaJ-qSAz-WH9DjuvItnVGg540B8nbL5fs37NAH_JFaxedc4-TPOLOCmLUYPqqtzw0lnCeOWe02p9lBmRjTyhQ/s3779/DimPlot_comparisson_aggr_combined.png)
+## Move files to correspondent directories
 
-### Analysis of RNA, ATAC and multimodal RNA+ATAC samples
-A reference RNA expression map was used (top left figure) to identify the celltypes. Anchor cells were used to annotate ATAC map and to transfer annotation to multimodal RNA+ATAC map.
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj7ZjmkAGlaVnro5rji3ynMWDHu8B28bdrcMmrV42YLuAEADUWC4yqxlx8GCivVDFWZYYA5DkxycIjnLwVZWBiZc73dz0cSl4LWfsqFcIp3m1PtytUqE_Vn_6Pi7IlUlEmW22d2NmJLglDWd_6-CUO-4TBcLwKHSMR8c7IVzlHsdRnTXfWJFSG4L5Ll73s/s1600/WhatsApp%20Image%202023-11-30%20at%2005.39.52.jpeg)
+    mv ./gencode.vM32.chr_patch_hapl_scaff.annotation.gtf.gz /home/cellranger/database/ #### Move mouse annotation to database folder
+    mv ./gencode.v43.annotation.gff3.gz /home/cellranger/database/ #### Move human annotation to database folder
+    mv ./GRCh38.p13.genome.fa.gz /home/cellranger/database/ #### Move mouse genome to database folder
+    mv ./GRCm39.genome.fa.gz /home/cellranger/database/ #### Move human genome to database folder
+    mv ./cellranger-6.1.2.tar.gz /home/cellranger/ #### Move cellranger file to folder
+    mv ./cellranger-atac-2.1.0.tar.gz /home/cellranger/ #### Move cellranger file to folder
 
-### sn-RNA-seq exp. and sn-ATAC-seq peak track for celltypes
-All celltypes were considered for analysis as well as the corresponding markers identifying each. Noteworthy, Pdgfra is a good marker for OPCs in this testdata.
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyAKrkkNiN4apyHcn6M32WX2vGaKSaRKkmUEhf_Vm-O_pYWEYcD8FmxvMTh1fqAtSSraad94VBg-rqKWGHbr6Y7gUks78BqjN8T0cLnW-_wFfd9i929YDrjV-TLbzyNNktVM81PPFWhas-u4ce3RD8BMWAtt6eRAdIdFsFoh-YYzsdVO9_ZsabZGXqctQ/s1600/WhatsApp%20Image%202023-12-08%20at%2004.09.56%20(1).jpeg)
+# Step 4 - Install CellRanger :
+## Untar cell cellranger
 
-### UMAPs of neuronal cells
-We next investigated sub-popualations of neuronal cells. In the paper describind the data [1], authors described 33 neuronal su-bpopulations using 6 mouse samples and 100% of the filtered cells. In our test case, ~17 clusters are seen.
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0ekzzRaYkGnAkd3jzQ6TQR8q9qe4glYkTivGz-j9RuqxhGdJYv524U4rUJgHuqVPfTaKadqs4aAMRYhoO9NlqNb4SMCqciVU5LpdblkoN2jSbtkWwSkRyfWzWAWdmo5eNSPaLs0Ui1fxl_CcOPXVuK8RZU2VkGN5QoHobBNrMsMYZdNilomAYS7zo7b0/s1600/WhatsApp%20Image%202023-12-06%20at%2012.34.52%20(1).jpeg)
+    cd /home/cellranger/
+    tar -xzvf cellranger-6.1.2.tar.gz #### unzip cellranger
+    tar -xzvf cellranger-atac-2.1.0.tar.gz
 
-### Clusters of neuronal cells
-Neuronal cells were sublected for clusterring and further investigation.
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj-QNdCjidcGhZUtM8cs5LxGCiVdqEBRRdzgaBbQDRSeXGi2P4ai_lgY89Kxk13lwFDYiFP04gdvZddP_bQuQhd48NbMRQui8TV-xFD_UwM2yS325TTIx6wc8o42xwaTMxm3n-hf6O0pq4hhp_Xd7qQwCkZYs1ozy5ALJAWn2PNs7mCMEfZW3bjxs-Cxy0/s1600/WhatsApp%20Image%202023-12-06%20at%2015.49.02.jpeg)
+## Untar annotation tar.gz
 
-### sn-RNA-seq exp. and sn-ATAC-seq peak track for neuronal clusters
-Neuronal sub-poppulations were investigated for magnocellular population using markers Oxt, Avp and Caprin2. Interesting, clusters 9 and 10 show both, differential ATAC peaks and differential RNA expr.
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjFYH9giY0Cr217eXCMdLjweQT8F78zZh6q8dVhVBzwUyy2wpl9C3D_HNo-FY9fk8JG_4iWrF12xExHqWwcFIp7Oxqp7JoeCFmQZ4P8gHa-pxLXNGAhGDt6gcWP66CQUT91WYd5jE9OMSil5ZGqadYpfun7WE_tu2cbf-p4RF9LOrr2hx9LgSDlTYsIdEM/s1600/WhatsApp%20Image%202023-12-07%20at%2007.32.07%20(1).jpeg)
+    gzip -d gencode.v43.annotation.gtf.gz #### unzip gencode.v43.annotation.gtf
+    gzip -d gencode.vM32.chr_patch_hapl_scaff.annotation.gtf.gz #### unzip gencode.vM32.annotation.gtf
+    gzip -d GRCm39.genome.fa.gz #### unzip GRCm39.genome.fa.gz
+    gzip -d GRCh38.p13.genome.fa.gz #### unzip GRCh38.p13.genome.fa
+    tar -xzvf refdata-cellranger-arc-GRCh38-2020-A-2.0.0.tar.gz
+    tar -xzvf refdata-cellranger-arc-mm10-2020-A-2.0.0.tar.gz
 
-### Investigating magnocellular population among neuronal cells
-Noteworthy, clusters 9 and 10 can be considered for further investigation for magnocellular populations.
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXiMA9LU7fJzyhbbaiexFzwh2pv2SKeC2PsBLLXuWrCcMOgYn9yXAhk3dV3nwHbxuQ5iuMf8ZYtPgic2AYTK3n0Ah-3fJ6kpLrEgCxPmHReUqrTcPySmWj1GbVt89FEzfPLTtUufzNLZGVg7lmba9Y7rkJnuUufKAUhh9MR3YzsULhB7rcRrzyyd4IwCw/s1600/WhatsApp%20Image%202023-12-07%20at%2011.03.33.jpeg)
+## Configure cellranger
+
+    /home/cellranger/cellranger-6.1.2/bin/cellranger sitecheck
+    /home/cellranger/cellranger-6.1.2/bin/cellranger upload felipe.flv@gmail.com sitecheck.txt-
+
+# Step 5 - Prepare CellRanger database :
+## Create fasta indexes
+
+    sudo samtools faidx /home/cellranger/database/GRCm39.genome.fa # Human genome index
+    sudo samtools faidx /home/cellranger/database/GRCh38.p13.genome.fa # Mouse genome index
+
+## Filter gft files
+
+    sudo gffread /home/cellranger/database/gencode.v43.annotation.gtf -o /home/cellranger/database/gencode.v43.annotation.filtered.gtf
+    sudo gffread /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.gtf -o /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.filtered.gtf
+
+## Prepare gft files
+
+    /home/cellranger/cellranger-6.1.2/bin/cellranger mkgtf /home/cellranger/database/gencode.v43.annotation.gtf /home/cellranger/database/gencode.v43.annotation.prepared.gtf --attribute=key:allowable_value # Human gtf file
+    /home/cellranger/cellranger-6.1.2/bin/cellranger mkgtf /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.filtered.gtf /home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.prepared.gtf --attribute=key:allowable_value # Mouse gtf file
+
+## Create reference files
+
+    sudo /home/cellranger/cellranger-6.1.2/bin/cellranger mkref --nthreads=4 --genome=human --fasta=/home/cellranger/database/GRCh38.p13.genome.fa --genes=/home/cellranger/database/gencode.v43.annotation.prepared.gtf # Human annotation formatted
+    sudo /home/cellranger/cellranger-6.1.2/bin/cellranger mkref --nthreads=4 --genome=mouse --fasta=/home/cellranger/database/GRCm39.genome.fa --genes=/home/cellranger/database/gencode.vM32.chr_patch_hapl_scaff.annotation.prepared.gtf # Mouse annotation formatted
+
+# Step 6 - Call cellranger for single-cell rna-seq
+## Path to the folder with the files
+
+    metadata_file=/home/cellranger/database/metadata.txt
+    database_folder=/home/cellranger/database/hypothalamu_scRNA_scATAC/
+
+## Call script folder for processing cell ranger in each sample of the experiment
+
+    preprocessing_scRNA_scATAC/CallCellRanger_sc_RNA_NAExperiment.sh
+
+## call cellranger count
+
+    sudo /home/cellranger/cellranger-6.1.2/bin/cellranger count --id=pbmc_1k_v3_mini --transcriptome=/home/cellranger/refdata-gex-GRCh38-2020-A/ --fastqs=/home/cellranger/cellranger/testdata/ --sample=pbmc_1k_v3_mini --localcores=8 --localmem=32 --chemistry=ARC-v1
+
+## call cellranger aggr
+
+    cellranger aggr --id=hypothalamu_scRNA_scATAC --csv=AGG123_libraries.csv
+
+# Step 7 - Call cellranger for single-cell atac-seq
+## Path to the folder with the files
+
+    metadata_file=/home/cellranger/database/metadata.txt
+    database_folder=/home/cellranger/database/hypothalamu_scRNA_scATAC/
+
+## Call script folder for processing cell ranger in each sample of the experiment
+
+    preprocessing_scRNA_scATAC/CallCellRanger_sc_ATAC_NAExperiment.sh
+    cellranger/cellranger-atac-2.1.0/bin/cellranger-atac mkfastq --id=hypothalamus --run=/home/zenpoetryinsights/cellranger/database/cellranger-atac-tiny-bcl-1.0.0/ --csv=cellranger-atac-tiny-bcl-simple-1.0.0.csv
+    /home/singlecell/cellranger/cellranger-atac-2.1.0/bin/cellranger-atac count --id=ATAC-M1 --fastqs=/home/singlecell/cellranger/sequences/ATAC-M1/ --reference=/home/singlecell/cellranger/cellranger-atac-2.1.0/ --sample=ATAC-M1 --chemistry=ARC-v1
