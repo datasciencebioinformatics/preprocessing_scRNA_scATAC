@@ -25,13 +25,12 @@ A reference RNA expression map was used (top left figure) to identify the cellty
 
 ![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj7ZjmkAGlaVnro5rji3ynMWDHu8B28bdrcMmrV42YLuAEADUWC4yqxlx8GCivVDFWZYYA5DkxycIjnLwVZWBiZc73dz0cSl4LWfsqFcIp3m1PtytUqE_Vn_6Pi7IlUlEmW22d2NmJLglDWd_6-CUO-4TBcLwKHSMR8c7IVzlHsdRnTXfWJFSG4L5Ll73s/s1600/WhatsApp%20Image%202023-11-30%20at%2005.39.52.jpeg)
 
-### Temporal distribution of lineages
-
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEja2vS2rgCdAnwyOgzDPt1vPkGv2cwVJVXPHRFhInu5GNx7he02_VVQ6jcgnu8ZgOaxbZo_lPQut3-JKq46JZbobGasSyuBqnjPZsqdMt5EQ8dEd_RcD7e0gQtx98RByNXbAtTpNvJ6EN0La400vOpSfeFnMgU-uE1ERSwz8P0Xwvv_798PA0-atrpL/s3000/plot_temporal_frequency_of_lineages.png)
+### sn-RNA-seq vs. sn-ATAC-seq peak track
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyAKrkkNiN4apyHcn6M32WX2vGaKSaRKkmUEhf_Vm-O_pYWEYcD8FmxvMTh1fqAtSSraad94VBg-rqKWGHbr6Y7gUks78BqjN8T0cLnW-_wFfd9i929YDrjV-TLbzyNNktVM81PPFWhas-u4ce3RD8BMWAtt6eRAdIdFsFoh-YYzsdVO9_ZsabZGXqctQ/s1600/WhatsApp%20Image%202023-12-08%20at%2004.09.56%20(1).jpeg)
 
 ### Scheme for frequency of lineages
-
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjhSFf6-usViD9su19Fmpu0h1kj-f-ZuZ_JCpodF3DaMFea4VQr_4Nen9TuUY57TEARLYg8sIS6amWQzvCyO0rxwJ5Zft6OYmpf1oN7_qJtLXNvn4A7oTjzStW9nHrmoHlGN8Fn-XjXdwiws4JS0jkg1ayokqpu5TVsvATl5hlQciBybu6a7zGNCkWQ/s3000/plot_scheme_of_lineage_distribution.png)
+All celltypes were considered for analysis as well as the corresponding markers identifying each. Noteworthy, Pdgfra is a good marker for OPCs in this testdata.
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyAKrkkNiN4apyHcn6M32WX2vGaKSaRKkmUEhf_Vm-O_pYWEYcD8FmxvMTh1fqAtSSraad94VBg-rqKWGHbr6Y7gUks78BqjN8T0cLnW-_wFfd9i929YDrjV-TLbzyNNktVM81PPFWhas-u4ce3RD8BMWAtt6eRAdIdFsFoh-YYzsdVO9_ZsabZGXqctQ/s1600/WhatsApp%20Image%202023-12-08%20at%2004.09.56%20(1).jpeg)
 
 ### Principal component of samples per lineage
 
