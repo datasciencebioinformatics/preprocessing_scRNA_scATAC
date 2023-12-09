@@ -62,3 +62,32 @@ png(filename=paste(output_dir,"joint_Cluster_annotations.png",sep=""), width = 2
 dev.off()
 #####################################################################################
 # Subselect only clusters 9 and 10
+# Reload object
+load("./hypotha_wnn.RData")
+
+# Make copy
+hypotha_wnn_AUC<-hypotha_wnn
+
+# Get expression matrix
+exprMatrix= hypotha_wnn[["SCT"]]@scale.data
+
+# Markers set
+markersSets <- list(Neurons=c("Avp"),Astrocytes=c("Agt"),Microglia=c("Ctss"),OPCs=c("Pdgfra"),Oligodendrocytes=c("Mbp","Mobp"))
+
+# Calculate cellranking
+cells_rankings <- AUCell_buildRankings(exprMatrix, plotStats=TRUE)
+
+# Calculate enrichment scores
+cells_AUC <- AUCell_run(exprMatrix, markersSets, aucMaxRank=nrow(cells_rankings)*0.05)
+
+# Determine the cells with the given gene signatures or active gene sets
+cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, assign=TRUE) 
+
+# Assign
+Idents(hypotha_wnn)[cells_assignment$Neurons$assignment]<-"Neurons"
+
+cells_assignment$Astrocytes$assignment
+cells_assignment$Microglia$assignment
+cells_assignment$OPCs$assignment
+cells_assignment$Oligodendrocytes$assignment
+
