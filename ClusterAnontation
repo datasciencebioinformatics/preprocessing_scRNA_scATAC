@@ -52,6 +52,10 @@ Idents(DatabaseImmuneCellExpression)<-DatabaseImmuneCellExpression.hypho$labels[
 plot.hypotha_MouseRNAseq          <- DimPlot(hypho, group.by = c("predicted.MouseRNAseqData"),label=TRUE ) + theme_bw() +ggtitle("MouseRNAseqData")
 plot.hypotha_ImmGenData           <- DimPlot(hypho, group.by = c("predicted.ImmGenData"),label=TRUE ) + theme_bw()+ggtitle("ImmGenData")
 plot.DatabaseImmuneCellExpression <- DimPlot(hypho, group.by = c("predicted.DatabaseImmuneCellExpressionData"),label=TRUE ) + theme_bw()+ggtitle("DatabaseImmuneCellExpressionData")
-plot.DatabaseImmuneCellExpression <- DimPlot(hypotha_wnn, group.by = c("idents"),label=TRUE ) + theme_bw()+ggtitle("DatabaseImmuneCellExpressionData")
+plot.hypotha_wnn                  <- DimPlot(hypotha_wnn, group.by = c("idents"),label=TRUE ) + theme_bw()+ggtitle("Reference annotation")
 
 #####################################################################################
+# FindClusters_resolution
+png(filename=paste(output_dir,"joint_Cluster_annotations.png",sep=""), width = 45, height = 15, res=600, units = "cm")
+	grid.arrange(plot.hypotha_wnn,plot.DatabaseImmuneCellExpression,plot.hypotha_ImmGenData, plot.hypotha_MouseRNAseq ,ncol = 3)
+dev.off()
