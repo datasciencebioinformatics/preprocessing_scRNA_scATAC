@@ -59,3 +59,5 @@ plot.hypotha_wnn                  <- DimPlot(hypotha_wnn, group.by = c("idents")
 png(filename=paste(output_dir,"joint_Cluster_annotations.png",sep=""), width = 45, height = 15, res=600, units = "cm")
 	grid.arrange(plot.hypotha_wnn,plot.DatabaseImmuneCellExpression,plot.hypotha_ImmGenData, plot.hypotha_MouseRNAseq ,ncol = 3)
 dev.off()
+#####################################################################################
+# Subselect only clusters 9 and 10
