@@ -39,25 +39,26 @@ hypho[["predicted.ImmGenData"]]                       <- ImmGenData.hypho$labels
 hypho[["predicted.DatabaseImmuneCellExpressionData"]] <- DatabaseImmuneCellExpressionData.hypho$labels
 #####################################################################################
 # Copy the UMAP
-hypotha_MouseRNAseq                  <- hypotha_wnn
-hypotha_ImmGenData                   <- hypotha_wnn
-DatabaseImmuneCellExpression         <- hypotha_wnn
+hypotha_MouseRNAseq                          <- hypotha_wnn
+hypotha_ImmGenData                           <- hypotha_wnn
+hypotha_DatabaseImmuneCellExpression         <- hypotha_wnn
 
 # Reset identities
-Idents(hypotha_MouseRNAseq)<-MouseRNAseqData.hypho$labels[Idents(hypotha_MouseRNAseq)]
-Idents(hypotha_ImmGenData)<-ImmGenData.hypho$labels[Idents(hypotha_ImmGenData)]
-Idents(DatabaseImmuneCellExpression)<-DatabaseImmuneCellExpression.hypho$labels[Idents(DatabaseImmuneCellExpression)]
+Idents(hypotha_MouseRNAseq)                   <-MouseRNAseqData.hypho[names(Idents(hypotha_MouseRNAseq)),"pruned.labels"]
+Idents(hypotha_ImmGenData)                    <-ImmGenData.hypho[names(Idents(hypotha_ImmGenData)),"pruned.labels"]
+Idents(hypotha_DatabaseImmuneCellExpression)  <-DatabaseImmuneCellExpressionData.hypho[names(Idents(hypotha_DatabaseImmuneCellExpression)),"pruned.labels"]
 
 # Calculate plots
-plot.hypotha_MouseRNAseq          <- DimPlot(hypho, group.by = c("predicted.MouseRNAseqData"),label=TRUE ) + theme_bw() +ggtitle("MouseRNAseqData")
-plot.hypotha_ImmGenData           <- DimPlot(hypho, group.by = c("predicted.ImmGenData"),label=TRUE ) + theme_bw()+ggtitle("ImmGenData")
-plot.DatabaseImmuneCellExpression <- DimPlot(hypho, group.by = c("predicted.DatabaseImmuneCellExpressionData"),label=TRUE ) + theme_bw()+ggtitle("DatabaseImmuneCellExpressionData")
-plot.hypotha_wnn                  <- DimPlot(hypotha_wnn, group.by = c("idents"),label=TRUE ) + theme_bw()+ggtitle("Reference annotation")
+plot.hypotha_MouseRNAseq          <- DimPlot(hypotha_MouseRNAseq, label=TRUE, reduction = "wnn.umap" ) + theme_bw() +ggtitle("MouseRNAseqData")
+plot.hypotha_ImmGenData           <- DimPlot(hypotha_ImmGenData,label=TRUE, reduction = "wnn.umap" ) + theme_bw()+ggtitle("ImmGenData")
+plot.DatabaseImmuneCellExpression <- DimPlot(hypotha_DatabaseImmuneCellExpression, label=TRUE , reduction = "wnn.umap") + theme_bw()+ggtitle("DatabaseImmuneCellExpressionData")
+plot.hypotha_wnn                  <- DimPlot(hypotha_wnn, label=TRUE, reduction = "wnn.umap" ) + theme_bw()+ggtitle("Reference annotation")
 
 #####################################################################################
 # FindClusters_resolution
-png(filename=paste(output_dir,"joint_Cluster_annotations.png",sep=""), width = 45, height = 15, res=600, units = "cm")
-	grid.arrange(plot.hypotha_wnn,plot.DatabaseImmuneCellExpression,plot.hypotha_ImmGenData, plot.hypotha_MouseRNAseq ,ncol = 3)
+output_dir="/home/felipe/results_seurat/"    
+png(filename=paste(output_dir,"joint_Cluster_annotations.png",sep=""), width = 25, height = 25, res=600, units = "cm")
+	grid.arrange(plot.hypotha_wnn,plot.DatabaseImmuneCellExpression,plot.hypotha_ImmGenData, plot.hypotha_MouseRNAseq ,ncol = 2)
 dev.off()
 #####################################################################################
 # Subselect only clusters 9 and 10
