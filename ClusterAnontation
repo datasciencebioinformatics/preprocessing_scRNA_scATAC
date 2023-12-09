@@ -97,6 +97,11 @@ plot.hypotha_wnn_AUC          <- DimPlot(hypotha_wnn_AUC, label=TRUE, reduction 
 
 
 ##############################################################################################################################################3
+load("./neurons.RData")
+
+# Find Clusters
+neurons <- FindClusters(neurons, graph.name = "wsnn", algorithm = 1, resolution = 0.7, verbose = FALSE)
+
 # Markers set
 markersSets <- list(Magnocellular_1=c("Oxt"),Magnocellular_2=c("Avp"),Magnocellular_3=c("Caprin2"),Magnocellular_4=c("Oxt","Caprin2","Avp"))
 
@@ -109,8 +114,9 @@ cells_AUC <- AUCell_run(exprMatrix, markersSets, aucMaxRank=nrow(cells_rankings)
 # Determine the cells with the given gene signatures or active gene sets
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, assign=TRUE) 
 
-clusters_name<-as.vector(Idents(hypotha_wnn_AUC))
-names(clusters_name)<-names(Idents(hypotha_wnn_AUC))
+clusters_name<-as.vector(Idents(neurons))
+names(clusters_name)<-names(Idents(neurons))
+clusters_name<-"Other"
 
 # Assign
 clusters_name[cells_assignment$Magnocellular_1$assignment]<-"Oxt"
@@ -118,13 +124,16 @@ clusters_name[cells_assignment$Magnocellular_2$assignment]<-"Avp"
 clusters_name[cells_assignment$Magnocellular_3$assignment]<-"Caprin2"
 clusters_name[cells_assignment$Magnocellular_4$assignment]<-"Oxt + Caprin2+ Avp"
 
-clusters_name[clusters_name=="Neurons"]<-"NA"
-clusters_name[clusters_name=="Astrocytes"]<-"NA"
-clusters_name[clusters_name=="Microglia"]<-"NA"
-clusters_name[clusters_name=="Oligodendrocytes"]<-"NA"
-clusters_name[clusters_name=="OPCs"]<-"NA"
+# Stash cell identity classes in metadata
+neurons[["Prediction"]] <- factor(clusters_name)
+
+# Subset per group
+Oxt               <- subset(neurons, idents = "Oxt")
+Oxt_Caprin2_Avp   <- subset(neurons, idents = "Oxt + Caprin2")
 
 # Create plots
-plot.hypotha_magno          <- DimPlot(hypotha_wnn_AUC, label=TRUE, reduction = "wnn.umap" ) + theme_bw() +ggtitle("AUCell")
+plot.hypotha_Oxt              <- DimPlot(Oxt, label=TRUE, group.by = "Prediction",reduction = "wnn.umap" ) + theme_bw() +ggtitle("AUCell")
+plot.hypotha_Oxt_Caprin2_Avp  <- DimPlot(Oxt_Caprin2_Avp, label=TRUE, group.by = "Prediction",reduction = "wnn.umap" ) + theme_bw() +ggtitle("AUCell")
 
+grid.arrange(plot.hypotha_Oxt,plot.hypotha_Oxt_Caprin2_Avp,ncol = 2)
 
