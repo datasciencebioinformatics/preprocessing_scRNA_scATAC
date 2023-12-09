@@ -38,11 +38,20 @@ hypho[["predicted.MouseRNAseqData"]]                  <- MouseRNAseqData.hypho$l
 hypho[["predicted.ImmGenData"]]                       <- ImmGenData.hypho$labels
 hypho[["predicted.DatabaseImmuneCellExpressionData"]] <- DatabaseImmuneCellExpressionData.hypho$labels
 #####################################################################################
-Idents(hypotha_wnn)<-Idents(MouseRNAseqData)
+# Copy the UMAP
+hypotha_MouseRNAseq                  <- hypotha_wnn
+hypotha_ImmGenData                   <- hypotha_wnn
+DatabaseImmuneCellExpression         <- hypotha_wnn
+
+# Reset identities
+Idents(hypotha_MouseRNAseq)<-MouseRNAseqData.hypho$labels[Idents(hypotha_MouseRNAseq)]
+Idents(hypotha_ImmGenData)<-ImmGenData.hypho$labels[Idents(hypotha_ImmGenData)]
+Idents(DatabaseImmuneCellExpression)<-DatabaseImmuneCellExpression.hypho$labels[Idents(DatabaseImmuneCellExpression)]
 
 # Calculate plots
-hypho.anontated <- DimPlot(hypho, group.by = c("predicted.MouseRNAseqData"),label=TRUE ) + theme_bw() +ggtitle("predicted.MouseRNAseqData")
-hypho.anontated2 <- DimPlot(hypho, group.by = c("predicted.ImmGenData"),label=TRUE ) + theme_bw()+ggtitle("predicted.ImmGenData")
-hypho.anontated3 <- DimPlot(hypho, group.by = c("predicted.DatabaseImmuneCellExpressionData"),label=TRUE ) + theme_bw()+ggtitle("predicted.DatabaseImmuneCellExpressionData")
+plot.hypotha_MouseRNAseq          <- DimPlot(hypho, group.by = c("predicted.MouseRNAseqData"),label=TRUE ) + theme_bw() +ggtitle("MouseRNAseqData")
+plot.hypotha_ImmGenData           <- DimPlot(hypho, group.by = c("predicted.ImmGenData"),label=TRUE ) + theme_bw()+ggtitle("ImmGenData")
+plot.DatabaseImmuneCellExpression <- DimPlot(hypho, group.by = c("predicted.DatabaseImmuneCellExpressionData"),label=TRUE ) + theme_bw()+ggtitle("DatabaseImmuneCellExpressionData")
+plot.DatabaseImmuneCellExpression <- DimPlot(hypotha_wnn, group.by = c("idents"),label=TRUE ) + theme_bw()+ggtitle("DatabaseImmuneCellExpressionData")
 
 #####################################################################################
