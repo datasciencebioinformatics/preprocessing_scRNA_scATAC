@@ -22,6 +22,7 @@ load("./reference.RData")
 
 # Finding differentially expressed features (cluster biomarkers)
 hypho=reference
+hypho=JoinLayers(hypho, assay = "RNA")
 
 # Calulate predicted annotation
 MouseRNAseqData <- MouseRNAseqData()
@@ -29,13 +30,15 @@ ImmGenData <- ImmGenData()
 DatabaseImmuneCellExpressionData <- celldex::DatabaseImmuneCellExpressionData()
 
 # Annotate celltype
-MouseRNAseqData.hypho <- SingleR(test=GetAssayData(hypho, assay = "RNA", slot = "data"), ref=MouseRNAseqData, labels=MouseRNAseqData$label.main)
-aggregate.ImmGenData.hypho      <- SingleR(test=GetAssayData(hypho, assay = "RNA", slot = "data"), ref=ImmGenData, labels=ImmGenData$label.main)
-aggregate.DatabaseImmuneCellExpressionData.hypho <- SingleR(test=GetAssayData(hypho, assay = "RNA", slot = "data"), ref=DatabaseImmuneCellExpressionData, labels=DatabaseImmuneCellExpressionData$label.main)
+MouseRNAseqData.hypho                            <- SingleR(test=GetAssayData(hypho, assay = "RNA", slot = "data"), ref=MouseRNAseqData, labels=MouseRNAseqData$label.main)
+ImmGenData.hypho                                 <- SingleR(test=GetAssayData(hypho, assay = "RNA", slot = "data"), ref=ImmGenData, labels=ImmGenData$label.main)
+DatabaseImmuneCellExpressionData.hypho           <- SingleR(test=GetAssayData(hypho, assay = "RNA", slot = "data"), ref=DatabaseImmuneCellExpressionData, labels=DatabaseImmuneCellExpressionData$label.main)
 
 hypho[["predicted.MouseRNAseqData"]] <- MouseRNAseqData.hypho$labels
 hypho[["predicted.ImmGenData"]] <- ImmGenData.hypho$labels
 hypho[["predicted.DatabaseImmuneCellExpressionData"]] <- DatabaseImmuneCellExpressionData.hypho$labels
+#####################################################################################
+Idents(hypotha_wnn)<-Idents(MouseRNAseqData)
 
 # Calculate plots
 hypho.anontated <- DimPlot(hypho, group.by = c("predicted.MouseRNAseqData"),label=TRUE ) + theme_bw() +ggtitle("predicted.MouseRNAseqData")
