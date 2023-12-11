@@ -64,76 +64,23 @@ dev.off()
 # Subselect only clusters 9 and 10
 # Reload object
 load("./hypotha_wnn.RData")
+library('SCINA')
 
 # Make copy
 hypotha_wnn_AUC<-hypotha_wnn
 
 # Get expression matrix
-exprMatrix= hypotha_wnn[["SCT"]]@scale.data
+exprMatrix= data.frame(as.matrix(hypotha_wnn[["SCT"]]@counts))
 
 # Markers set
 markersSets <- list(Neurons=c("Avp","Snap25"),Astrocytes=c("Agt"),Microglia=c("Ctss"),OPCs=c("Pdgfra"),Oligodendrocytes=c("Mbp","Mobp"))
 
-# Calculate cellranking
-cells_rankings <- AUCell_buildRankings(exprMatrix, plotStats=TRUE)
-
-# Calculate enrichment scores
-cells_AUC <- AUCell_run(exprMatrix, markersSets, aucMaxRank=nrow(cells_rankings)*0.05)
-
-# Determine the cells with the given gene signatures or active gene sets
-cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, assign=TRUE) 
-
-# Assign
-Idents(hypotha_wnn_AUC)[cells_assignment$Neurons$assignment]<-"Neurons"
-Idents(hypotha_wnn_AUC)[cells_assignment$Microglia$assignment]<-"Microglia"
-Idents(hypotha_wnn_AUC)[cells_assignment$OPCs$assignment]<-"OPCs"
-Idents(hypotha_wnn_AUC)[cells_assignment$Oligodendrocytes$assignment]<-"Oligodendrocytes"
-Idents(hypotha_wnn_AUC)[cells_assignment$Astrocytes$assignment]<-"Astrocytes"
-
-# Create plots
-plot.hypotha_wnn_AUC          <- DimPlot(hypotha_wnn_AUC, label=TRUE, reduction = "wnn.umap" ) + theme_bw() +ggtitle("AUCell")
-
-
-
-
-##############################################################################################################################################3
-load("./neurons.RData")
-
-# Find Clusters
-neurons <- FindClusters(neurons, graph.name = "wsnn", algorithm = 1, resolution = 0.7, verbose = FALSE)
-
 # Markers set
-markersSets <- list(Magnocellular_1=c("Oxt"),Magnocellular_2=c("Avp"),Magnocellular_3=c("Caprin2"),Magnocellular_4=c("Oxt","Caprin2","Avp"))
+markersSets_ <- list(Neurons=c("Avp","Snap25"),Astrocytes=c("Agt"),Microglia=c("Ctss"),OPCs=c("Pdgfra"),Oligodendrocytes=c("Mbp","Mobp"))
 
-# Calculate cellranking
-cells_rankings <- AUCell_buildRankings(exprMatrix, plotStats=TRUE)
-
-# Calculate enrichment scores
-cells_AUC <- AUCell_run(exprMatrix, markersSets, aucMaxRank=nrow(cells_rankings)*0.05)
-
-# Determine the cells with the given gene signatures or active gene sets
-cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, assign=TRUE) 
-
-clusters_name<-as.vector(Idents(neurons))
-names(clusters_name)<-names(Idents(neurons))
-clusters_name<-"Other"
-
-# Assign
-clusters_name[cells_assignment$Magnocellular_1$assignment]<-"Oxt"
-clusters_name[cells_assignment$Magnocellular_2$assignment]<-"Avp"
-clusters_name[cells_assignment$Magnocellular_3$assignment]<-"Caprin2"
-clusters_name[cells_assignment$Magnocellular_4$assignment]<-"Oxt + Caprin2+ Avp"
-
-# Stash cell identity classes in metadata
-neurons[["Prediction"]] <- factor(clusters_name)
-
-# Subset per group
-Oxt               <- subset(neurons, idents = "Oxt")
-Oxt_Caprin2_Avp   <- subset(neurons, idents = "Oxt + Caprin2")
+# Clalculate results
+results = SCINA(data.frame(exprMatrix), markersSets, max_iter = 100, convergence_n = 10, convergence_rate = 0.999, sensitivity_cutoff = 0.9, rm_overlap=TRUE, allow_unknown=TRUE, log_file='SCINA.log')
 
 # Create plots
-plot.hypotha_Oxt              <- DimPlot(Oxt, label=TRUE, group.by = "Prediction",reduction = "wnn.umap" ) + theme_bw() +ggtitle("AUCell")
-plot.hypotha_Oxt_Caprin2_Avp  <- DimPlot(Oxt_Caprin2_Avp, label=TRUE, group.by = "Prediction",reduction = "wnn.umap" ) + theme_bw() +ggtitle("AUCell")
-
-grid.arrange(plot.hypotha_Oxt,plot.hypotha_Oxt_Caprin2_Avp,ncol = 2)
+plotheat.SCINA(data.frame(exprMatrix), results, markersSets)
 
