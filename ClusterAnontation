@@ -76,11 +76,11 @@ exprMatrix= data.frame(as.matrix(hypotha_wnn[["SCT"]]@counts))
 markersSets <- list(Neurons=c("Avp","Snap25"),Astrocytes=c("Agt"),Microglia=c("Ctss"),OPCs=c("Pdgfra"),Oligodendrocytes=c("Mbp","Mobp"))
 
 # Markers set
-markersSets_ <- list(Neurons=c("Avp","Snap25"),Astrocytes=c("Agt"),Microglia=c("Ctss"),OPCs=c("Pdgfra"),Oligodendrocytes=c("Mbp","Mobp"))
+markersSets_subclusters <- list(MagnoCelluar1=c("Oxt","Caprin2","Avp"),MagnoCelluar2=c("Oxt"),MagnoCelluar3=c("Caprin2"),MagnoCelluar3=c("Avp"))
 
 # Clalculate results
 results = SCINA(data.frame(exprMatrix), markersSets, max_iter = 100, convergence_n = 10, convergence_rate = 0.999, sensitivity_cutoff = 0.9, rm_overlap=TRUE, allow_unknown=TRUE, log_file='SCINA.log')
 
 # Create plots
-plotheat.SCINA(data.frame(exprMatrix), results, markersSets)
+#plotheat.SCINA(data.frame(exprMatrix), results, markersSets)
 
