@@ -70,17 +70,62 @@ library('SCINA')
 hypotha_wnn_AUC<-hypotha_wnn
 
 # Get expression matrix
-exprMatrix= data.frame(as.matrix(hypotha_wnn[["SCT"]]@counts))
+exprMatrix= hypotha_wnn[["SCT"]]@counts
 
 # Markers set
 markersSets <- list(Neurons=c("Avp","Snap25"),Astrocytes=c("Agt"),Microglia=c("Ctss"),OPCs=c("Pdgfra"),Oligodendrocytes=c("Mbp","Mobp"))
 
-# Markers set
-markersSets_subclusters <- list(MagnoCelluar1=c("Oxt","Caprin2","Avp"),MagnoCelluar2=c("Oxt"),MagnoCelluar3=c("Caprin2"),MagnoCelluar3=c("Avp"))
+# AUCell_buildRankings
+cells_rankings <- AUCell_buildRankings(exprMatrix, plotStats=FALSE)
 
-# Clalculate results
-results = SCINA(data.frame(exprMatrix), markersSets_subclusters, max_iter = 100, convergence_n = 10, convergence_rate = 0.999, sensitivity_cutoff = 0.9, rm_overlap=TRUE, allow_unknown=TRUE, log_file='SCINA.log')
+# Calculate enrichment scores
+cells_AUC <- AUCell_run(exprMatrix, markersSets, aucMaxRank=nrow(cells_rankings)*0.05)
 
-# Create plots
-plotheat.SCINA(data.frame(exprMatrix), results, markersSets)
+# Optional: Set the assignment thresholds
+par(mfrow=c(3,3))
+set.seed(123)
+cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 
+cellsAssigned <- lapply(cells_assignment, function(x) x$assignment)
+assignmentTable <- reshape2::melt(cellsAssigned, value.name="cell")
+colnames(assignmentTable)[2] <- "geneSet"
+head(assignmentTable)
+assignmentMat <- table(assignmentTable[,"geneSet"], assignmentTable[,"cell"])
+miniAssigMat <- assignmentMat[,sample(1:ncol(assignmentMat),100)]
+
+# Plot heatmap
+png(filename=paste(output_dir,"Dimplot_neurons.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	aheatmap(miniAssigMat, scale="none", color="black", legend=FALSE)
+dev.off()
+
+#####################################################################################
+
+# Take neuronal cells
+Neurons<-cells_assignment$Neurons$assignment[!cells_assignment$Neurons$assignment  %in% c(cells_assignment$Astrocytes$assignment,cells_assignment$Microglia$assignment,cells_assignment$OPCs$assignment,cells_assignment$Oligodendrocytes$assignment)]
+Astrocytes<-cells_assignment$Astrocytes$assignment[!cells_assignment$Astrocytes$assignment  %in% c(cells_assignment$Neurons$assignment,cells_assignment$Microglia$assignment,cells_assignment$OPCs$assignment,cells_assignment$Oligodendrocytes$assignment)]
+Microglia<-cells_assignment$Microglia$assignment[!cells_assignment$Microglia$assignment  %in% c(cells_assignment$Neurons$assignment,cells_assignment$Astrocytes$assignment,cells_assignment$OPCs$assignment,cells_assignment$Oligodendrocytes$assignment)]
+OPCs<-cells_assignment$OPCs$assignment[!cells_assignment$OPCs$assignment  %in% c(cells_assignment$Neurons$assignment,cells_assignment$Astrocytes$assignment,cells_assignment$Microglia$assignment,cells_assignment$Oligodendrocytes$assignment)]
+Oligodendrocytes<-cells_assignment$Oligodendrocytes$assignment[!cells_assignment$Oligodendrocytes$assignment  %in% c(cells_assignment$Neurons$assignment,cells_assignment$Astrocytes$assignment,cells_assignment$Microglia$assignment,cells_assignment$OPCs$assignment)]
+
+# Set identity
+Idents(hypotha_wnn)<-"Other neurons"
+identities<-as.vector(Idents(hypotha_wnn))
+names(identities)<-names(Idents(hypotha_wnn))
+
+identities[Neurons]<-"Neurons"
+identities[Astrocytes]<-"Astrocytes"
+identities[Microglia]<-"Microglia"
+identities[OPCs]<-"OPCs"
+identities[Oligodendrocytes]<-"Oligodendrocytes"
+
+
+Idents(hypotha_wnn)<-factor(identities)
+
+colour=c('Astrocytes' ='#fde725','OPCs' ='#5ec962','Microglia' ='#21918c','Neurons'='#3b528b','Oligodendrocytes'='#440154','Other neurons'='white')
+DimPlot_AUCell<-DimPlot(hypotha_wnn, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + scale_fill_manual(values=colour) + ggtitle("AUCell celltype predictions RNA+ATC M1/M2") 
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"DimPlot_AUCell.png",sep=""), width = 16, height = 16, res=600, units = "cm")
+	DimPlot_AUCell
+dev.off()
+#####################################################################################
