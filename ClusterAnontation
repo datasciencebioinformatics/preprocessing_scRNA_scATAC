@@ -130,36 +130,5 @@ png(filename=paste(output_dir,"DimPlot_AUCell.png",sep=""), width = 16, height =
 	DimPlot_AUCell
 dev.off()
 #####################################################################################
-# Clalculate results
-# Markers set
-markersSets_subclusters <- list(MagnoCelluar1=c("Oxt","Caprin2","Avp"))
-results = SCINA(data.frame(exprMatrix), markersSets_subclusters, max_iter = 100, convergence_n = 10, convergence_rate = 0.999, sensitivity_cutoff = 0.9, rm_overlap=TRUE, allow_unknown=TRUE, log_file='SCINA.log')
-
-# Set identity
-Idents(hypotha_wnn)<-"Other neurons"
-identities<-as.vector(Idents(hypotha_wnn))
-names(identities)<-names(Idents(hypotha_wnn))
-identities[which(results$cell_labels=="MagnoCelluar1")]<-"M-cells"
-Idents(hypotha_wnn)<-factor(identities)
-
-# Markers set
-markersSets_subclusters <- list(MagnoCelluar1=c("Caprin2","Avp"))
-results = SCINA(data.frame(exprMatrix), markersSets_subclusters, max_iter = 100, convergence_n = 10, convergence_rate = 0.999, sensitivity_cutoff = 0.9, rm_overlap=TRUE, allow_unknown=TRUE, log_file='SCINA.log')
-
-# Set identity
-identities[which(results$cell_labels=="MagnoCelluar1")]<-"M-cells-2"
-Idents(hypotha_wnn)<-factor(identities)
-
-# Markers set
-markersSets_subclusters <- list(MagnoCelluar1=c("Caprin2"))
-results = SCINA(data.frame(exprMatrix), markersSets_subclusters, max_iter = 100, convergence_n = 10, convergence_rate = 0.999, sensitivity_cutoff = 0.9, rm_overlap=TRUE, allow_unknown=TRUE, log_file='SCINA.log')
-
-# Set identity
-identities[which(results$cell_labels=="MagnoCelluar1")]<-"M-cells-3"
-Idents(hypotha_wnn)<-factor(identities)
-
-
-colour=c('M-cells'='#3b528b','Other neurons'='#FFFFFF')
-DimPlot_AUCell<-DimPlot(hypotha_wnn, label = TRUE, repel = TRUE, group.by = "ident", reduction = "wnn.umap",cols=colour) + scale_fill_manual(values=colour) + ggtitle("AUCell celltype predictions RNA+ATC M1/M2") 
 
 
