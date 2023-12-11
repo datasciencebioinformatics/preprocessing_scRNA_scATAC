@@ -1,8 +1,7 @@
 <!-- GETTING STARTED -->
 # Introduction
 A multiome analysis of sn-RNA and sn-ATAC of hypothalamus cells.
-
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh_IRay9Tx3_DB-kkExYNqRAde9y9yXrW6XY0TuH3MSBosR2bxakx8tXV7lDd9OLorRBEbzkvH6As6xpUvRapeII4tA6VeTN1uRc5puuU5wbBVXk6CodOsn2dPxdv8X5a8WCuJ81ttqaYkQO2gizXZUZ7rFBZVrbQODqKidP0QqHsOv8Yx9Bt343OVKLnw/s11600/Figure_Hypothalamus_3.png)
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiuFsV6P6c5qbv6h8i4YCnqSBZzGzb59-mMON2BUR-pfIbVo1vjq3f4-BmkkpK1u8LWYWhYSNh6lVbHhfK0QPpuJxYzwBMRgtuGtQkudszAC-UhP1X7Bpg8dT8ffOXUBelJ0W_n4ekKkPD77O1rGy6zLnzQtplJ-DfGixBchvvGffWwmZjt1LqQLZxP5ec/s11600/Figure_Hypothalamus_3.png)
 
 # Test data
 Two hypotlamus samples from mouse [1] were used as test data, each contaning both RNA and ATAC.
