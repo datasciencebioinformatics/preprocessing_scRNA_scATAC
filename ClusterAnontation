@@ -61,6 +61,7 @@ png(filename=paste(output_dir,"joint_Cluster_annotations.png",sep=""), width = 2
 	grid.arrange(plot.hypotha_wnn,plot.DatabaseImmuneCellExpression,plot.hypotha_ImmGenData, plot.hypotha_MouseRNAseq ,ncol = 2)
 dev.off()
 #####################################################################################
+library("AUCell")
 # Subselect only clusters 9 and 10
 # Reload object
 load("./hypotha_wnn.RData")
