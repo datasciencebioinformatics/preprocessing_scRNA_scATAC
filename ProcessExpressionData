@@ -4,15 +4,14 @@ input_folder= /home/felipe/Documentos/LungPortal/samples/
 # For each file
 ls /home/felipe/Documentos/LungPortal/samples/*/*.rna_seq.augmented_star_gene_counts.tsv  | while read file
 do
-    echo $line
-   # cat $file | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous    
+    folder_name=$(echo $file  | sed 's/\// /g' | awk '{print "/"$1"/"$2"/"$3"/"$4"/"$5"/"$6"/"}')
+    file_name=$(echo $file  | sed 's/\// /g' | awk '{print $7}')
+    file_path=$(echo $folder_name"/"$file_name)
+    echo $file_path    
 done
 
-ls /home/felipe/Documentos/LungPortal/samples/* | while read files_name | 
-do
-    # Store file and folder
-    folder_name=$(echo $files_name | awk '{print $1}')
-    file_name=$(echo $files_name |  awk '{print $2}')    
-    file_path=$(echo $folder_name"/"$file_name)
+
+
+
 
 done
