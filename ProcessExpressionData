@@ -9,9 +9,3 @@ do
     file_path=$(echo $folder_name"/"$file_name)
     echo $file_path    
 done
-
-
-
-
-
-done
